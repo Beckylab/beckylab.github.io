@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qclaw vs WorkBuddy — AI测试用例生成能力对比</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --card2: #1c2333;
+    --border: #30363d; --t: #e6edf3; --t2: #8b949e;
+    --red: #f85149; --green: #3fb950; --yellow: #d2991d;
+    --blue: #58a6ff; --purple: #a371f7;
+    --rb: rgba(248,81,73,0.12); --gb: rgba(63,185,80,0.12);
+    --bb: rgba(88,166,255,0.12); --yb: rgba(210,153,29,0.12);
+    --pb: rgba(163,113,247,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: var(--bg); color: var(--t); line-height: 1.6;
+  }
+  .wrap { max-width: 1000px; margin:0 auto; padding: 60px 28px 80px; }
+
+  /* cover */
+  .cover { text-align:center; padding:90px 20px 70px; border-bottom:1px solid var(--border); }
+  .cover h1 { font-size:2.4em; font-weight:800; margin-bottom:6px; }
+  .cover .sub { font-size:1.2em; color:var(--t2); margin-bottom:20px; }
+
+  /* sections */
+  .sec { padding:36px 0; border-bottom:1px solid var(--border); }
+  .sec:last-child { border-bottom:none; }
+  h2 { font-size:1.4em; border-left:3px solid var(--red); padding-left:12px; margin-bottom:20px; }
+  h3 { font-size:1.05em; margin:16px 0 8px; }
+  p { color:var(--t2); margin-bottom:10px; }
+
+  /* cards */
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .g5 { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+  @media(max-width:720px){ .g2,.g3,.g5{ grid-template-columns:1fr; } }
+
+  .card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:18px; }
+  .qc { border-left:3px solid var(--red); }
+  .wb { border-left:3px solid var(--blue); }
+
+  /* tool cards */
+  .tc { background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .tc .hd { padding:12px 18px; font-size:1.15em; font-weight:700; background:var(--card2); border-bottom:1px solid var(--border); }
+  .tc .bd { padding:14px 18px; }
+  .tc .bd p { font-size:0.9em; margin-bottom:6px; }
+
+  /* kpi */
+  .kpi { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:16px; text-align:center; }
+  .kpi .v { font-size:1.8em; font-weight:800; }
+  .kpi .l { font-size:0.78em; color:var(--t2); }
+
+  /* table */
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.88em; }
+  th { background:var(--card2); padding:10px 12px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:9px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  tr.hi { background:rgba(88,166,255,0.03); }
+
+  /* badges */
+  .b { display:inline-block; padding:2px 8px; border-radius:10px; font-size:0.78em; font-weight:600; margin-right:3px; }
+  .br { background:var(--rb); color:var(--red); }
+  .bg { background:var(--gb); color:var(--green); }
+  .bb { background:var(--bb); color:var(--blue); }
+  .by { background:var(--yb); color:var(--yellow); }
+
+  /* timeline */
+  .tl { position:relative; padding-left:24px; margin:8px 0; }
+  .tl::before { content:""; position:absolute; left:7px; top:4px; bottom:4px; width:2px; background:var(--border); }
+  .ti { position:relative; margin-bottom:14px; padding-left:16px; }
+  .ti::before { content:""; position:absolute; left:-21px; top:4px; width:10px; height:10px; border-radius:50%; }
+  .ti.q::before { background:var(--red); }
+  .ti.w::before { background:var(--blue); }
+  .ti .t { font-size:0.78em; color:var(--t2); }
+  .ti .n { font-weight:600; font-size:0.92em; margin:2px 0; }
+  .ti .d { font-size:0.85em; color:var(--t2); }
+
+  /* bar */
+  .bar { margin:5px 0; }
+  .bar .lbl { display:flex; justify-content:space-between; font-size:0.82em; margin-bottom:2px; }
+  .bar .trk { background:var(--card2); border-radius:3px; height:8px; }
+  .bar .fil { height:100%; border-radius:3px; }
+  .bar .fr { background:var(--red); }
+  .bar .fb { background:var(--blue); }
+
+  .call { background:var(--card2); border-left:3px solid var(--yellow); padding:14px 18px; border-radius:0 6px 6px 0; margin:12px 0; font-size:0.9em; }
+
+  .red { color:var(--red); }
+  .green { color:var(--green); }
+  .blue { color:var(--blue); }
+  .yellow { color:var(--yellow); }
+  .purple { color:var(--purple); }
+  .t2 { color:var(--t2); }
+  .fs { font-size:0.88em; }
+  .fw { font-weight:600; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<!-- ====== 封面 ====== -->
+<div class="cover">
+  <h1>Qclaw vs WorkBuddy <span class="red">实战对比</span></h1>
+  <p class="sub">AI 测试用例生成能力对比 — 一次真实的双工具对比实验</p>
+  <p class="t2 fs">生活服务二期行李托运管理</p>
+</div>
+
+<!-- ====== 一、背景 ====== -->
+<div class="sec">
+  <h2>一、项目背景与对比方法</h2>
+  <div class="g2">
+    <div class="card">
+      <p class="fw">项目概况</p>
+      <p class="fs">生活服务二期行李托运管理，覆盖 FRA 赴任、FRB 计重、LRA 离任三条业务链路，涉及小程序端 + 后台管理端 + 7 环节全链路。</p>
+    </div>
+    <div class="card">
+      <p class="fw">需求资料</p>
+      <p class="fs">技术响应书 · 原型文档 · 需求变更说明 · 数据字典 / 流程字段清单（多源异构文档）</p>
+    </div>
+  </div>
+  <div class="call" style="margin-top:14px;">
+    <span class="fw">核心问题：</span>AI 工具能否真正理解多源需求资料，并自动生成<strong>可被测试团队直接采用</strong>的测试用例？
+  </div>
+</div>
+
+<!-- ====== 二、工具介绍 ====== -->
+<div class="sec">
+  <h2>二、工具基础画像 &amp; 核心差异</h2>
+  <div class="g2">
+    <div class="tc"><div class="hd" style="color:var(--red);border-bottom-color:var(--red);">Qclaw</div>
+      <div class="bd">
+        <p class="fw">定位</p><p class="fs">腾讯出品、基于 OpenClaw 的本地 AI Agent，微信遥控电脑，24/7 自主运行。</p>
+        <p class="fw">理念</p><p class="fs">AI 是"遥控器"——微信里说一句话，电脑帮你干活。</p>
+        <p class="fw">架构</p><p class="fs">交互层 → 理解层 → 规划层(ReAct) → 执行层(5000+ Skills) → 记忆层</p>
+      </div>
+    </div>
+    <div class="tc"><div class="hd" style="color:var(--blue);border-bottom-color:var(--blue);">WorkBuddy</div>
+      <div class="bd">
+        <p class="fw">定位</p><p class="fs">腾讯全栈 AI 办公助手，"你说，AI 做，你验收"，覆盖全品类产出。</p>
+        <p class="fw">理念</p><p class="fs">AI 是"数字员工"——直接产出可交付成果，沉淀为组织能力。</p>
+        <p class="fw">架构</p><p class="fs">交互层 → 业务应用层(20+) → 能力服务层 → 智能体引擎层 → 底座层</p>
+      </div>
+    </div>
+  </div>
+  <table style="margin-top:20px;">
+    <tr><th style="width:16%;">核心差异</th><th style="width:42%;">Qclaw / OpenClaw</th><th style="width:42%;">WorkBuddy</th></tr>
+    <tr>
+      <td class="fw">引擎定位</td>
+      <td><span class="b by">任务编排</span> 聚焦「选择工具→调用工具→返回结果」。本质是 <b>Tool-Use Orchestrator</b>。</td>
+      <td><span class="b bg">知识生产</span> 聚焦「理解意图→拆解任务→多Agent协同→生产交付物」。本质是 <b>Knowledge Worker</b>。</td>
+    </tr>
+    <tr>
+      <td class="fw">认知层级</td>
+      <td>工具调用序列：输入需求文本→调LLM→调Writer写入。逻辑硬编码在Skill中。</td>
+      <td>知识工作流：解析多源需求→理解业务语义→识别场景维度→结构化生成→迭代优化。全程AI自主推理。</td>
+    </tr>
+    <tr>
+      <td class="fw">资料处理</td>
+      <td>需自编DocumentParser Skill，仅做文本提取，缺乏语义关联。</td>
+      <td>内置原生支持多格式深度解析，自动提取功能点、业务规则、用户角色等结构化信息。</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ====== 三、实战过程 ====== -->
+<div class="sec">
+  <h2>三、个人使用过程 — 从 Qclaw 到 WorkBuddy</h2>
+  <div class="tl">
+    <div class="ti q"><div class="t">阶段 1 · 3-5天</div><div class="n red">Qclaw：定义角色 + 编写技能</div><div class="d">定义"资深软件测试工程师"角色，编写 Python Skill（需求解析→用例生成→Excel写入），配置 Prompt 模板和输出格式。</div></div>
+    <div class="ti q"><div class="t">阶段 2 · 多天迭代</div><div class="n red">Qclaw：灌入需求 → 生成 → 调教 → 再生成</div><div class="d">逐份灌入技术响应书、原型文档、需求变更、数据字典。每次生成后人工审核纠偏，反复多轮。调教磨合时间较长。</div></div>
+    <div class="ti q"><div class="t">阶段 3</div><div class="n red">Qclaw：产出 V5.0 终版（150 条）</div><div class="d">125 条功能用例 + 25 条异常场景 + 统计汇总。<b>调教到位后产出较符合个人使用要求</b>。</div></div>
+    <div class="ti w"><div class="t">阶段 4 · 0.5-1天</div><div class="n blue">WorkBuddy：相同需求重新生成</div><div class="d"><b>上手极快</b>：上传文档→自然语言指令→几分钟产出初版。响应速度更快。</div></div>
+    <div class="ti w"><div class="t">阶段 5 · 半天</div><div class="n blue">WorkBuddy：调教与迭代</div><div class="d">利用多模型切换、专家模式、Skill生态快速迭代。调教成本显著低于 Qclaw。</div></div>
+    <div class="ti w"><div class="t">阶段 6</div><div class="n blue">WorkBuddy：产出 V5.0 版本（53 条）</div><div class="d">53 条端到端合并用例 + 追溯矩阵 + 目录统计。<b>策略迥异</b>：选择粗粒度端到端合并而非细粒度分解。</div></div>
+  </div>
+  <div class="call">
+    <b>直观感受：</b><span class="b br">Qclaw</span> 调教耗时长，但调教好后产出较贴合个人需求；<span class="b bb">WorkBuddy</span> 上手快、响应快、可选模型/技能丰富（含<span class="purple">专家模式</span>）。
+  </div>
+</div>
+
+<!-- ====== 四、理论对比 ====== -->
+<div class="sec">
+  <h2>四、理论能力九维度对比</h2>
+  <div class="g2">
+    <div>
+      <p class="fw red">Qclaw · 4.15 分</p>
+      <div class="bar"><div class="lbl"><span>需求理解</span><span>3.5</span></div><div class="trk"><div class="fil fr" style="width:35%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>生成质量</span><span>4.0</span></div><div class="trk"><div class="fil fr" style="width:40%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>资料整合</span><span>2.0</span></div><div class="trk"><div class="fil fr" style="width:20%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>输出集成</span><span>5.0</span></div><div class="trk"><div class="fil fr" style="width:50%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>迭代优化</span><span>3.0</span></div><div class="trk"><div class="fil fr" style="width:30%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>自动化</span><span>8.0</span></div><div class="trk"><div class="fil fr" style="width:80%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>企业能力</span><span>5.0</span></div><div class="trk"><div class="fil fr" style="width:50%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>易用性</span><span>4.0</span></div><div class="trk"><div class="fil fr" style="width:40%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>复用沉淀</span><span>5.0</span></div><div class="trk"><div class="fil fr" style="width:50%"></div></div></div>
+    </div>
+    <div>
+      <p class="fw blue">WorkBuddy · 8.35 分</p>
+      <div class="bar"><div class="lbl"><span>需求理解</span><span>9.0</span></div><div class="trk"><div class="fil fb" style="width:90%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>生成质量</span><span>8.0</span></div><div class="trk"><div class="fil fb" style="width:80%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>资料整合</span><span>9.0</span></div><div class="trk"><div class="fil fb" style="width:90%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>输出集成</span><span>8.0</span></div><div class="trk"><div class="fil fb" style="width:80%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>迭代优化</span><span>8.0</span></div><div class="trk"><div class="fil fb" style="width:80%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>自动化</span><span>6.0</span></div><div class="trk"><div class="fil fb" style="width:60%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>企业能力</span><span>9.0</span></div><div class="trk"><div class="fil fb" style="width:90%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>易用性</span><span>9.0</span></div><div class="trk"><div class="fil fb" style="width:90%"></div></div></div>
+      <div class="bar"><div class="lbl"><span>复用沉淀</span><span>9.0</span></div><div class="trk"><div class="fil fb" style="width:90%"></div></div></div>
+    </div>
+  </div>
+  <p class="fs t2" style="margin-top:10px;">理论结论：WorkBuddy 以 2 倍的加权总分领先。核心差距不在模型，而在<strong>产品形态</strong>——WB 是知识工作台，天然匹配「理解→生成→交付」链路；QC 是工具编排器，擅长「触发→执行」。</p>
+</div>
+
+<!-- ====== 五、实际产出 ====== -->
+<div class="sec">
+  <h2>五、实际产出数据</h2>
+  <div class="g5">
+    <div class="kpi" style="border-top:3px solid var(--red);"><div class="v red">150</div><div class="l">Qclaw 生成<br>125主表+25异常</div></div>
+    <div class="kpi" style="border-top:3px solid var(--blue);"><div class="v blue">53</div><div class="l">WorkBuddy 生成<br>53条合并用例</div></div>
+    <div class="kpi" style="border-top:3px solid var(--green);"><div class="v green">120</div><div class="l">人工整合终版</div></div>
+    <div class="kpi" style="border-top:3px solid var(--yellow);"><div class="v yellow">2.8x</div><div class="l">数量比 QC:WB</div></div>
+    <div class="kpi" style="border-top:3px solid var(--purple);"><div class="v purple">1.7x</div><div class="l">单条内容量 WB:QC</div></div>
+  </div>
+  <div class="g2" style="margin-top:16px;">
+    <div class="card qc"><p class="fw red">Qclaw 产出结构</p><table><tr><td>主表</td><td>125条 / 9列 / 25个一级模块</td></tr><tr><td>异常场景</td><td><span class="b bg">独家</span> 25条独立异常sheet</td></tr><tr><td>汇总</td><td>27行，按模块×优先级×新增统计</td></tr><tr><td>粒度</td><td>细粒度原子化（每功能一条）</td></tr><tr><td>命名</td><td>英文缩写（FRA-JF-ACCEPT等）</td></tr></table></div>
+    <div class="card wb"><p class="fw blue">WorkBuddy 产出结构</p><table><tr><td>主表</td><td>53条 / 12列 / 14个一级模块</td></tr><tr><td>追溯矩阵</td><td><span class="b bg">独家</span> 54条需求-用例双向追溯</td></tr><tr><td>目录统计</td><td>按业务类型×用例类型双维统计</td></tr><tr><td>粒度</td><td>粗粒度端到端合并（1条覆盖7-8原用例）</td></tr><tr><td>命名</td><td>中文语义（FRA赴任流程等）</td></tr></table></div>
+  </div>
+</div>
+
+<!-- ====== 六、胜负手：粒度策略 ====== -->
+<div class="sec">
+  <h2>六、胜负手：生成粒度与执行可用性</h2>
+  <table>
+    <tr><th style="width:18%;"></th><th style="width:36%;"><span class="red">Qclaw 细粒度原子化</span></th><th style="width:36%;"><span class="blue">WorkBuddy 粗粒度合并化</span></th><th>结论</th></tr>
+    <tr><td class="fw">典型用例</td><td>受理单列表页单条件查询 — 一个功能一条</td><td>FRA-小程序申请→审核→两端核对 — 一个端到端场景</td><td></td></tr>
+    <tr><td class="fw">可分配性</td><td><span class="b bg">优</span> 可直接分配给测试人员</td><td><span class="b br">差</span> 需拆解后才能分配</td><td class="green">QC</td></tr>
+    <tr><td class="fw">可追踪性</td><td><span class="b bg">优</span> TAPD/Jira逐条管理状态</td><td><span class="b br">差</span> 无法逐条记录通过/失败</td><td class="green">QC</td></tr>
+    <tr><td class="fw">缺陷关联</td><td><span class="b bg">优</span> Bug精准关联到功能点</td><td><span class="b br">差</span> 一个Bug关联到合并场景</td><td class="green">QC</td></tr>
+    <tr><td class="fw">单条质量</td><td>164字符 · 75%有预期结果</td><td><span class="b bg">280字符 · 100%有预期结果</span></td><td class="blue">WB</td></tr>
+    <tr><td class="fw">最终采纳</td><td><span class="b bg">结构+内容主体被采纳</span></td><td>思路参考，原文未直接采用</td><td class="green">QC</td></tr>
+  </table>
+  <p class="fs t2" style="margin-top:12px;">WorkBuddy <b>不是输在能力</b>，而是生成策略不匹配测试管理流程。单条质量高≠整体可用，粒度是关键。</p>
+</div>
+
+<!-- ====== 七、独家亮点 & 短板 ====== -->
+<div class="sec">
+  <h2>七、独家亮点 &amp; 短板</h2>
+  <div class="g2">
+    <div>
+      <p class="fw red">Qclaw</p>
+      <div class="card qc">
+        <p class="fw">✨ 独家亮点</p>
+        <ul class="fs t2" style="padding-left:16px;">
+          <li><b>独立异常场景 sheet</b>（25条）：并发审核、支付超时、金额篡改等，每个有独立步骤和优先级</li>
+          <li><b>细粒度模块分解</b>：25个一级模块，FRA计费拆为受理→纸箱→取件→费用→发运→发票</li>
+          <li><b>统计汇总 sheet</b>：按模块×优先级×新增三维度统计</li>
+        </ul>
+        <p class="fw" style="margin-top:10px;">⚠️ 短板</p>
+        <ul class="fs t2" style="padding-left:16px;">
+          <li>25%用例缺少预期结果 · 英文命名不直观 · 缺少测试数据列 · 等价类覆盖不足 · 无需求追溯 · 上手门槛高</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <p class="fw blue">WorkBuddy</p>
+      <div class="card wb">
+        <p class="fw">✨ 独家亮点</p>
+        <ul class="fs t2" style="padding-left:16px;">
+          <li><b>追溯矩阵 sheet</b>（54条）：每条合并用例→覆盖的原始用例ID，支持需求变更影响分析</li>
+          <li><b>测试数据列</b>：每个用例附带具体数据值（如DHL单价=20元/kg）</li>
+          <li><b>步骤极度详实</b>：单条280字符（1.7x），含操作界面/字段名/期望值，100%有预期结果</li>
+        </ul>
+        <p class="fw" style="margin-top:10px;">⚠️ 短板</p>
+        <ul class="fs t2" style="padding-left:16px;">
+          <li>用例数严重不足 · 合并过度不可执行 · 与TAPD不兼容 · 缺异常场景 · 无统计汇总 · 偶有差错</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 八、实际产出评分 ====== -->
+<div class="sec">
+  <h2>八、实际产出综合评分</h2>
+  <table>
+    <tr><th>评估维度</th><th style="text-align:center;">权重</th><th style="text-align:center;">Qclaw</th><th style="text-align:center;">WorkBuddy</th><th>关键差异</th></tr>
+    <tr class="hi"><td>用例数量与覆盖广度</td><td style="text-align:center;">20%</td><td style="text-align:center;" class="green fw">9</td><td style="text-align:center;" class="red">3</td><td>150 vs 53，3:1</td></tr>
+    <tr><td>粒度与执行可用性</td><td style="text-align:center;">20%</td><td style="text-align:center;" class="green fw">8</td><td style="text-align:center;" class="red">3</td><td>原子化可用 vs 合并需拆解</td></tr>
+    <tr class="hi"><td>单条用例内容质量</td><td style="text-align:center;">15%</td><td style="text-align:center;">6</td><td style="text-align:center;" class="green fw">9</td><td>WB 1.7x内容量+100%预期结果</td></tr>
+    <tr><td>异常场景覆盖</td><td style="text-align:center;">15%</td><td style="text-align:center;" class="green fw">9</td><td style="text-align:center;" class="red">4</td><td>QC独立25条；WB缺失</td></tr>
+    <tr class="hi"><td>需求追溯能力</td><td style="text-align:center;">10%</td><td style="text-align:center;">4</td><td style="text-align:center;" class="green fw">9</td><td>WB追溯矩阵；QC无</td></tr>
+    <tr><td>字段/结构规范性</td><td style="text-align:center;">10%</td><td style="text-align:center;">6</td><td style="text-align:center;" class="green fw">9</td><td>WB字段更丰富</td></tr>
+    <tr class="hi"><td>管理统计能力</td><td style="text-align:center;">5%</td><td style="text-align:center;" class="green fw">8</td><td style="text-align:center;">5</td><td>QC统计汇总更详实</td></tr>
+    <tr><td>中文可读性</td><td style="text-align:center;">5%</td><td style="text-align:center;">5</td><td style="text-align:center;" class="green fw">8</td><td>QC英文缩写；WB中文</td></tr>
+    <tr style="background:var(--card2);"><td class="fw">加权总分</td><td style="text-align:center;">100%</td><td style="text-align:center;" class="green fw" style="font-size:1.1em;">7.15</td><td style="text-align:center;" class="yellow" style="font-size:1.1em;">5.40</td><td>Qclaw领先32%</td></tr>
+  </table>
+  <p class="fs t2">注：最终版本(120条)结构和内容主体采纳了Qclaw，中文命名和字段丰富度吸收了WorkBuddy思路。</p>
+</div>
+
+<!-- ====== 九、启示 ====== -->
+<div class="sec">
+  <h2>九、AI 测试用例生成的优势与困扰</h2>
+  <div class="g2">
+    <div>
+      <p class="fw green">优势</p>
+      <div class="card" style="border-left:3px solid var(--green);margin-bottom:10px;"><p class="fw fs">效率大幅提升</p><p class="fs t2">从零手写需2-4小时/模块，AI初版仅数分钟，单模块编写时间可从4小时缩至10分钟。</p></div>
+      <div class="card" style="border-left:3px solid var(--green);margin-bottom:10px;"><p class="fw fs">场景覆盖更全面</p><p class="fs t2">AI可自动推导边界值、异常场景、逆向流程等容易遗漏的维度，降低漏测风险。</p></div>
+      <div class="card" style="border-left:3px solid var(--green);"><p class="fw fs">降低专业门槛</p><p class="fs t2">测试新人无需啃透PRD即可获得结构化用例草稿，精力集中在审核和补充隐性规则上。</p></div>
+    </div>
+    <div>
+      <p class="fw yellow">困扰</p>
+      <div class="card" style="border-left:3px solid var(--yellow);margin-bottom:10px;"><p class="fw fs">必须人工校验</p><p class="fs t2">AI不理解业务隐性规则（如虚拟号规则、币种联动逻辑），生成后仍需逐条核对补充。</p></div>
+      <div class="card" style="border-left:3px solid var(--yellow);margin-bottom:10px;"><p class="fw fs">输出粒度不可控</p><p class="fs t2">同一需求不同工具产出完全不同风格，需额外Prompt约束才能对齐团队规范。</p></div>
+      <div class="card" style="border-left:3px solid var(--yellow);"><p class="fw fs">调教需要投入</p><p class="fs t2">初版通常不够精准，需多轮优化和角色定义才能达标。不同工具调教成本差异大。</p></div>
+    </div>
+  </div>
+
+  <p class="fw purple" style="margin-top:20px;">启示</p>
+  <div class="g3">
+    <div class="card" style="border-left:3px solid var(--purple);">
+      <p class="fs">AI 已具备从需求直接生成可执行测试用例的能力，但仍需人工审核业务专属规则。在测试用例生成领域，AI 已跨越「能写」到「可用」的门槛，但距离「无需审核」还有差距。</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--purple);">
+      <p class="fs">不同 AI 工具的核心差异不在模型能力，而在<b>生成策略</b>与团队<b>工作流的匹配度</b>。同一个需求可产出完全不同风格的用例。选型应优先考虑输出格式与测试管理流程的兼容性。</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--purple);">
+      <p class="fs">两类工具互补使用是最优解。建议建立「AI 生成 + 人工审核 + 模板沉淀」的标准流程，将打磨好的方案封装为可复用 Skill。让 AI 做重复性产出，人专注于判断和业务规则补充。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 结束页 ====== -->
+<div class="cover" style="padding-bottom:40px;">
+  <div class="g3" style="max-width:500px;margin:0 auto 20px;">
+    <div style="text-align:center;"><div style="font-size:2em;font-weight:900;" class="red">150</div><div class="fs t2">Qclaw 产出</div></div>
+    <div style="text-align:center;"><div style="font-size:2em;font-weight:900;" class="blue">53</div><div class="fs t2">WorkBuddy 产出</div></div>
+    <div style="text-align:center;"><div style="font-size:2em;font-weight:900;" class="green">120</div><div class="fs t2">最终采用</div></div>
+  </div>
+  <p class="fs">核心结论：<b>理论能力 ≠ 实际可用</b> · 粒度匹配比模型智力更重要 · 互补是最优解</p>
+</div>
+
+</div>
+</body>
+</html>
