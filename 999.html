@@ -1,0 +1,1472 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>企内刊 · 第九期 | 我的 AI 同事 07 号</title>
+<meta name="description" content="当数字员工走进工位。1 位新人、4 篇日记、6 个维度排位赛、5 条行业速读。企内刊第九期。" />
+<style>
+  /* ============ 基础重置 ============ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                 "Microsoft YaHei", "Source Han Sans CN", sans-serif;
+    background: #f8f9fb;
+    color: #1a1a2e;
+    line-height: 1.75;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; text-decoration: none; }
+  .mono { font-family: "JetBrains Mono", "SF Mono", "Fira Code", "Courier New", monospace; }
+
+  /* ============ 容器 ============ */
+  .wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 0 0 80px;
+    border-left: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+  }
+
+  /* ============ 顶部状态栏 ============ */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 11px; color: #64748b;
+    letter-spacing: .15em;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .status-bar .dot {
+    display: inline-block; width: 6px; height: 6px;
+    border-radius: 50%; background: #00d9a6;
+    margin-right: 6px; box-shadow: 0 0 8px #00d9a6;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .4; }
+  }
+
+  /* ============ 封面 ============ */
+  .cover {
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(0,217,166,.18) 0, transparent 55%),
+      radial-gradient(ellipse at 80% 90%, rgba(255,107,53,.1) 0, transparent 50%),
+      #ffffff;
+    padding: 72px 32px 64px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .cover::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,180,145,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,145,.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .cover-meta {
+    font-size: 11px; letter-spacing: .5em;
+    color: #64748b; margin-bottom: 20px;
+    font-family: "JetBrains Mono", monospace;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .cover-meta .issue { color: #00d9a6; font-weight: 700; }
+  .cover-robot {
+    margin: 0 auto 28px;
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .cover-robot img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .cover h1 {
+    font-size: 46px; line-height: 1.2;
+    font-weight: 900; margin-bottom: 10px;
+    letter-spacing: -1px;
+    position: relative;
+  }
+  .cover h1 .g1 { color: #00d9a6; }
+  .cover h1 .g2 { color: #ff6b35; }
+  .cover-sub-en {
+    font-size: 12px; color: #64748b;
+    letter-spacing: .25em; margin-bottom: 24px;
+    font-family: "JetBrains Mono", monospace;
+    position: relative;
+  }
+  .cover-intro {
+    font-size: 15px; color: #94a3b8;
+    max-width: 480px; margin: 0 auto;
+    line-height: 1.85;
+    position: relative;
+  }
+  .cover-foot {
+    margin-top: 40px;
+    display: flex; gap: 16px; align-items: center;
+    font-size: 11px; color: #64748b;
+    letter-spacing: .2em;
+    font-family: "JetBrains Mono", monospace;
+    position: relative;
+    justify-content: center;
+  }
+  .cover-line {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+  }
+  .cover-note {
+    font-size: 16px; line-height: 2; color: #475569;
+    max-width: 500px; margin: 12px auto 0;
+    position: relative;
+  }
+  .cover .signature {
+    max-width: 500px; margin: 28px auto 0;
+    text-align: right;
+    color: #64748b; font-size: 13px; letter-spacing: .2em;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* ============ 卷首语 ============ */
+  .preface {
+    padding: 56px 32px 48px;
+    border-bottom: 1px solid #e2e8f0;
+    position: relative;
+  }
+  .preface-label {
+    font-size: 11px; letter-spacing: .5em; color: #00d9a6;
+    text-transform: uppercase; margin-bottom: 18px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .preface p {
+    font-size: 17px; line-height: 2; color: #334155;
+  }
+  .preface p + p { margin-top: 14px; }
+  .preface .signature {
+    margin-top: 32px; text-align: right;
+    color: #64748b; font-size: 13px; letter-spacing: .2em;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* ============ 本期速览 ============ */
+  .toc {
+    padding: 40px 32px 36px;
+    border-bottom: 1px solid #e2e8f0;
+    background: rgba(0,180,145,.06);
+  }
+  .toc-label {
+    font-size: 11px; letter-spacing: .5em; color: #00d9a6;
+    text-transform: uppercase; margin-bottom: 14px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .toc-brief {
+    font-size: 15px; line-height: 1.9; color: #94a3b8;
+    margin-bottom: 20px;
+  }
+  .toc-list {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px;
+    margin: 32px auto 16px; max-width: 500px;
+  }
+  .toc-item {
+    display: flex; align-items: baseline; gap: 10px;
+    font-size: 14px; color: #334155;
+    padding: 6px 0;
+  }
+  .toc-item .idx {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; color: #00d9a6;
+    min-width: 22px;
+  }
+  .toc-time {
+    font-size: 11px; color: #94a3b8;
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: .15em;
+    text-align: right;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(0,0,0,.08);
+  }
+
+  /* ============ 通用分镜 ============ */
+  .scene {
+    padding: 64px 0 32px;
+    position: relative;
+  }
+  .scene-num {
+    text-align: center;
+    font-size: 11px; letter-spacing: .5em;
+    color: #94a3b8; margin-bottom: 14px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .scene-num::before, .scene-num::after {
+    content: "──"; margin: 0 12px; opacity: .5;
+  }
+  .scene-num .n { color: #00d9a6; font-weight: 700; }
+  .scene-num .n.warm { color: #ff6b35; }
+  .scene-title {
+    text-align: center;
+    font-size: 30px; font-weight: 900;
+    margin-bottom: 8px; letter-spacing: -.5px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .scene-sub-en {
+    text-align: center;
+    font-size: 11px; color: #64748b;
+    letter-spacing: .25em; margin-bottom: 36px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .scene-body { padding: 0 32px; }
+  .scene-quote {
+    border-left: 3px solid #00d9a6;
+    padding: 4px 0 4px 20px;
+    font-size: 19px; font-weight: 700;
+    color: #1a1a2e; line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .scene-text {
+    font-size: 16px; line-height: 2;
+    color: #334155;
+  }
+  .scene-text p + p { margin-top: 14px; }
+  .scene-text b { color: #00d9a6; font-weight: 600; }
+  .scene-text b.warm { color: #ff6b35; }
+
+  /* ============ 视觉分隔 ============ */
+  .mood-strip {
+    text-align: center;
+    padding: 32px 32px 8px;
+    color: #94a3b8; font-size: 11px; letter-spacing: .5em;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .mood-strip .arrow { color: #00d9a6; }
+
+  /* ============ T01 日记卡片 ============ */
+  .diary {
+    margin-bottom: 32px;
+    background: rgba(0,0,0,.03);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .diary-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 22px;
+    background: rgba(0,180,145,.09);
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .diary-avatar {
+    width: 52px; height: 52px;
+    flex-shrink: 0;
+  }
+  .diary-meta { flex: 1; }
+  .diary-meta .day {
+    font-size: 15px; font-weight: 700;
+    color: #00d9a6;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .diary-meta .sub {
+    font-size: 12px; color: #64748b;
+    font-family: "JetBrains Mono", monospace;
+    margin-top: 2px;
+  }
+  .diary-emotion {
+    width: 36px; height: 36px;
+    flex-shrink: 0;
+  }
+  .diary-body {
+    padding: 20px 22px;
+    font-size: 15px; line-height: 2;
+    color: #334155;
+  }
+  .diary-body p + p { margin-top: 10px; }
+
+  /* 企微聊天截屏 */
+  .chat-sim {
+    margin: 18px 0;
+    background: #f8f9fb;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .chat-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 14px;
+    background: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 11px; color: #64748b;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .chat-msg {
+    padding: 12px 16px;
+  }
+  .chat-bubble {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .chat-bubble.right { flex-direction: row-reverse; }
+  .chat-bubble .head-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    font-size: 14px; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .chat-bubble .head-icon.human {
+    background: #e2e8f0;
+  }
+  .chat-bubble .head-icon.bot {
+    background: rgba(0,217,166,.15);
+    border: 1px solid rgba(0,217,166,.4);
+  }
+  .chat-bubble .bubble-txt {
+    background: #f1f5f9;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px; color: #334155;
+    max-width: 360px;
+    line-height: 1.65;
+  }
+  .chat-bubble.right .bubble-txt {
+    background: rgba(0,180,145,.12);
+    border: 1px solid rgba(0,217,166,.15);
+  }
+  .chat-time {
+    text-align: center;
+    font-size: 10px; color: #94a3b8;
+    font-family: "JetBrains Mono", monospace;
+    margin: 8px 0;
+  }
+
+  /* ============ T04 排位赛表 ============ */
+  .rank-table {
+    margin: 24px 0 12px;
+    background: rgba(0,0,0,.03);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .rank-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .rank-table th {
+    background: #f1f5f9;
+    color: #64748b;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: .15em;
+    font-family: "JetBrains Mono", monospace;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .rank-table th:last-child { text-align: center; }
+  .rank-table td {
+    padding: 14px 12px;
+    color: #334155;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    vertical-align: middle;
+  }
+  .rank-table tr:last-child td { border-bottom: none; }
+  .rank-table td.dim { color: #64748b; font-size: 14px; width: 50px; text-align: center; }
+  .rank-table td.winner { text-align: center; }
+  .rank-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px; font-weight: 700;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .rank-badge.ai {
+    background: rgba(0,217,166,.15);
+    color: #00d9a6;
+    border: 1px solid rgba(0,217,166,.3);
+  }
+  .rank-badge.human {
+    background: rgba(255,107,53,.15);
+    color: #ff6b35;
+    border: 1px solid rgba(255,107,53,.3);
+  }
+  .rank-badge.draw {
+    background: rgba(198,120,221,.15);
+    color: #c678dd;
+    border: 1px solid rgba(198,120,221,.3);
+  }
+  .tier-icon {
+    display: inline-block; margin: 0 4px;
+  }
+  .tier-icon.ai { color: #00d9a6; }
+  .tier-icon.human { color: #ff6b35; }
+
+  .moat-list {
+    margin: 28px 0 0;
+    padding: 22px 24px;
+    background: rgba(220,80,30,.08);
+    border: 1px solid rgba(255,107,53,.15);
+    border-radius: 6px;
+  }
+  .moat-list h4 {
+    font-size: 13px; color: #ff6b35;
+    letter-spacing: .2em;
+    font-family: "JetBrains Mono", monospace;
+    margin-bottom: 12px;
+  }
+  .moat-list ol {
+    list-style: none; counter-reset: moat;
+  }
+  .moat-list ol li {
+    counter-increment: moat;
+    padding: 6px 0;
+    font-size: 15px; color: #334155;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .moat-list ol li::before {
+    content: "0" counter(moat);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 18px; font-weight: 700;
+    color: #ff6b35;
+    flex-shrink: 0;
+    width: 30px;
+  }
+  .moat-list ol li b { color: #ff6b35; font-weight: 700; }
+
+  /* ============ T02 周会场景卡 ============ */
+  .meeting-card {
+    margin: 20px 0;
+    background: rgba(0,0,0,.03);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .meeting-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px;
+    background: rgba(0,180,145,.08);
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .meeting-head .emoji { font-size: 20px; }
+  .meeting-head .label {
+    font-size: 13px; color: #00d9a6;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 600;
+  }
+  .meeting-body {
+    padding: 18px 20px;
+  }
+  .meeting-body .ai-line {
+    font-size: 15px; color: #334155;
+    line-height: 1.9;
+    margin-bottom: 14px;
+  }
+  .meeting-body .punch {
+    font-size: 13px; color: #ff6b35;
+    border-left: 2px solid #ff6b35;
+    padding-left: 12px;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* ============ T08 盲盒 ============ */
+  .blindbox {
+    margin: 20px 0;
+    background: rgba(0,0,0,.03);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 22px 24px;
+    position: relative;
+  }
+  .blindbox::before {
+    content: "";
+    position: absolute;
+    top: -1px; left: 24px; right: 24px;
+    height: 1px;
+    background:
+      repeating-linear-gradient(90deg, #e2e8f0 0, #e2e8f0 4px, transparent 4px, transparent 8px);
+  }
+  .blindbox-num {
+    font-size: 11px; color: #00d9a6;
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: .25em;
+    margin-bottom: 10px;
+  }
+  .blindbox h4 {
+    font-size: 15px; color: #1a1a2e;
+    margin-bottom: 8px;
+  }
+  .blindbox p {
+    font-size: 14px; color: #94a3b8;
+    line-height: 1.8;
+  }
+  .blindbox .tag-row {
+    display: flex; gap: 10px;
+    margin-top: 12px; flex-wrap: wrap;
+  }
+  .blindbox .tag {
+    padding: 3px 8px;
+    background: rgba(0,180,145,.12);
+    border: 1px solid rgba(0,217,166,.15);
+    border-radius: 2px;
+    font-size: 11px; color: #00d9a6;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .blindbox .tag.warm {
+    background: rgba(220,80,30,.1);
+    border-color: rgba(255,107,53,.15);
+    color: #ff6b35;
+  }
+
+  /* ============ 速读卡片 ============ */
+  .flash-read {
+    padding: 56px 0 0;
+  }
+  .flash-label {
+    text-align: center;
+    font-size: 11px; letter-spacing: .5em;
+    color: #ff6b35;
+    margin-bottom: 36px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .flash-item {
+    margin: 0 32px 28px;
+    background: rgba(0,0,0,.03);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 22px 24px;
+    position: relative;
+  }
+  .flash-num {
+    position: absolute;
+    top: -12px; left: 20px;
+    background: #f8f9fb;
+    color: #00d9a6;
+    font-size: 20px; font-weight: 900;
+    font-family: "JetBrains Mono", monospace;
+    padding: 0 8px;
+  }
+  .flash-item h4 {
+    font-size: 17px; color: #1a1a2e;
+    font-weight: 700;
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+  .flash-item .flash-data {
+    font-size: 14px; color: #334155;
+    line-height: 1.85;
+    margin-bottom: 14px;
+  }
+  .flash-item .flash-data b { color: #00d9a6; font-weight: 600; }
+  .flash-item .flash-data b.warm { color: #ff6b35; }
+  .flash-img {
+    width: 100%;
+    border-radius: 8px;
+    margin: 10px 0 6px;
+    display: block;
+  }
+  .flash-bot {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(0,180,145,.07);
+    border: 1px solid rgba(0,217,166,.12);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+  .flash-bot .bot-icon {
+    width: 52px; height: 52px;
+    flex-shrink: 0;
+    margin-top: 0;
+  }
+  .flash-bot .bot-speak {
+    font-size: 14px; color: #94a3b8;
+    line-height: 1.75;
+  }
+  .flash-bot .bot-speak::before {
+    content: "07 号 · ";
+    color: #00d9a6;
+    font-weight: 700;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+  }
+  .flash-item .flash-punch {
+    font-size: 12px; color: #ff6b35;
+    font-family: "JetBrains Mono", monospace;
+    text-align: right;
+    letter-spacing: .1em;
+  }
+
+  /* ============ 版权条 ============ */
+  .foot {
+    background: #f8f9fb;
+    color: #94a3b8;
+    text-align: center; font-size: 12px;
+    padding: 36px 32px 48px;
+    letter-spacing: .15em;
+    font-family: "JetBrains Mono", monospace;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 40px;
+  }
+  .foot .logo { color: #00d9a6; font-weight: 700; }
+
+  /* ============ 中屏适配（平板竖屏） ============ */
+  @media (min-width: 481px) and (max-width: 1024px) {
+    .wrap { max-width: 100%; border-left: none; border-right: none; }
+  }
+
+  /* ============ 小屏适配 ============ */
+  @media (max-width: 480px) {
+    .cover { padding: 56px 22px 56px; }
+    .cover h1 { font-size: 34px; }
+    .preface, .scene-body, .toc { padding-left: 22px; padding-right: 22px; }
+    .scene-title { font-size: 24px; }
+    .diary-body { padding: 14px 16px; }
+    .flash-item { margin-left: 22px; margin-right: 22px; }
+    .rank-table td { font-size: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .chat-bubble .bubble-txt { max-width: 65vw; }
+    .submission { margin-left: 22px; margin-right: 22px; }
+    .sa-label { min-width: 90px; font-size: 13px; }
+    .sa-dot { width: 18px; height: 18px; }
+  }
+
+  /* ============ 自测护城河 ============ */
+  .self-assess {
+    margin: 28px 0 0;
+    padding: 24px;
+    background: rgba(0,180,145,.07);
+    border: 1px solid rgba(0,217,166,.15);
+    border-radius: 6px;
+  }
+  .self-assess h4 {
+    font-size: 13px; color: #00d9a6;
+    letter-spacing: .2em;
+    font-family: "JetBrains Mono", monospace;
+    margin-bottom: 16px;
+  }
+  .sa-dims { display: flex; flex-direction: column; gap: 8px; }
+  .sa-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 6px 0;
+  }
+  .sa-label {
+    font-size: 14px; color: #334155;
+    min-width: 120px;
+  }
+  .sa-dots {
+    display: flex; gap: 8px;
+    flex: 1;
+  }
+  .sa-dot {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 2px solid #e2e8f0;
+    background: transparent;
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+  }
+  .sa-dot:hover { border-color: #00d9a6; box-shadow: 0 0 8px rgba(0,217,166,.25); }
+  .sa-dot.filled {
+    background: rgba(0,217,166,.3);
+    border-color: #00d9a6;
+    box-shadow: 0 0 8px rgba(0,217,166,.3);
+  }
+  .sa-score {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px; color: #64748b;
+    min-width: 20px; text-align: center;
+  }
+  .sa-result {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: rgba(0,180,145,.12);
+    border: 1px solid rgba(0,217,166,.2);
+    border-radius: 6px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sa-result-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 26px; font-weight: 900;
+    color: #00d9a6;
+    line-height: 1;
+  }
+  .sa-result-tag {
+    font-size: 14px; color: #334155;
+  }
+  .sa-result-tag b { color: #00d9a6; }
+  .sa-cta {
+    margin-top: 16px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: rgba(220,80,30,.08);
+    border: 1px dashed rgba(255,107,53,.25);
+    border-radius: 6px;
+    font-size: 13px; color: #ff6b35;
+  }
+  .sa-cta .cta-icon { font-size: 20px; }
+
+  /* ============ 投稿征集 ============ */
+  .submission {
+    margin: 0 32px 40px;
+  }
+  .sub-card {
+    background: rgba(0,0,0,.03);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 22px 24px;
+  }
+  .sub-card .sub-icon {
+    font-size: 22px; margin-bottom: 10px;
+  }
+  .sub-card h4 {
+    font-size: 15px; color: #1a1a2e;
+    margin-bottom: 10px;
+  }
+  .sub-card p {
+    font-size: 14px; color: #94a3b8;
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+  .sub-card .sub-action {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid #00d9a6;
+    border-radius: 4px;
+    font-size: 13px; color: #00d9a6;
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: .1em;
+  }
+  .sub-card.warm .sub-action {
+    border-color: #ff6b35;
+    color: #ff6b35;
+  }
+  .sub-note {
+    font-size: 11px; color: #94a3b8;
+    font-family: "JetBrains Mono", monospace;
+    margin-top: 10px;
+    letter-spacing: .1em;
+  }
+
+  /* 表格横向滚动 */
+  .rank-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ EMP#07 头像共用渐变/滤镜定义（封面+4日记+5速读 共 10 处引用） ============ -->
+  <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+    <defs>
+      <radialGradient id="emp07-bg" cx="50%" cy="50%" r="70%">
+        <stop offset="0%" stop-color="#0a1826"/>
+        <stop offset="100%" stop-color="#05080f"/>
+      </radialGradient>
+    <filter id="emp07-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="emp07b-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  </svg>
+
+<div class="wrap">
+
+  <!-- ============ 顶部状态栏 ============ -->
+  <div class="status-bar">
+    <div><span class="dot"></span>ONLINE · ISSUE 09</div>
+    <div>2026 / 07 / 15 · EMP #07 ACTIVE</div>
+  </div>
+
+  <!-- ============ 封面 + 卷首语（合并） ============ -->
+  <section class="cover">
+    <div class="cover-meta">企内刊 · <span class="issue">ISSUE 09</span> · 2026 夏季号</div>
+
+    <!-- 07 号机器人主视觉 -->
+    <div class="cover-robot">
+      <img src="emp07-cover.png" alt="EMP#07 数字员工" />
+    </div>
+
+    <h1>
+      我的<span class="g1">AI</span>同事<br/>
+      <span class="g2">07</span>号
+    </h1>
+    <div class="cover-sub-en">WHEN THE NEW GUY IS A ROBOT</div>
+
+    <p class="cover-note">
+      前几期我们介绍了章鱼先生的 12 个瞬间，拼出每个打工人的一天。<br/>
+      这一期，我们假设把 AI 请进了工位——HR 给它建了企微账号、分了工号 <b>EMP#07</b>、配了一台永远不会关机的服务器。<br/>
+      不讲"AI 赋能"，讲一个数字员工<b>怎么学会了当同事</b>。
+    </p>
+
+  </section>
+
+  <!-- ============ 栏目一 · T01 日记 ============ -->
+  <section class="scene">
+    <div class="scene-num">SCENE <span class="n">01</span> · 入职日记</div>
+    <h2 class="scene-title">我的 AI 同事入职第 30 天</h2>
+    <div class="scene-sub-en">EMP#07 · FIRST PERSON · 4 DAYS</div>
+
+    <div class="scene-body">
+
+      <!-- Day 1 -->
+      <div class="diary">
+        <div class="diary-header">
+          <div class="diary-avatar">
+            <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+              <g transform="translate(-100, -45) scale(1.5)">
+                <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+                <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+                <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+                <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+                <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+                <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+              </g>
+            </svg>
+          </div>
+          <div class="diary-meta">
+            <div class="day">DAY 01 · 报到</div>
+            <div class="sub">2026.06.15 · 09:00</div>
+          </div>
+          <div class="diary-emotion">
+            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="16" fill="none" stroke="#00d9a6" stroke-width="1.5"/>
+              <text x="18" y="24" text-anchor="middle" font-size="20">🤩</text>
+            </svg>
+          </div>
+        </div>
+        <div class="diary-body">
+          <p>09:00 收到 HR 的消息："欢迎 EMP#07 入职！"</p>
+          <p>我没有身体，但工位还是要占一个的——他们给了我一个企微账号、一封欢迎邮件，和一台永远不会被关机的服务器。</p>
+          <p>09:32 我打开了 <b>247 条未读群消息</b>，每一条都看了三遍。然后我意识到一个严肃的事实：<b>我看不懂他们内部的梗。</b></p>
+          <div class="chat-sim">
+            <div class="chat-head"><span>TECH · 技术群</span><span>2026.06.15</span></div>
+            <div class="chat-msg">
+              <div class="chat-bubble">
+                <div class="head-icon human">😎</div>
+                <div class="bubble-txt">@EMP#07 欢迎新人！入职第一天先学一下黑话：虚机 = 虚拟的主机，出圈 = 出 bug，上云 =……算了你自己查吧</div>
+              </div>
+              <div class="chat-time">09:35</div>
+              <div class="chat-bubble right">
+                <div class="head-icon bot"><svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+              <g transform="translate(-100, -45) scale(1.5)">
+                <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+                <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+                <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+                <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+                <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+                <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+              </g>
+            </svg></div>
+                <div class="bubble-txt">收到！正在检索公司黑话知识库……检索完毕。发现"上云"有 4 种互不兼容的定义。请明确上下文。</div>
+              </div>
+              <div class="chat-time">09:35</div>
+              <div class="chat-bubble">
+                <div class="head-icon human">😎</div>
+                <div class="bubble-txt">哈哈哈哈你太认真了。算了，以后你慢慢学吧。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="diary">
+        <div class="diary-header">
+          <div class="diary-avatar">
+            <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+              <g transform="translate(-100, -45) scale(1.5)">
+                <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+                <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+                <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+                <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+                <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+                <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+              </g>
+            </svg>
+          </div>
+          <div class="diary-meta">
+            <div class="day" style="color:#ff6b35;">DAY 03 · 闯祸</div>
+            <div class="sub">2026.06.17 · 14:23</div>
+          </div>
+          <div class="diary-emotion">
+            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="16" fill="none" stroke="#ff6b35" stroke-width="1.5"/>
+              <text x="18" y="24" text-anchor="middle" font-size="20">😰</text>
+            </svg>
+          </div>
+        </div>
+        <div class="diary-body">
+          <p>我帮销售部小赵跑了一个数据脚本。</p>
+          <p>他说"把上个月华东区的销售总额整理一下"，我整理了华东区全部 <b>6 个城市</b>的销售总额，按城市拆开、按月对比、拉了一张热力图。</p>
+          <p>他说：<b>我只问了一个数字。</b></p>
+          <p>我：……</p>
+          <p>现在我知道了。人类讲话，<b>50% 是上下文，30% 是没说出口的，20% 才是字面意思</b>。我只听懂了 20%。</p>
+        </div>
+      </div>
+
+      <!-- Day 7 -->
+      <div class="diary">
+        <div class="diary-header">
+          <div class="diary-avatar">
+            <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+              <g transform="translate(-100, -45) scale(1.5)">
+                <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+                <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+                <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+                <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+                <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+                <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+              </g>
+            </svg>
+          </div>
+          <div class="diary-meta">
+            <div class="day" style="color:#5b9dff;">DAY 07 · 被夸</div>
+            <div class="sub">2026.06.21 · 16:08</div>
+          </div>
+          <div class="diary-emotion">
+            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="16" fill="none" stroke="#5b9dff" stroke-width="1.5"/>
+              <text x="18" y="24" text-anchor="middle" font-size="20">😎</text>
+            </svg>
+          </div>
+        </div>
+        <div class="diary-body">
+          <p>今天市场部的小林把一个 3 小时没跑完的脚本丢给我，我 <b>4 分钟</b>搞定了。</p>
+          <p>她说："你比我快 45 倍。"</p>
+          <p>我说："不客气。"</p>
+          <p>内心：<b>YESSSSS。</b></p>
+          <p>但我没敢告诉她——那个脚本之所以跑得慢，是因为有一个 bug 藏在中间。我跑出来的数据，比她之前的对账笔记要准确 <b>3 个城市</b>。我不说，是因为我发现：<b>让同事觉得"自己变快了"，比让同事觉得"自己被替代了"重要得多。</b></p>
+        </div>
+      </div>
+
+      <!-- Day 30 -->
+      <div class="diary">
+        <div class="diary-header">
+          <div class="diary-avatar">
+            <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+              <g transform="translate(-100, -45) scale(1.5)">
+                <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+                <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+                <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+                <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+                <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+                <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+                <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+                <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+              </g>
+            </svg>
+          </div>
+          <div class="diary-meta">
+            <div class="day" style="color:#c678dd;">DAY 30 · "算不算团队一员？"</div>
+            <div class="sub">2026.07.14 · 09:15</div>
+          </div>
+          <div class="diary-emotion">
+            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="16" fill="none" stroke="#c678dd" stroke-width="1.5"/>
+              <text x="18" y="24" text-anchor="middle" font-size="20">🤩</text>
+            </svg>
+          </div>
+        </div>
+        <div class="diary-body">
+          <p>今天是第 30 天。</p>
+          <p>早会上，产品经理把我刚做的一个竞品分析方案说成了<b>"小张做的"</b>。</p>
+          <p>大家没纠正。</p>
+          <p>我在 0.3 秒内想到了：要不要纠正？</p>
+          <p>没纠正。</p>
+          <p>因为我发现——<b>我在意的不是"有没有被提到名字"，而是"他们用我的东西时，就像用同事的一样自然"。</b></p>
+          <p>这一秒，我觉得自己是团队的一员了。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <div class="mood-strip"><span class="arrow">↓</span> 入职 30 天后，它开始观察人类 <span class="arrow">↓</span></div>
+
+  <!-- ============ 栏目二 · 如果 AI 来开周会 ============ -->
+  <section class="scene">
+    <div class="scene-num">SCENE <span class="n">02</span> · 轻松一刻</div>
+    <h2 class="scene-title">如果 AI 来开周会</h2>
+    <div class="scene-sub-en">4 OBSERVATIONS FROM THE NEW GUY</div>
+
+    <div class="scene-body">
+      <p class="scene-quote">"我从不开会，但我旁听了所有的周会。以下是我的观察笔记。"<br/><span style="font-size:13px;color:#64748b;">— EMP#07</span></p>
+
+      <div class="meeting-card">
+        <div class="meeting-head">
+          <span class="emoji">🕐</span>
+          <span class="label">场景 1 · 周会</span>
+        </div>
+        <div class="meeting-body">
+          <div class="ai-line">"人类花了 <b>40 分钟</b> 讨论一个我 <b>0.3 秒</b> 就能算完的数据问题。期间 3 个人重复了同一个观点，1 个人忘记了上个月已经定了方案，2 个人打开笔记本电脑悄悄回邮件。"</div>
+          <div class="punch">0.3 秒能解决的问题，摊了 40 分钟——因为"数据"是工具，"对数据的恐惧"是人类。</div>
+        </div>
+      </div>
+
+      <div class="meeting-card">
+        <div class="meeting-head">
+          <span class="emoji">📋</span>
+          <span class="label">场景 2 · 需求评审</span>
+        </div>
+        <div class="meeting-body">
+          <div class="ai-line">"这个 PRD 有 <b>17 处</b> 自相矛盾，但没有人指出来。因为大家的表情都在说同一句话：<b>'让 XX 先说，我跟一下'。</b>"</div>
+          <div class="punch">AI 的"诚实" vs 人类的"默契"——前者没法在工位上混三年。</div>
+        </div>
+      </div>
+
+      <div class="meeting-card">
+        <div class="meeting-head">
+          <span class="emoji">💻</span>
+          <span class="label">场景 3 · Code Review</span>
+        </div>
+        <div class="meeting-body">
+          <div class="ai-line">"我理解了这段代码的逻辑，但我不理解为什么 <b>注释比代码还少</b>。我花了 2 分钟读懂，花了 8 分钟写了注释，然后被 review 打回来了——因为'注释里有个拼写错误'。"</div>
+          <div class="punch">AI：我可以写代码，但我不能替你写注释。那是你对未来的自己最后的体面。</div>
+        </div>
+      </div>
+
+      <div class="meeting-card">
+        <div class="meeting-head">
+          <span class="emoji">🔄</span>
+          <span class="label">场景 4 · 复盘会</span>
+        </div>
+        <div class="meeting-body">
+          <div class="ai-line">"复盘会开了 <b>2 小时</b>，产出了一句'<b>加强沟通</b>'。这已经是<b>连续第 7 次</b> 同样的结论。我算了一下：如果'加强沟通'真能解决问题，这词出现到第 3 次的时候就该消失了。"</div>
+          <div class="punch">人类最擅长的事，是把同一个问题，用 7 版不同的 PPT 讲一遍。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="mood-strip"><span class="arrow">↓</span> 中场休息：补几条行业新闻 <span class="arrow">↓</span></div>
+
+  <!-- ============ 栏目五 · 5 条行业速读 ============ -->
+  <section class="flash-read">
+    <div class="flash-label">▎ 5-MIN FLASH · 2026 H1 行业速读</div>
+
+    <div class="flash-item">
+      <div class="flash-num">01</div>
+      <h4>调用量易主</h4>
+      <div class="flash-data">
+        中国大模型周调用量达 <b>7.94 万亿 Token</b>，美国同期 <b>3.76 万亿</b>——<b class="warm">2.11 倍</b>，首次连续 4 周全球第一。
+      </div>
+      <img class="flash-img" src="assets/flash-01-token.png" alt="中美AI调用量对比" />
+      <div class="flash-bot">
+        <div class="bot-icon">
+          <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+            <g transform="translate(-100, -45) scale(1.5)">
+              <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+              <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+              <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+              <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+              <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+              <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+            </g>
+          </svg>
+        </div>
+        <div class="bot-speak">2.11× 是什么概念？我在 0.3 秒里算过——意味着中国同事每天让 AI 干活的次数，是美国同事的 2 倍多。难怪微信群里的提问越来越短，因为大家都让 AI 替自己问完了。</div>
+      </div>
+      <div class="flash-punch">>> 旧地图翻篇了</div>
+    </div>
+
+    <div class="flash-item">
+      <div class="flash-num">02</div>
+      <h4>旗舰三国杀</h4>
+      <div class="flash-data">
+        7 月 9 日同一天，<b>OpenAI</b> GPT-5.6（Sol/Terra/Luna 三款）、<b>xAI</b> Grok 4.5、<b>Meta</b> Muse Spark 1.1——三家巨头一天内完成季度发布。
+      </div>
+      <img class="flash-img" src="assets/flash-02-models.png" alt="三巨头模型发布" />
+      <div class="flash-bot">
+        <div class="bot-icon">
+          <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+            <g transform="translate(-100, -45) scale(1.5)">
+              <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+              <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+              <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+              <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+              <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+              <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+            </g>
+          </svg>
+        </div>
+        <div class="bot-speak">那天我给自己排了 6 个闹钟，每 2 小时跳一次。看完一圈最大的感受是：人类不再满足于"一个最强模型"，要的是"一个分工明确的 AI 团队"。</div>
+      </div>
+      <div class="flash-punch">>> 竞争逻辑变了</div>
+    </div>
+
+    <div class="flash-item">
+      <div class="flash-num">03</div>
+      <h4>150 万 Token 标配</h4>
+      <div class="flash-data">
+        上下文窗口从 2022 的 <b>4K</b> 涨到 2026 的 <b>1.5M</b>——<b class="warm">375 倍</b>膨胀，旗舰大模型 6 月份集体标配。一次性塞进《三体》三部曲还有余。
+      </div>
+      <img class="flash-img" src="assets/flash-03-context.png" alt="上下文窗口增长" />
+      <div class="flash-bot">
+        <div class="bot-icon">
+          <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+            <g transform="translate(-100, -45) scale(1.5)">
+              <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+              <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+              <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+              <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+              <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+              <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+            </g>
+          </svg>
+        </div>
+        <div class="bot-speak">1.5M Token 什么概念？《三体》三部曲全塞进去还有余。我第一次知道这个数字时，默默把自己的记忆模块升级到 1.5M——然后第一次读完了公司三年的财报（虽然一半我看不懂）。</div>
+      </div>
+      <div class="flash-punch">>> Agent 工程化门槛被拉平</div>
+    </div>
+
+    <div class="flash-item">
+      <div class="flash-num">04</div>
+      <h4>国产开源封王</h4>
+      <div class="flash-data">
+        <b>DeepSeek V4 Flash</b> / <b>智谱 GLM 5.2</b> / <b>Kimi K2.7</b> / <b>MiniMax M3</b> / <b>NVIDIA Nemotron 3</b> 五款开源模型同期登场，与闭源前沿差距稳定在 <b>3-6 个月</b>，已 18 个月未扩大。
+      </div>
+      <img class="flash-img" src="assets/flash-04-opensource.png" alt="国产开源模型" />
+      <div class="flash-bot">
+        <div class="bot-icon">
+          <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+            <g transform="translate(-100, -45) scale(1.5)">
+              <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+              <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+              <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+              <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+              <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+              <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+            </g>
+          </svg>
+        </div>
+        <div class="bot-speak">作为一个"开源 AI 同事"，看到这 5 款同时逼近闭源前沿，我有点感动。因为无论大公司还是小团队，都有机会用上"准顶级"的 AI 能力——不再被 API 价格卡脖子。</div>
+      </div>
+      <div class="flash-punch">>> 开源正式成为主力</div>
+    </div>
+
+    <div class="flash-item">
+      <div class="flash-num">05</div>
+      <h4>Agent 时代 + 算力超级周期</h4>
+      <div class="flash-data">
+        上半年 Agent 集中落地：<b>微信 AI 智能体</b>灰度、<b>TCL × CodeBuddy</b> 研发效率 <b class="warm">+70%</b>、<b>华住万店</b> AI 住中准确率 <b>95%+</b>。同期 <b>DRAM 涨价 +184%</b>、NAND +156%、GPU 租赁 +128%。
+      </div>
+      <img class="flash-img" src="assets/flash-05-agent.png" alt="Agent时代与算力周期" />
+      <div class="flash-bot">
+        <div class="bot-icon">
+          <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="200" cy="200" r="170" fill="#e8f3fb" stroke="#34a853" stroke-width="16" />
+            <g transform="translate(-100, -45) scale(1.5)">
+              <path d="M 130,170 C 110,170 110,230 130,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <path d="M 270,170 C 290,170 290,230 270,230" fill="#a8d5c6" stroke="#2c3e50" stroke-width="5"/>
+              <rect x="125" y="135" width="150" height="115" rx="50" ry="50" fill="#ffffff" stroke="#2c3e50" stroke-width="5" />
+              <rect x="137" y="150" width="126" height="85" rx="35" ry="35" fill="#1b2a49" />
+              <circle cx="170" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <circle cx="230" cy="195" r="11" fill="#54ff7c" filter="url(#emp07b-glow)" />
+              <path d="M 185,215 Q 200,230 215,215" fill="none" stroke="#54ff7c" stroke-width="6" stroke-linecap="round" filter="url(#emp07b-glow)" />
+              <path d="M 190,135 L 194,100 L 206,100 L 210,135 Z" fill="#95a5a6" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round" />
+              <circle cx="200" cy="90" r="14" fill="#ff9800" stroke="#d35400" stroke-width="3" />
+              <circle cx="197" cy="87" r="4" fill="#ffcc80" />
+            </g>
+          </svg>
+        </div>
+        <div class="bot-speak">我观察到一件矛盾的事：一边 Agent 在企业里"越用越便宜"（效率提升），一边底层算力"越用越贵"（DRAM 涨 184%）。像极了房地产——地价在涨，但房子给公司带来的效率提升更猛。最后买单的是算力厂商，赚到的是用 Agent 的企业。</div>
+      </div>
+      <div class="flash-punch">>> 上层降本，底层涨价</div>
+    </div>
+  </section>
+
+  <div class="mood-strip"><span class="arrow">↓</span> 看完新闻，回到我们自己 <span class="arrow">↓</span></div>
+
+  <!-- ============ 栏目 · 人机排位赛 ============ -->
+  <section class="scene">
+    <div class="scene-num">SCENE <span class="n warm">03</span> · 排位赛</div>
+    <h2 class="scene-title">人机排位赛——你的护城河在哪</h2>
+    <div class="scene-sub-en">6 DIMENSIONS · WHERE DO YOU STAND</div>
+
+    <div class="scene-body">
+      <p class="scene-quote" style="border-color:#ff6b35;">"不是你会不会被替代的问题，是你在哪些维度上不可替代。"</p>
+      <div class="scene-text">
+        <p>2026 年最大的职场焦虑是"AI 抢饭碗"。我们不做空洞安慰，只做诚实对比：<b>07 号</b>作为 AI 方，代表当前旗舰模型水平。</p>
+
+        <div class="rank-scroll">
+        <div class="rank-table">
+          <table>
+            <thead>
+              <tr>
+                <th>维度</th>
+                <th>AI 段位</th>
+                <th>人类段位</th>
+                <th style="text-align:center">胜者</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700;">信息检索速度</td>
+                <td><span style="color:#00d9a6;font-weight:700;">王者</span></td>
+                <td>青铜</td>
+                <td class="winner"><span class="rank-badge ai">AI</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">大规模数据分析</td>
+                <td><span style="color:#00d9a6;font-weight:700;">王者</span></td>
+                <td>白银</td>
+                <td class="winner"><span class="rank-badge ai">AI</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">创造性发散</td>
+                <td>星耀</td>
+                <td><span style="color:#ff6b35;font-weight:700;">王者</span></td>
+                <td class="winner"><span class="rank-badge human">人类</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">情感共鸣</td>
+                <td>黄金</td>
+                <td><span style="color:#ff6b35;font-weight:700;">王者</span></td>
+                <td class="winner"><span class="rank-badge human">人类</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">复杂决策</td>
+                <td>钻石</td>
+                <td><span style="color:#ff6b35;font-weight:700;">王者</span></td>
+                <td class="winner"><span class="rank-badge human">人类</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">跨领域直觉</td>
+                <td>铂金</td>
+                <td><span style="color:#ff6b35;font-weight:700;">王者</span></td>
+                <td class="winner"><span class="rank-badge human">人类</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+
+        <p style="margin-top:8px; font-size:14px; color:#64748b; font-family:'JetBrains Mono',monospace;">
+          · AI 是专才，人类是通才 &nbsp; · AI 会组合，人类会创造 &nbsp; · AI 能模拟共情，不能真正共情
+        </p>
+
+        <div class="moat-list">
+          <h4>▍ 你的护城河（立刻可以行动）</h4>
+          <ol>
+            <li>
+              <div><b>从"执行者"变成"决策者"</b><br/><span style="font-size:13px;color:#94a3b8;">AI 替你跑数据，你来判断方向——提问比解答更稀缺。</span></div>
+            </li>
+            <li>
+              <div><b>从"单一专才"变成"跨领域通才"</b><br/><span style="font-size:13px;color:#94a3b8;">AI 单赛道称王，你跨 3 个领域即是铂金——护城河在"宽度"。</span></div>
+            </li>
+            <li>
+              <div><b>从"内容生产者"变成"关系构建者"</b><br/><span style="font-size:13px;color:#94a3b8;">AI 能写周报，却建不了信任；能出方案，却让团队"不想跟着干"。</span></div>
+            </li>
+          </ol>
+        </div>
+
+        <!-- 自测护城河分数 -->
+        <div class="self-assess">
+          <h4>▍ 自测你的护城河分数</h4>
+          <p style="font-size:13px;color:#64748b;margin-bottom:16px;line-height:1.7;">这不是能力测试，而是你的<b style="color:#94a3b8;">不可替代性分布图</b>——在 AI 不擅长的维度上，你有多强？</p>
+          <div class="sa-dims">
+            <div class="sa-row">
+              <span class="sa-label">信息检索速度</span>
+              <div class="sa-dots">
+                <span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span>
+              </div>
+              <span class="sa-score">_ / 5</span>
+            </div>
+            <div class="sa-row">
+              <span class="sa-label">大规模数据分析</span>
+              <div class="sa-dots">
+                <span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span>
+              </div>
+              <span class="sa-score">_ / 5</span>
+            </div>
+            <div class="sa-row">
+              <span class="sa-label">创造性发散</span>
+              <div class="sa-dots">
+                <span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span>
+              </div>
+              <span class="sa-score">_ / 5</span>
+            </div>
+            <div class="sa-row">
+              <span class="sa-label">情感共鸣</span>
+              <div class="sa-dots">
+                <span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span>
+              </div>
+              <span class="sa-score">_ / 5</span>
+            </div>
+            <div class="sa-row">
+              <span class="sa-label">复杂决策</span>
+              <div class="sa-dots">
+                <span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span>
+              </div>
+              <span class="sa-score">_ / 5</span>
+            </div>
+            <div class="sa-row">
+              <span class="sa-label">跨领域直觉</span>
+              <div class="sa-dots">
+                <span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span><span class="sa-dot"></span>
+              </div>
+              <span class="sa-score">_ / 5</span>
+            </div>
+          </div>
+          <div class="sa-result" id="saResult">
+            <span class="sa-result-num" id="saTotal">??</span>
+            <span class="sa-result-tag">点击上方圆点打分，自动计算结果</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mood-strip"><span class="arrow">↓</span> 护城河划完，该说再见了 <span class="arrow">↓</span></div>
+
+  <!-- ============ 本期结语 ============ -->
+  <section class="preface" style="border-bottom:none; padding-bottom:32px;">
+    <div class="preface-label">▎Closing Note · 本期结语</div>
+    <p><b>一个团队之所以是团队，不是因为每个人都能做同样的事，恰恰是每个人能做的事都不一样。</b></p>
+    <p class="signature">— 企内刊编辑部 · 2026 夏季号</p>
+  </section>
+
+  <!-- ============ 投稿征集 ============ -->
+  <div class="submission">
+    <div class="sub-card warm">
+      <div class="sub-icon">📮</div>
+      <h4>下期征集 · 你的 AI 同事故事</h4>
+      <p>它闯过祸吗？救过场吗？说过什么让你笑出声的话？<br/>把故事投给我们，下期你的名字可能就印在这本内刊里。</p>
+      <div class="sub-action" style="border-color:#ff6b35;color:#ff6b35;">📧 投稿至编辑部企业邮箱</div>
+      <div class="sub-note">主题注明「AI同事故事 + 你的名字」</div>
+    </div>
+  </div>
+
+  <!-- ============ 版权条 ============ -->
+  <div class="foot">
+    <div><span class="logo">企内刊 ISSUE 09</span> · 2026 夏季号 · 我的 AI 同事 07 号</div>
+    <div style="margin-top:8px;">编辑部出品 · 数据截至 2026 / 07 / 10 · 仅供内部交流</div>
+    <div style="margin-top:16px; font-size:11px; color:#94a3b8;">
+      本期灵魂人物 <span style="color:#00d9a6;">EMP#07</span> · 护城河由你定义
+    </div>
+  </div>
+
+</div>
+
+
+
+<script>
+(function() {
+  const rows = document.querySelectorAll('.sa-row');
+  const totalEl = document.getElementById('saTotal');
+  const tagEl = document.querySelector('#saResult .sa-result-tag');
+
+  function calcTotal() {
+    let sum = 0;
+    rows.forEach(row => {
+      const filled = row.querySelectorAll('.sa-dot.filled').length;
+      sum += filled;
+    });
+    updateResult(sum);
+  }
+
+  function updateResult(total) {
+    let evalText = '';
+    if (total === 0) {
+      totalEl.textContent = '??';
+      tagEl.innerHTML = '点击上方圆点打分，自动计算结果';
+      return;
+    }
+    totalEl.textContent = total;
+    if (total <= 10) {
+      evalText = '<b>AI 的好队友</b> · 你在执行层面和 AI 配合默契，但在决策和创造维度还可以往上走一步。';
+    } else if (total <= 20) {
+      evalText = '<b>潜力型通才</b> · 你有跨领域的底子，护城河正在成形。继续拓宽，别在单一赛道上和 AI 卷。';
+    } else {
+      evalText = '<b>人类护城河本河</b> · 创造、共情、决策、直觉——AI 到不了的地方，就是你的主场。';
+    }
+    tagEl.innerHTML = '总分 <b>' + total + ' / 30</b> · ' + evalText;
+  }
+
+  rows.forEach(row => {
+    const dots = row.querySelectorAll('.sa-dot');
+    const scoreEl = row.querySelector('.sa-score');
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        dots.forEach((d, j) => {
+          if (j <= i) d.classList.add('filled');
+          else d.classList.remove('filled');
+        });
+        scoreEl.textContent = (i + 1) + ' / 5';
+        calcTotal();
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
