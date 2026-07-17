@@ -14,8 +14,8 @@
                  "Microsoft YaHei", "Source Han Sans CN", sans-serif;
     background: #f8f9fb;
     color: #1a1a2e;
-    line-height: 1.75;
-    font-size: 16px;
+    line-height: 1.8;
+    font-size: 18px;
     -webkit-font-smoothing: antialiased;
   }
   img, svg { max-width: 100%; height: auto; display: block; }
@@ -56,13 +56,8 @@
   /* ============ 封面 ============ */
   .cover {
     position: relative;
-    background:
-      radial-gradient(ellipse at 50% 20%, rgba(0,217,166,.18) 0, transparent 55%),
-      radial-gradient(ellipse at 80% 90%, rgba(255,107,53,.1) 0, transparent 50%),
-      #ffffff;
-    padding: 48px 32px 40px;
+    background: #ffffff;
     overflow: hidden;
-    text-align: center;
   }
   .cover::before {
     content: "";
@@ -73,70 +68,19 @@
     background-size: 40px 40px;
     pointer-events: none;
   }
-  .cover-meta {
-    font-size: 11px; letter-spacing: .5em;
-    color: #64748b; margin-bottom: 20px;
-    font-family: "JetBrains Mono", monospace;
-    text-transform: uppercase;
-    position: relative;
-  }
-  .cover-meta .issue { color: #00d9a6; font-weight: 700; }
   .cover-robot {
-    margin: 0 auto 28px;
+    margin: 0;
     position: relative;
     width: 100%;
-    max-width: 560px;
-    border-radius: 16px;
+    max-width: 100%;
+    border-radius: 0;
     overflow: hidden;
+    line-height: 0;
   }
   .cover-robot img {
     width: 100%;
     height: auto;
     display: block;
-  }
-  .cover h1 {
-    font-size: 46px; line-height: 1.2;
-    font-weight: 900; margin-bottom: 10px;
-    letter-spacing: -1px;
-    position: relative;
-  }
-  .cover h1 .g1 { color: #00d9a6; }
-  .cover h1 .g2 { color: #ff6b35; }
-  .cover-sub-en {
-    font-size: 12px; color: #64748b;
-    letter-spacing: .25em; margin-bottom: 24px;
-    font-family: "JetBrains Mono", monospace;
-    position: relative;
-  }
-  .cover-intro {
-    font-size: 15px; color: #94a3b8;
-    max-width: 480px; margin: 0 auto;
-    line-height: 1.85;
-    position: relative;
-  }
-  .cover-foot {
-    margin-top: 40px;
-    display: flex; gap: 16px; align-items: center;
-    font-size: 11px; color: #64748b;
-    letter-spacing: .2em;
-    font-family: "JetBrains Mono", monospace;
-    position: relative;
-    justify-content: center;
-  }
-  .cover-line {
-    width: 80px; height: 1px;
-    background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
-  }
-  .cover-note {
-    font-size: 16px; line-height: 2; color: #475569;
-    max-width: 500px; margin: 12px auto 0;
-    position: relative;
-  }
-  .cover .signature {
-    max-width: 500px; margin: 28px auto 0;
-    text-align: right;
-    color: #64748b; font-size: 13px; letter-spacing: .2em;
-    font-family: "JetBrains Mono", monospace;
   }
 
   /* ============ 卷首语 ============ */
@@ -151,7 +95,7 @@
     font-family: "JetBrains Mono", monospace;
   }
   .preface p {
-    font-size: 17px; line-height: 2; color: #334155;
+    font-size: 19px; line-height: 2; color: #334155;
   }
   .preface p + p { margin-top: 14px; }
   .preface .signature {
@@ -159,6 +103,28 @@
     color: #64748b; font-size: 13px; letter-spacing: .2em;
     font-family: "JetBrains Mono", monospace;
   }
+
+  /* ============ 头图下方前言 ============ */
+  .cover-intro {
+    padding: 32px 32px 36px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .cover-intro .intro-label {
+    font-size: 12px; letter-spacing: .35em; color: #00d9a6;
+    margin-bottom: 22px;
+    font-family: "JetBrains Mono", monospace;
+    text-transform: uppercase;
+  }
+  .cover-intro .intro-label::before {
+    content: "▎";
+    color: #00d9a6;
+    margin-right: 10px;
+  }
+  .cover-intro p {
+    font-size: 20px; line-height: 2; color: #1a1a2e;
+    margin: 0;
+  }
+  .cover-intro p + p { margin-top: 14px; }
 
   /* ============ 本期速览 ============ */
   .toc {
@@ -172,7 +138,7 @@
     font-family: "JetBrains Mono", monospace;
   }
   .toc-brief {
-    font-size: 15px; line-height: 1.9; color: #94a3b8;
+    font-size: 17px; line-height: 1.9; color: #94a3b8;
     margin-bottom: 20px;
   }
   .toc-list {
@@ -181,7 +147,7 @@
   }
   .toc-item {
     display: flex; align-items: baseline; gap: 10px;
-    font-size: 14px; color: #334155;
+    font-size: 16px; color: #334155;
     padding: 6px 0;
   }
   .toc-item .idx {
@@ -216,8 +182,8 @@
   .scene-num .n.warm { color: #ff6b35; }
   .scene-title {
     text-align: center;
-    font-size: 30px; font-weight: 900;
-    margin-bottom: 6px; letter-spacing: -.5px;
+    font-size: 34px; font-weight: 900;
+    margin-bottom: 8px; letter-spacing: -.5px;
     background: linear-gradient(135deg, #1a1a2e 0%, #94a3b8 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -233,12 +199,12 @@
   .scene-quote {
     border-left: 3px solid #00d9a6;
     padding: 4px 0 4px 20px;
-    font-size: 19px; font-weight: 700;
+    font-size: 22px; font-weight: 700;
     color: #1a1a2e; line-height: 1.7;
     margin-bottom: 24px;
   }
   .scene-text {
-    font-size: 16px; line-height: 2;
+    font-size: 18px; line-height: 2;
     color: #334155;
   }
   .scene-text p + p { margin-top: 14px; }
@@ -288,8 +254,8 @@
     flex-shrink: 0;
   }
   .diary-body {
-    padding: 20px 22px;
-    font-size: 15px; line-height: 2;
+    padding: 22px 24px;
+    font-size: 17px; line-height: 2;
     color: #334155;
   }
   .diary-body p + p { margin-top: 10px; }
@@ -334,11 +300,11 @@
   }
   .chat-bubble .bubble-txt {
     background: #f1f5f9;
-    padding: 8px 14px;
+    padding: 10px 16px;
     border-radius: 8px;
-    font-size: 13px; color: #334155;
+    font-size: 15px; color: #334155;
     max-width: 360px;
-    line-height: 1.65;
+    line-height: 1.7;
   }
   .chat-bubble.right .bubble-txt {
     background: rgba(0,180,145,.12);
@@ -432,7 +398,7 @@
   .moat-list ol li {
     counter-increment: moat;
     padding: 6px 0;
-    font-size: 15px; color: #334155;
+    font-size: 17px; color: #334155;
     display: flex; gap: 10px; align-items: flex-start;
   }
   .moat-list ol li::before {
@@ -469,7 +435,7 @@
     padding: 18px 20px;
   }
   .meeting-body .ai-line {
-    font-size: 15px; color: #334155;
+    font-size: 17px; color: #334155;
     line-height: 1.9;
     margin-bottom: 14px;
   }
@@ -504,11 +470,11 @@
     margin-bottom: 10px;
   }
   .blindbox h4 {
-    font-size: 15px; color: #1a1a2e;
+    font-size: 17px; color: #1a1a2e;
     margin-bottom: 8px;
   }
   .blindbox p {
-    font-size: 14px; color: #94a3b8;
+    font-size: 16px; color: #94a3b8;
     line-height: 1.8;
   }
   .blindbox .tag-row {
@@ -558,14 +524,14 @@
     padding: 0 8px;
   }
   .flash-item h4 {
-    font-size: 17px; color: #1a1a2e;
+    font-size: 19px; color: #1a1a2e;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     margin-top: 4px;
   }
   .flash-item .flash-data {
-    font-size: 14px; color: #334155;
-    line-height: 1.85;
+    font-size: 16px; color: #334155;
+    line-height: 1.9;
     margin-bottom: 14px;
   }
   .flash-item .flash-data b { color: #00d9a6; font-weight: 600; }
@@ -590,8 +556,8 @@
     margin-top: 0;
   }
   .flash-bot .bot-speak {
-    font-size: 14px; color: #94a3b8;
-    line-height: 1.75;
+    font-size: 16px; color: #94a3b8;
+    line-height: 1.8;
   }
   .flash-bot .bot-speak::before {
     content: "07 号 · ";
@@ -628,16 +594,18 @@
 
   /* ============ 小屏适配 ============ */
   @media (max-width: 480px) {
-    .cover { padding: 36px 20px 32px; }
-    .cover h1 { font-size: 34px; }
     .preface, .scene-body, .toc { padding-left: 22px; padding-right: 22px; }
-    .scene-title { font-size: 24px; }
+    .cover-intro { padding: 24px 22px 26px; }
+    .cover-intro p { font-size: 18px; }
+    .scene-title { font-size: 28px; }
+    .scene-quote { font-size: 19px; }
+    .scene-text, .preface p, .diary-body, .flash-item .flash-data { font-size: 17px; }
     .scene { padding: 28px 0 16px; }
-    .diary-body { padding: 14px 16px; }
+    .diary-body { padding: 16px 18px; }
     .flash-item { margin-left: 22px; margin-right: 22px; }
-    .rank-table td { font-size: 12px; }
+    .rank-table td { font-size: 13px; }
     .toc-list { grid-template-columns: 1fr; }
-    .chat-bubble .bubble-txt { max-width: 65vw; }
+    .chat-bubble .bubble-txt { max-width: 65vw; font-size: 14px; }
     .submission { margin-left: 22px; margin-right: 22px; }
     .mood-strip { padding: 10px 16px 2px; font-size: 11px; }
   }
@@ -669,7 +637,7 @@
     background: rgba(0,0,0,.03);
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    font-size: 14px; color: #334155;
+    font-size: 16px; color: #334155;
   }
   .sa-example {
     margin-top: 16px;
@@ -704,11 +672,11 @@
     font-size: 22px; margin-bottom: 10px;
   }
   .sub-card h4 {
-    font-size: 15px; color: #1a1a2e;
+    font-size: 17px; color: #1a1a2e;
     margin-bottom: 10px;
   }
   .sub-card p {
-    font-size: 14px; color: #94a3b8;
+    font-size: 16px; color: #94a3b8;
     line-height: 1.8;
     margin-bottom: 14px;
   }
@@ -775,26 +743,19 @@
 
   <!-- ============ 封面 + 卷首语（合并） ============ -->
   <section class="cover">
-    <div class="cover-meta">企内刊 · <span class="issue">ISSUE 09</span> · 2026 夏季号</div>
-
-    <!-- 07 号机器人主视觉 -->
+    <!-- 07 号机器人主视觉（全幅头图，图片自带标题文字） -->
     <div class="cover-robot">
-      <img src="emp07-cover.webp" alt="EMP#07 数字员工" />
+      <img src="emp07-cover.webp" alt="我的AI同事07号" />
     </div>
-
-    <h1>
-      我的<span class="g1">AI</span>同事<br/>
-      <span class="g2">07</span>号
-    </h1>
-    <div class="cover-sub-en">WHEN THE NEW GUY IS A ROBOT</div>
-
-    <p class="cover-note">
-      前几期我们介绍了章鱼先生的 12 个瞬间，拼出每个打工人的一天。<br/>
-      这一期，我们假设把 AI 请进了工位——HR 给它建了企微账号、分了工号 <b>EMP#07</b>、配了一台永远不会关机的服务器。<br/>
-      不讲"AI 赋能"，讲一个数字员工<b>怎么学会了当同事</b>。
-    </p>
-
   </section>
+
+  <!-- ============ 卷首语 · 前言 ============ -->
+  <div class="cover-intro">
+    <div class="intro-label">FROM THE EDITOR · 写在前面</div>
+    <p>前几期我们介绍了章鱼先生的 12 个瞬间,拼出每个打工人的一天。</p>
+    <p>这一期,我们假设把 AI 请进了工位——HR 给它建了企微账号、分了工号 <b>EMP#07</b>、配了一台永远不会关机的服务器。</p>
+    <p>不讲"AI 赋能",讲一个数字员工<b>怎么学会了当同事</b>。</p>
+  </div>
 
   <!-- ============ 栏目一 · T01 日记 ============ -->
   <section class="scene">
