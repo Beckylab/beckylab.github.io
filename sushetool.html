@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宿舍费用计算工具 · 规则变更影响分析</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#1a2230; --panel-2:#222c3c; --border:#2c3a4f;
+    --text:#e6edf3; --muted:#8b9bb0; --accent:#4f9dff; --accent-2:#2dd4a7;
+    --warn:#ffb454; --danger:#ff6b6b; --ok:#2dd4a7; --shadow:0 6px 24px rgba(0,0,0,.35);
+  }
+  html[data-theme="light"]{
+    --bg:#f4f6fa; --panel:#ffffff; --panel-2:#f0f3f8; --border:#dbe2ec;
+    --text:#1a2230; --muted:#5c6b80; --accent:#1c6fe0; --accent-2:#0f9d77;
+    --warn:#c47d00; --danger:#d83a3a; --ok:#0f9d77; --shadow:0 6px 24px rgba(20,40,80,.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.55;font-size:14px;}
+  header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  header h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.5px;}
+  header .sub{color:var(--muted);font-size:12px;}
+  .spacer{flex:1;}
+  .toggle{background:var(--panel-2);border:1px solid var(--border);color:var(--text);
+    border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px;}
+  .toggle:hover{border-color:var(--accent);}
+  nav{display:flex;gap:6px;flex-wrap:wrap;padding:10px 18px 0;background:var(--panel);border-bottom:1px solid var(--border);}
+  nav button{background:transparent;border:none;color:var(--muted);padding:9px 14px;cursor:pointer;
+    font-size:13.5px;border-bottom:2px solid transparent;border-radius:6px 6px 0 0;}
+  nav button.active{color:var(--text);border-bottom-color:var(--accent);font-weight:600;}
+  nav button:hover{color:var(--text);}
+  .wrap{display:grid;grid-template-columns:340px 1fr;gap:18px;padding:18px;max-width:1280px;margin:0 auto;}
+  @media(max-width:880px){.wrap{grid-template-columns:1fr;}}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow);}
+  .card h2{margin:0 0 12px;font-size:15px;display:flex;align-items:center;gap:8px;}
+  .card h2 .tag{font-size:11px;background:var(--panel-2);color:var(--muted);padding:2px 8px;border-radius:20px;border:1px solid var(--border);}
+  label{display:block;font-size:12.5px;color:var(--muted);margin:12px 0 5px;}
+  input,select{width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);
+    border-radius:8px;padding:9px 11px;font-size:14px;font-family:inherit;}
+  input:focus,select:focus{outline:none;border-color:var(--accent);}
+  .row{display:flex;gap:10px;}
+  .row>div{flex:1;}
+  .radio-group{display:flex;gap:8px;margin-top:5px;}
+  .radio-group label{margin:0;flex:1;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;
+    padding:9px;text-align:center;cursor:pointer;color:var(--text);font-size:13px;}
+  .radio-group input{display:none;}
+  .radio-group input:checked+span{color:var(--accent);font-weight:700;}
+  .radio-group label:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel-2));}
+  .result{background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:14px;}
+  .result .line{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:13.5px;}
+  .result .line:last-child{border-bottom:none;}
+  .result .line .k{color:var(--muted);}
+  .result .line .v{font-variant-numeric:tabular-nums;font-weight:600;}
+  .big{font-size:22px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;}
+  .note{font-size:12px;color:var(--muted);background:var(--panel-2);border-left:3px solid var(--accent);
+    padding:8px 12px;border-radius:0 8px 8px 0;margin-top:12px;}
+  .note.warn{border-left-color:var(--warn);}
+  .note.danger{border-left-color:var(--danger);}
+  .note.ok{border-left-color:var(--ok);}
+  .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;}
+  .pill.red{background:color-mix(in srgb,var(--danger) 18%,transparent);color:var(--danger);}
+  .pill.green{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok);}
+  .pill.amber{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+  th,td{border:1px solid var(--border);padding:7px 9px;text-align:left;}
+  th{background:var(--panel-2);color:var(--muted);font-weight:600;}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  .preset{background:var(--panel-2);border:1px solid var(--border);border-radius:20px;padding:6px 13px;
+    cursor:pointer;font-size:12.5px;color:var(--text);}
+  .preset:hover{border-color:var(--accent);color:var(--accent);}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:680px){.compare-grid{grid-template-columns:1fr;}}
+  .hidden{display:none;}
+  .footnote{color:var(--muted);font-size:11.5px;text-align:center;padding:18px;}
+  .divider{height:1px;background:var(--border);margin:14px 0;}
+  code{background:var(--panel-2);padding:1px 6px;border-radius:5px;font-size:12.5px;}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>宿舍费用计算工具</h1>
+    <div class="sub">基于「宿舍分析计算方式的影响」— 新旧规则（季度前/季度后生成）对照计算</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="toggle" id="themeBtn">🌓 切换主题</button>
+</header>
+
+<nav id="nav">
+  <button data-tab="params" class="active">① 基础参数</button>
+  <button data-tab="open">② 开户应缴</button>
+  <button data-tab="period">③ 周期缴费单</button>
+  <button data-tab="refund">④ 退房退款</button>
+  <button data-tab="arrears">⑤ 欠费抵扣</button>
+  <button data-tab="overlap">⑥ 重叠检测</button>
+  <button data-tab="compare">⑦ 规则对比</button>
+</nav>
+
+<div class="wrap">
+  <!-- LEFT: live status / shared params summary -->
+  <div>
+    <div class="card">
+      <h2>当前配置 <span class="tag" id="cfgRule">新规则</span></h2>
+      <div class="result">
+        <div class="line"><span class="k">月单价</span><span class="v" id="sPrice">500</span></div>
+        <div class="line"><span class="k">入住日期</span><span class="v" id="sIn">—</span></div>
+        <div class="line"><span class="k">押金</span><span class="v" id="sDeposit">—</span></div>
+        <div class="line"><span class="k">生成时点规则</span><span class="v" id="sGen">季度第3天 8:00</span></div>
+      </div>
+      <div class="note" id="cfgNote">在「① 基础参数」中设置后，各模块自动联动。</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <h2>文档预设场景</h2>
+      <div class="presets" id="presets"></div>
+      <div class="note">点击载入文档中的示例参数，可快速查看对应计算结果。</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: tab panels -->
+  <div>
+    <!-- ① PARAMS -->
+    <div class="card tab-panel" data-panel="params">
+      <h2>① 基础参数 <span class="tag">全局</span></h2>
+      <div class="row">
+        <div>
+          <label>月单价（元/月）</label>
+          <input type="number" id="pPrice" value="500" min="0" step="1">
+        </div>
+        <div>
+          <label>押金（元）</label>
+          <input type="number" id="pDeposit" value="500" min="0" step="1">
+        </div>
+      </div>
+      <label>入住日期</label>
+      <input type="date" id="pIn" value="2025-09-27">
+      <label>收费生成时点规则</label>
+      <div class="radio-group">
+        <label><input type="radio" name="rule" value="old"><span>旧规则 · 季度前3天 9:00</span></label>
+        <label><input type="radio" name="rule" value="new" checked><span>新规则 · 季度第3天 8:00</span></label>
+      </div>
+      <label>基础费（元/月，用于周期单）</label>
+      <input type="number" id="pBase" value="350" min="0" step="1">
+      <label>其他费（元/月，用于周期单）</label>
+      <input type="number" id="pExtra" value="150" min="0" step="1">
+      <div class="note">月单价默认 500（= 基础费350 + 其他费150），与文档示例一致。修改后各模块实时更新。</div>
+    </div>
+
+    <!-- ② OPENING -->
+    <div class="card tab-panel hidden" data-panel="open">
+      <h2>② 开户应缴计算 <span class="tag">公式不变·参数变</span></h2>
+      <div class="note">公式：<code>开户应缴 = 当月剩余天数 × 日均 + 后续整月数 × 月单价</code>。新规则下「后续整月数」通常大幅减少。</div>
+      <div class="row" style="margin-top:12px;">
+        <div>
+          <label>当月剩余天数（自动）</label>
+          <input type="number" id="oRemain" readonly>
+        </div>
+        <div>
+          <label>日均单价（自动·2位）</label>
+          <input type="text" id="oDaily" readonly>
+        </div>
+      </div>
+      <label>后续整月数（月）</label>
+      <input type="number" id="oMonths" value="0" min="0" step="1">
+      <div class="row" style="margin-top:8px;">
+        <div><button class="toggle" id="oAuto" style="width:100%">⚙ 按规则自动估算</button></div>
+        <div><button class="toggle" id="oClear" style="width:100%">清空为0</button></div>
+      </div>
+      <div class="result">
+        <div class="line"><span class="k">当月部分 = 剩余天数 × 日均</span><span class="v" id="oPartMonth">—</span></div>
+        <div class="line"><span class="k">整月部分 = 整月数 × 月单价</span><span class="v" id="oPartFull">—</span></div>
+        <div class="line"><span class="k">开户应缴合计（取整）</span><span class="v big" id="oTotal">—</span></div>
+      </div>
+      <div class="note warn" id="oImpact">后续整月数决定金额大小：旧规则 9/27 入住为 3 个月（1567元），新规则仅 0 个月（67元），差额达 1500 元。</div>
+    </div>
+
+    <!-- ③ PERIODIC -->
+    <div class="card tab-panel hidden" data-panel="period">
+      <h2>③ 周期缴费单（季度） <span class="tag">公式不变</span></h2>
+      <div class="note">公式：<code>周期缴费单 = (基础费 + 其他费) × 计费月数</code>。按季度全额收取，金额与规则无关。</div>
+      <div class="row" style="margin-top:12px;">
+        <div>
+          <label>基础费（元/月）</label>
+          <input type="number" id="perBase" value="350" min="0" step="1">
+        </div>
+        <div>
+          <label>其他费（元/月）</label>
+          <input type="number" id="perExtra" value="150" min="0" step="1">
+        </div>
+        <div>
+          <label>计费月数</label>
+          <input type="number" id="perMonths" value="3" min="1" step="1">
+        </div>
+      </div>
+      <div class="result">
+        <div class="line"><span class="k">月合计 = 基础费 + 其他费</span><span class="v" id="perMonthly">—</span></div>
+        <div class="line"><span class="k">单期缴费单合计</span><span class="v big" id="perTotal">—</span></div>
+      </div>
+      <div class="note" id="perNote">示例：(350+150)×3 = 1500 元，按季度全额收取。</div>
+    </div>
+
+    <!-- ④ REFUND -->
+    <div class="card tab-panel hidden" data-panel="refund">
+      <h2>④ 退房退款计算 <span class="tag">公式不变·分支变</span></h2>
+      <div class="note">公式：<code>退款 = 未住天数 × 日均 + 未住整月数 × 月单价</code>。新规则需额外判断「住户是否已缴纳当季周期单」。</div>
+      <div class="row" style="margin-top:12px;">
+        <div>
+          <label>退房日期</label>
+          <input type="date" id="rOut" value="2025-10-15">
+        </div>
+        <div>
+          <label>缴费覆盖结束日期</label>
+          <input type="date" id="rCoverEnd" value="2025-09-30">
+        </div>
+      </div>
+      <label>是否已缴纳当季周期单？</label>
+      <div class="radio-group">
+        <label><input type="radio" name="paid" value="yes" checked><span>已缴（同旧规则）</span></label>
+        <label><input type="radio" name="paid" value="no"><span>未缴（新规则常态）</span></label>
+      </div>
+      <div class="result">
+        <div class="line"><span class="k">日均（按覆盖月计）</span><span class="v" id="rDaily">—</span></div>
+        <div class="line"><span class="k">未住整月数（自动）</span><span class="v" id="rFull">—</span></div>
+        <div class="line"><span class="k">未住零散天数（自动）</span><span class="v" id="rDays">—</span></div>
+        <div class="line"><span class="k">应退金额（取整）</span><span class="v big" id="rRefund">—</span></div>
+      </div>
+      <div class="note warn" id="rBranch">已缴分支：退房直接按未住期间退款。未缴分支：住户仍欠当季周期单，实际退款可能需抵扣或补缴（见⑤）。</div>
+    </div>
+
+    <!-- ⑤ ARREARS -->
+    <div class="card tab-panel hidden" data-panel="arrears">
+      <h2>⑤ 欠费抵扣 / 实际退还 <span class="tag">新增逻辑</span></h2>
+      <div class="note">公式：<code>实际退还 = 退款金额 + 押金 − 欠缴金额</code>。结果为负则需补缴。此场景在旧规则下几乎不存在，新规则下成为常态。</div>
+      <div class="row" style="margin-top:12px;">
+        <div>
+          <label>退款金额（元）</label>
+          <input type="number" id="aRefund" value="0" min="0" step="1">
+        </div>
+        <div>
+          <label>押金（元）</label>
+          <input type="number" id="aDeposit" value="500" min="0" step="1">
+        </div>
+        <div>
+          <label>欠缴金额（元）</label>
+          <input type="number" id="aOwed" value="0" min="0" step="1">
+        </div>
+      </div>
+      <button class="toggle" id="aFromRefund" style="margin-top:8px;width:100%">↧ 从④退房退款带入金额</button>
+      <div class="result">
+        <div class="line"><span class="k">退款 + 押金</span><span class="v" id="aSum">—</span></div>
+        <div class="line"><span class="k">减：欠缴金额</span><span class="v" id="aMinus">—</span></div>
+        <div class="line"><span class="k">实际退还 / 需补缴</span><span class="v big" id="aActual">—</span></div>
+      </div>
+      <div class="note" id="aNote"></div>
+    </div>
+
+    <!-- ⑥ OVERLAP -->
+    <div class="card tab-panel hidden" data-panel="overlap">
+      <h2>⑥ 重叠计费检测 <span class="tag">新增逻辑</span></h2>
+      <div class="note">判定：比较「开户账单缴费有效期结束」与「系统周期单生成时间」。<br>
+        <code>有效期结束 &gt; 生成时间 → 开户已覆盖该季度 → 周期单需避免重叠</code></div>
+      <div class="row" style="margin-top:12px;">
+        <div>
+          <label>开户账单缴费有效期结束</label>
+          <input type="date" id="ovValidEnd" value="2025-09-30">
+        </div>
+        <div>
+          <label>系统周期单生成时间（年-月-日）</label>
+          <input type="date" id="ovGen" value="2025-10-03">
+        </div>
+      </div>
+      <label>生成时点（时:分）</label>
+      <input type="time" id="ovGenTime" value="08:00">
+      <div class="result">
+        <div class="line"><span class="k">有效期结束</span><span class="v" id="ovA">—</span></div>
+        <div class="line"><span class="k">生成时间</span><span class="v" id="ovB">—</span></div>
+        <div class="line"><span class="k">判定结果</span><span class="v" id="ovResult">—</span></div>
+      </div>
+      <div class="note" id="ovAdvice"></div>
+    </div>
+
+    <!-- ⑦ COMPARE -->
+    <div class="card tab-panel hidden" data-panel="compare">
+      <h2>⑦ 规则对比速查 <span class="tag">来自原文档</span></h2>
+      <div class="compare-grid">
+        <div>
+          <h3 style="font-size:13px;margin:4px 0 6px;color:var(--muted)">9/27 入住 · 开户应缴对比</h3>
+          <table>
+            <tr><th>项目</th><th class="num">旧规则</th><th class="num">新规则</th></tr>
+            <tr><td>下季度生成时间</td><td class="num">9/28 9:00</td><td class="num">10/3 8:00</td></tr>
+            <tr><td>缴费有效期结束</td><td class="num">9/30</td><td class="num">9/30</td></tr>
+            <tr><td>是否覆盖Q4</td><td class="num">✔ 覆盖</td><td class="num">✘ 不覆盖</td></tr>
+            <tr><td>后续整月数</td><td class="num">3</td><td class="num">0</td></tr>
+            <tr><td><b>开户应缴</b></td><td class="num"><b>1567</b></td><td class="num"><b>67</b></td></tr>
+            <tr><td>差额</td><td class="num">—</td><td class="num" style="color:var(--danger)">少1500</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3 style="font-size:13px;margin:4px 0 6px;color:var(--muted)">9/27入住·10/15退房 · 退款对比</h3>
+          <table>
+            <tr><th>项目</th><th class="num">旧规则</th><th class="num">新规则</th></tr>
+            <tr><td>开户覆盖</td><td class="num">9月4天+Q4</td><td class="num">仅9月4天</td></tr>
+            <tr><td>Q4缴费单</td><td class="num">已含于开户</td><td class="num">10/3生成</td></tr>
+            <tr><td>情况1 已缴Q4</td><td class="num">退2.5月+16天</td><td class="num">同旧规则</td></tr>
+            <tr><td>情况2 未缴Q4</td><td class="num">不存在</td><td class="num">退16天·或补缴</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <h3 style="font-size:13px;margin:4px 0;color:var(--muted)">计算模块变化对照表</h3>
+      <table>
+        <tr><th>计算模块</th><th>公式是否变</th><th>参数/逻辑是否变</th><th>变化程度</th></tr>
+        <tr><td>日均单价</td><td>不变</td><td>不变</td><td><span class="pill green">无</span></td></tr>
+        <tr><td>开户应缴</td><td>不变</td><td>后续整月数大幅减少</td><td><span class="pill red">大</span></td></tr>
+        <tr><td>周期缴费单金额</td><td>不变</td><td>不变</td><td><span class="pill green">无</span></td></tr>
+        <tr><td>开户覆盖判断</td><td>—</td><td>比较基准（生成时间）后移</td><td><span class="pill red">大</span></td></tr>
+        <tr><td>退款公式</td><td>不变</td><td>增「是否已缴周期单」分支</td><td><span class="pill amber">中</span></td></tr>
+        <tr><td>押金退还</td><td>不变</td><td>不变</td><td><span class="pill green">无</span></td></tr>
+        <tr><td>重叠计费防护</td><td><b>新增</b></td><td>检测开户与周期单重叠</td><td><span class="pill red">新增</span></td></tr>
+        <tr><td>欠费抵扣</td><td><b>新增</b></td><td>退房抵扣未缴周期费</td><td><span class="pill red">新增</span></td></tr>
+        <tr><td>入住前空档天数</td><td><b>新增</b></td><td>季度中期入住费用归属</td><td><span class="pill red">新增</span></td></tr>
+      </table>
+      <div class="note ok">核心结论：所有基础计算公式本身不变，但「生成时间从季度前→季度后」导致三大根本变化——开户金额大幅减少、重叠计费风险增加、欠费退房成为可能。系统需新增重叠防护、欠费抵扣、空档天数归属三块逻辑。</div>
+    </div>
+  </div>
+</div>
+
+<div class="footnote">本工具依据《宿舍分析计算方式的影响》文档实现 · 公式取整到元 · 后续整月数/覆盖期间请按实际业务规则确认</div>
+
+<script>
+"use strict";
+// ---------- 工具函数 ----------
+const $ = id => document.getElementById(id);
+function parseD(s){ if(!s) return null; const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+function daysInMonth(y,mi){ return new Date(y,mi+1,0).getDate(); }
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function fmt(d){ return d?`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`:'—'; }
+function round2(n){ return Math.round(n*100)/100; }
+function fmtMoney(n){ return (Math.round(n)).toLocaleString('zh-CN'); }
+
+function getRule(){ return document.querySelector('input[name="rule"]:checked').value; }
+function genTimeForDate(d, rule){
+  // 返回 d 所在季度的周期单生成时间
+  const q = Math.floor(d.getMonth()/3)+1;
+  let y = d.getFullYear();
+  const qs = new Date(y,(q-1)*3,1);
+  let g;
+  if(rule==='old'){ g=new Date(qs); g.setDate(qs.getDate()-3); g.setHours(9,0,0,0); }
+  else { g=new Date(qs); g.setDate(qs.getDate()+2); g.setHours(8,0,0,0); } // 第3天 = +2
+  return g;
+}
+function nextQuarterGen(d, rule){
+  const q = Math.floor(d.getMonth()/3)+1;
+  const nq = q===4?1:q+1;
+  const ny = q===4?d.getFullYear()+1:d.getFullYear();
+  const qs = new Date(ny,(nq-1)*3,1);
+  let g;
+  if(rule==='old'){ g=new Date(qs); g.setDate(qs.getDate()-3); g.setHours(9,0,0,0); }
+  else { g=new Date(qs); g.setDate(qs.getDate()+2); g.setHours(8,0,0,0); }
+  return g;
+}
+function dailyAvg(price, refDate){
+  const dim = daysInMonth(refDate.getFullYear(), refDate.getMonth());
+  return price/dim;
+}
+// 未住期间：从 退房次日 到 覆盖结束（含），逐月按当月实际天数折算
+function refundCalc(price, checkOut, coverEnd){
+  let start = addDays(checkOut,1);
+  if(start>coverEnd) return {amount:0, full:0, days:0};
+  let amount=0, full=0, days=0, cur=new Date(start);
+  while(cur<=coverEnd){
+    const y=cur.getFullYear(), m=cur.getMonth();
+    const ms=new Date(y,m,1), me=new Date(y,m+1,0);
+    const segStart = cur<ms?ms:cur;
+    const segEnd = me<coverEnd?me:coverEnd;
+    const dim=me.getDate();
+    const segDays=Math.round((segEnd-segStart)/86400000)+1;
+    amount += segDays*price/dim;            // 整天成本 = 月单价/当月天数
+    if(segStart.getDate()===1 && segEnd.getDate()===dim){ full++; }
+    else { days+=segDays; }
+    cur=addDays(me,1);
+  }
+  return {amount:Math.round(amount), full, days};
+}
+
+// ---------- 全局配置读取 ----------
+function readCfg(){
+  return {
+    price: +$('pPrice').value || 0,
+    deposit: +$('pDeposit').value || 0,
+    inDate: parseD($('pIn').value),
+    rule: getRule(),
+    base: +$('pBase').value || 0,
+    extra: +$('pExtra').value || 0,
+  };
+}
+
+// ---------- 各模块计算 ----------
+function calcOpening(){
+  const c=readCfg();
+  if(!c.inDate) return;
+  const dim=daysInMonth(c.inDate.getFullYear(),c.inDate.getMonth());
+  const remain=dim-c.inDate.getDate()+1;
+  const daily=dailyAvg(c.price,c.inDate);
+  const months=+$('oMonths').value||0;
+  const partMonth=remain*c.price/dim;
+  const partFull=months*c.price;
+  const total=Math.round(partMonth+partFull);
+  $('oRemain').value=remain;
+  $('oDaily').value=daily.toFixed(2);
+  $('oPartMonth').textContent='¥'+round2(partMonth).toLocaleString('zh-CN')+'  ('+remain+'×'+daily.toFixed(2)+')';
+  $('oPartFull').textContent='¥'+partFull.toLocaleString('zh-CN')+'  ('+months+'×'+c.price+')';
+  $('oTotal').textContent='¥'+fmtMoney(total);
+}
+function suggestMonths(){
+  const c=readCfg();
+  if(!c.inDate) return;
+  const endOfMonth=new Date(c.inDate.getFullYear(),c.inDate.getMonth()+1,0);
+  const g=nextQuarterGen(c.inDate,c.rule);
+  // 文档主示例(9/27)：endOfMonth > 生成时间 → 吸收下一季度(3个月)
+  const m = endOfMonth>g ? 3 : 0;
+  $('oMonths').value=m;
+  calcOpening();
+  const hint = m>0
+    ? `按文档主示例逻辑（当月月底 > 下季度生成时间）估算后续整月数为 ${m} 个月。注意：10月等季度中入住场景文档存在歧义，请按实际业务确认。`
+    : `按文档主示例逻辑估算后续整月数为 0（开户仅覆盖入住月剩余天数）。请结合实际业务确认是否需吸收后续月份。`;
+  $('oImpact').textContent=hint;
+  $('oImpact').className='note warn';
+}
+function calcPeriod(){
+  const base=+$('perBase').value||0, extra=+$('perExtra').value||0, months=+$('perMonths').value||1;
+  const monthly=base+extra;
+  $('perMonthly').textContent='¥'+monthly.toLocaleString('zh-CN');
+  $('perTotal').textContent='¥'+(monthly*months).toLocaleString('zh-CN');
+  $('perNote').textContent=`(${base}+${extra})×${months} = ${(monthly*months).toLocaleString('zh-CN')} 元，按季度全额收取，与规则无关。`;
+}
+function calcRefund(){
+  const c=readCfg();
+  const out=parseD($('rOut').value), cover=parseD($('rCoverEnd').value);
+  if(!out||!cover){ return; }
+  const daily=dailyAvg(c.price,cover); // 示例日均（按覆盖结束所在月）
+  const {amount,full,days}=refundCalc(c.price,out,cover);
+  $('rDaily').textContent=daily.toFixed(2)+'  ('+c.price+'/'+daysInMonth(cover.getFullYear(),cover.getMonth())+'天，逐月折算)';
+  $('rFull').textContent=full+' 个月';
+  $('rDays').textContent=days+' 天';
+  $('rRefund').textContent='¥'+fmtMoney(amount);
+  const paid=document.querySelector('input[name="paid"]:checked').value;
+  if(paid==='yes'){
+    $('rBranch').className='note';
+    $('rBranch').textContent='已缴分支：退房直接按未住期间退款（同旧规则）。未住 '+full+' 整月 + '+days+' 天，应退 ¥'+fmtMoney(amount)+'。';
+  }else{
+    $('rBranch').className='note danger';
+    $('rBranch').textContent='未缴分支：住户仍欠当季周期单。应退 ¥'+fmtMoney(amount)+' 仅覆盖未住零散部分，可能还需补缴已住但未缴的期间（见⑤欠费抵扣）。';
+  }
+}
+function calcArrears(){
+  const refund=+$('aRefund').value||0, deposit=+$('aDeposit').value||0, owed=+$('aOwed').value||0;
+  const actual=refund+deposit-owed;
+  $('aSum').textContent='¥'+(refund+deposit).toLocaleString('zh-CN');
+  $('aMinus').textContent='¥'+owed.toLocaleString('zh-CN');
+  $('aActual').textContent=(actual>=0?'¥':'需补缴 ¥')+Math.abs(actual).toLocaleString('zh-CN');
+  if(actual>=0){ $('aNote').className='note ok'; $('aNote').textContent='实际退还 ¥'+actual.toLocaleString('zh-CN')+'，无欠费。'; }
+  else { $('aNote').className='note danger'; $('aNote').textContent='退款+押金不足以抵扣欠费，住户需补缴 ¥'+Math.abs(actual).toLocaleString('zh-CN')+'。此为新规则下常态场景。'; }
+}
+function calcOverlap(){
+  const ve=parseD($('ovValidEnd').value);
+  const gdate=parseD($('ovGen').value);
+  const [hh,mm]=$('ovGenTime').value.split(':').map(Number);
+  if(!ve||!gdate) return;
+  const g=new Date(gdate); g.setHours(hh||0,mm||0,0,0);
+  const veEnd=new Date(ve); veEnd.setHours(23,59,59,0);
+  const overlap = veEnd>g;
+  $('ovA').textContent=fmt(ve)+' 23:59';
+  $('ovB').textContent=fmt(g)+' '+String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');
+  $('ovResult').innerHTML = overlap
+    ? '<span class="pill red">重叠 · 开户已覆盖</span>'
+    : '<span class="pill green">不重叠</span>';
+  if(overlap){
+    $('ovAdvice').className='note danger';
+    $('ovAdvice').textContent='开户账单已覆盖到该季度，系统生成的周期缴费单应【不生成】或【生成但金额为0 / 扣除已覆盖部分】，否则将造成重复计费（如10/1入住、Q4于10/3生成即属此类）。';
+  }else{
+    $('ovAdvice').className='note ok';
+    $('ovAdvice').textContent='开户账单未覆盖该季度，周期缴费单可正常生成并全额收取，无重叠风险。';
+  }
+}
+
+// ---------- 配置联动 ----------
+function refreshCfgPanel(){
+  const c=readCfg();
+  $('cfgRule').textContent = c.rule==='old'?'旧规则':'新规则';
+  $('sPrice').textContent='¥'+c.price;
+  $('sIn').textContent=c.inDate?fmt(c.inDate):'—';
+  $('sDeposit').textContent='¥'+c.deposit;
+  $('sGen').textContent = c.rule==='old'?'季度前3天 9:00':'季度第3天 8:00';
+}
+
+// ---------- 预设场景 ----------
+const PRESETS=[
+  {name:'9/27入住·旧规则开户', set:{rule:'old',pIn:'2025-09-27',oMonths:3,rCoverEnd:'2025-12-31',paid:'yes'}},
+  {name:'9/27入住·新规则开户', set:{rule:'new',pIn:'2025-09-27',oMonths:0,rCoverEnd:'2025-09-30',paid:'yes'}},
+  {name:'10/2入住·旧规则', set:{rule:'old',pIn:'2025-10-02',oMonths:2,rCoverEnd:'2025-12-31',paid:'yes'}},
+  {name:'10/2入住·新规则(重叠)', set:{rule:'new',pIn:'2025-10-02',oMonths:0,rCoverEnd:'2025-10-31',paid:'no',ovValidEnd:'2025-10-31',ovGen:'2025-10-03'}},
+  {name:'9/27入住·10/15退·旧', set:{rule:'old',pIn:'2025-09-27',oMonths:3,rOut:'2025-10-15',rCoverEnd:'2025-12-31',paid:'yes'}},
+  {name:'9/27入住·10/15退·新未缴', set:{rule:'new',pIn:'2025-09-27',oMonths:0,rOut:'2025-10-15',rCoverEnd:'2025-09-30',paid:'no'}},
+];
+function buildPresets(){
+  const box=$('presets'); box.innerHTML='';
+  PRESETS.forEach(p=>{
+    const b=document.createElement('button');
+    b.className='preset'; b.textContent=p.name;
+    b.onclick=()=>{ applyPreset(p.set); };
+    box.appendChild(b);
+  });
+}
+function applyPreset(set){
+  if(set.rule){ document.querySelector(`input[name="rule"][value="${set.rule}"]`).checked=true; }
+  if(set.pIn) $('pIn').value=set.pIn;
+  if(set.paid){ document.querySelector(`input[name="paid"][value="${set.paid}"]`).checked=true; }
+  ['oMonths','rOut','rCoverEnd','ovValidEnd','ovGen'].forEach(k=>{ if(set[k]!=null) $(k).value=set[k]; });
+  refreshAll();
+}
+
+// ---------- 全量刷新 ----------
+function refreshAll(){
+  refreshCfgPanel();
+  calcOpening(); calcPeriod(); calcRefund(); calcArrears(); calcOverlap();
+  // 同步周期单基础/其他费到参数
+  if(+$('pBase').value!==+$('perBase').value) $('perBase').value=$('pBase').value;
+  if(+$('pExtra').value!==+$('perExtra').value) $('perExtra').value=$('pExtra').value;
+}
+
+// ---------- 事件绑定 ----------
+document.querySelectorAll('nav button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p=>{
+      p.classList.toggle('hidden', p.dataset.panel!==b.dataset.tab);
+    });
+  };
+});
+$('themeBtn').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur==='light'?'dark':'light');
+};
+['pPrice','pDeposit','pIn','pBase','pExtra'].forEach(id=>$(id).addEventListener('input',refreshAll));
+document.querySelectorAll('input[name="rule"]').forEach(r=>r.addEventListener('change',()=>{refreshAll();suggestMonths();}));
+$('oMonths').addEventListener('input',calcOpening);
+$('oAuto').onclick=suggestMonths;
+$('oClear').onclick=()=>{$('oMonths').value=0;calcOpening();$('oImpact').textContent='后续整月数已清零，开户仅含当月剩余天数。';$('oImpact').className='note';};
+['perBase','perExtra','perMonths'].forEach(id=>$(id).addEventListener('input',calcPeriod));
+['rOut','rCoverEnd'].forEach(id=>$(id).addEventListener('input',calcRefund));
+document.querySelectorAll('input[name="paid"]').forEach(r=>r.addEventListener('change',calcRefund));
+['aRefund','aDeposit','aOwed'].forEach(id=>$(id).addEventListener('input',calcArrears));
+$('aFromRefund').onclick=()=>{
+  const txt=$('rRefund').textContent.replace(/[^\d]/g,'');
+  if(txt){ $('aRefund').value=+txt; }
+  $('aDeposit').value=readCfg().deposit;
+  calcArrears();
+};
+['ovValidEnd','ovGen','ovGenTime'].forEach(id=>$(id).addEventListener('input',calcOverlap));
+
+// ---------- 初始化 ----------
+document.documentElement.setAttribute('data-theme','dark');
+buildPresets();
+refreshAll();
+calcOpening();
+</script>
+</body>
+</html>
