@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>公考职位推荐智能体 — 市场调研报告（v1.9）</title>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --ink: #1f2733;
+    --ink-soft: #5b6675;
+    --line: #e4e8ee;
+    --brand: #1c5fbf;
+    --brand-soft: #eaf1fc;
+    --accent: #c0392b;
+    --warn-bg: #fff6ec;
+    --warn-line: #e8a95c;
+    --ok-bg: #eef9f1;
+    --ok-line: #4caa6a;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.75;
+    font-size: 16px;
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 40px;
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 16px;
+    font-size: 14px;
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+  }
+  .toc h4 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+  .toc ol { margin: 0; padding-left: 18px; }
+  .toc li { margin: 6px 0; }
+  .toc a { color: var(--ink-soft); text-decoration: none; }
+  .toc a:hover { color: var(--brand); }
+  .toc .sub { padding-left: 12px; font-size: 13px; }
+  .content { min-width: 0; }
+  .hero {
+    background: linear-gradient(135deg, #1c5fbf, #2f80ed);
+    color: #fff;
+    border-radius: 16px;
+    padding: 30px 32px;
+    margin-bottom: 28px;
+  }
+  .hero h1 { margin: 0 0 10px; font-size: 26px; line-height: 1.35; }
+  .hero .meta { font-size: 13px; opacity: .92; }
+  .chip {
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 999px;
+    padding: 2px 12px;
+    font-size: 12px;
+    margin-right: 8px;
+  }
+  section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 26px 30px;
+    margin-bottom: 22px;
+  }
+  h2 {
+    margin: 0 0 16px;
+    font-size: 21px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--brand-soft);
+  }
+  h3 {
+    margin: 22px 0 10px;
+    font-size: 16px;
+    color: var(--brand);
+  }
+  p { margin: 10px 0; }
+  strong { color: var(--ink); }
+  .hl { color: var(--accent); font-weight: 700; }
+  ul, ol { padding-left: 22px; }
+  li { margin: 6px 0; }
+  .table-scroll { overflow-x: auto; margin: 14px 0; }
+  table.matrix { min-width: 980px; }
+  .foot-note { font-size: 12.5px; color: var(--ink-soft); margin: 8px 0 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+    min-width: 560px;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  thead th {
+    background: var(--brand-soft);
+    color: #15365e;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  .callout {
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .callout.warn { background: var(--warn-bg); border-left: 4px solid var(--warn-line); }
+  .callout.ok { background: var(--ok-bg); border-left: 4px solid var(--ok-line); }
+  .callout.info { background: var(--brand-soft); border-left: 4px solid var(--brand); }
+  .callout .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    margin-bottom: 4px;
+  }
+  .callout.warn .tag { color: var(--warn-line); }
+  .callout.ok .tag { color: var(--ok-line); }
+  .callout.info .tag { color: var(--brand); }
+  .summary { counter-reset: sum; }
+  .summary .item {
+    border-left: 3px solid var(--line);
+    padding: 4px 0 4px 16px;
+    margin: 12px 0;
+  }
+  .summary .item b { color: var(--brand); }
+  footer {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 24px 0 0;
+    border-top: 1px dashed var(--line);
+    margin-top: 8px;
+  }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; gap: 0; }
+    .toc { position: static; max-height: none; margin-bottom: 20px; }
+  }
+  @media print {
+    body { background: #fff; }
+    .toc { display: none; }
+    section, .hero { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="toc">
+    <h4>目录</h4>
+    <ol>
+      <li><a href="#summary">执行摘要</a></li>
+      <li><a href="#s1">一、市场现状与需求</a>
+        <ol class="sub">
+          <li><a href="#s1-1">现状与趋势</a></li>
+          <li><a href="#s1-2">市场规模</a></li>
+        </ol>
+      </li>
+      <li><a href="#s2">二、竞争格局</a>
+        <ol class="sub">
+          <li><a href="#s2-1">竞品矩阵</a></li>
+          <li><a href="#s2-2">竞品短板</a></li>
+          <li><a href="#s2-3">竞争度分析</a></li>
+        </ol>
+      </li>
+      <li><a href="#s3">三、战略分析</a>
+        <ol class="sub">
+          <li><a href="#s3-1">SWOT</a></li>
+          <li><a href="#s3-2">波特五力</a></li>
+        </ol>
+      </li>
+      <li><a href="#s4">四、合规、商业模式与用户分析</a>
+        <ol class="sub">
+          <li><a href="#s4-1">合规与数据隐私</a></li>
+          <li><a href="#s4-2">商业模式与定价</a></li>
+          <li><a href="#s4-3">客户细分与痛点</a></li>
+          <li><a href="#s4-4">购买决策维度</a></li>
+        </ol>
+      </li>
+      <li><a href="#s5">五、产品方向建议</a>
+        <ol class="sub">
+          <li><a href="#s5-1">切入点建议与避坑</a></li>
+          <li><a href="#s5-2">差异化突破点建议</a></li>
+          <li><a href="#s5-3">核心使用场景</a></li>
+        </ol>
+      </li>
+      <li><a href="#s6">六、零误报与可解释的实现条件及风险</a></li>
+      <li><a href="#s7">七、需一手验证的部分</a></li>
+    </ol>
+  </nav>
+
+  <main class="content">
+    <div class="hero">
+      <div>
+        <span class="chip">版本 1.9</span>
+        <span class="chip">市场调研</span>
+        <span class="chip">2026-08-11</span>
+      </div>
+      <h1>公考职位推荐智能体 — 市场调研报告</h1>
+      <div class="meta">调研视角：市场调研专家 ｜ 口径说明：事实标注来源与时间；估计与判断明确标注，需一手验证的部分列于末节。</div>
+    </div>
+
+    <section id="summary">
+      <h2>执行摘要</h2>
+      <div class="summary">
+        <div class="item"><b>需求真实且持续增长：</b>2026 国考过审 <span class="hl">371.8 万人</span>（国家公务员局，历史新高），竞争比由 70:1 攀升至 <span class="hl">98:1</span>；2025 年公考培训市场约 <span class="hl">280 亿元</span>（中研普华等行研）。选岗是报考的第一道关口，需求刚性强。</div>
+        <div class="item"><b>但"AI 按学历/材料推荐岗位"已是红海：</b>公考雷达用户超 3000 万；腾讯 AI 公考通（2025-10）以全免费与亿级流量入局；夜灯公考、粉笔、中公、华图均已上线智能选岗。</div>
+        <div class="item"><b>竞争的关键在差异化，而非能否做成：</b>现有产品普遍缺"零误报的严谨合规"与"对话式决策解释"，纯消费端通用工具难以突围，须以"信任与专业深度"或企业端模块化取胜。</div>
+      </div>
+    </section>
+
+    <section id="s1">
+      <h2>一、市场现状与需求</h2>
+
+      <h3 id="s1-1">1.1 现状与趋势</h3>
+      <p><strong>市场边界：</strong>公职类招考选岗与职位匹配工具，涵盖公务员（国考/省考）、事业单位、教师、国企等；本产品聚焦"国考+省考+事业单位"选岗推荐。</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>趋势</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>考公热度持续</td><td>竞争比逐年走高，未见降温</td></tr>
+            <tr><td>招录政策数字化</td><td>公告与职位表全面线上化，为自动匹配提供数据基础</td></tr>
+            <tr><td>AI 选岗工具密集涌现</td><td>腾讯依托混元大模型与 QQ 浏览器流量免费入局（2025-10，公开报道），重塑流量分配</td></tr>
+            <tr><td>培训巨头整合</td><td>华图与粉笔 2025-12 达成股权级合作（行业报道），行业走向集中</td></tr>
+            <tr><td>用户需求升级</td><td>由"能筛"升级为"智能推荐 + 竞争度参考 + 决策解释"；区域厂商依托本地考情深耕</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info">
+        <span class="tag">市场周期判断</span>
+        市场仍处成长期，但头部集中、巨头入场，新进入者窗口收窄。
+      </div>
+
+      <h3 id="s1-2">1.2 市场规模（事实）</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>指标</th><th>数据</th><th>来源</th></tr></thead>
+          <tbody>
+            <tr><td>2026 国考过审人数</td><td>371.8 万（历史新高）</td><td>国家公务员局 2025-10</td></tr>
+            <tr><td>2023→2026 过审人数</td><td>近 260 万 → 371.8 万</td><td>国家公务员局历年</td></tr>
+            <tr><td>竞争比（过审∶计划）</td><td>70:1 → 77:1 → 86:1 → <span class="hl">98:1</span></td><td>国家公务员局</td></tr>
+            <tr><td>公考培训市场（2025）</td><td>约 <span class="hl">280 亿元</span>（口径 200–400 亿）</td><td>中研普华等行研</td></tr>
+            <tr><td>省考（中部省份样本）</td><td>42 万（2023）→ 56 万（2025）</td><td>行业报道</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info">
+        <span class="tag">需求驱动</span>
+        报考规模扩大受就业偏好转向体制内、年龄限制放宽（35→38 岁，应届硕博 43 岁）与往届生回流（2025 国考往届占比超 55%，华图数据）共同推动。
+      </div>
+    </section>
+
+    <section id="s2">
+      <h2>二、竞争格局</h2>
+
+      <h3 id="s2-1">2.1 竞品矩阵</h3>
+      <p>下表含直接竞品与间接替代两类。间接竞品指非专职选岗、但已具备语义级岗位匹配能力的大模型产品，对用户构成低成本替代。</p>
+      <div class="table-scroll">
+        <table class="matrix">
+          <thead><tr><th>厂商</th><th>覆盖端/渠道</th><th>专业匹配方式</th><th>画像采集</th><th>解释/顾问交互</th><th>竞争度参考</th><th>规模与优势</th><th>官网</th><th>商业模式</th></tr></thead>
+          <tbody>
+            <tr><td><strong>公考雷达</strong>（长沙麦都，2017）</td><td>App、微信小程序、手机/PC 网页</td><td>规则引擎（专业目录树匹配），简历导入后自动比对</td><td>简历导入 + 表单补全</td><td>列表与社区为主，无专项解释</td><td>报录比 / 进面概率预测</td><td>3000 万+用户；考试覆盖最广、全流程闭环</td><td><a href="https://www.gongkaoleida.com" target="_blank" rel="noopener">gongkaoleida.com</a></td><td>免费 + 课程导流</td></tr>
+            <tr><td><strong>腾讯 AI 公考通</strong>（2025-10）</td><td>QQ 浏览器内置（手机/PC）</td><td>混元大模型语义解析 + 规则校验</td><td>表单 / 对话输入</td><td>大模型对话式，个性化深度弱</td><td>站点聚合，参考有限</td><td>QQ 浏览器亿级流量</td><td>无独立官网</td><td>免费（生态获客）</td></tr>
+            <tr><td><strong>夜灯公考</strong></td><td>微信小程序、手机端网页（估计）</td><td>规则评分（学历×专业×地区×竞争比四维匹配）</td><td>表单填写（四维）</td><td>评分 + 推荐，解释性中等</td><td>含竞争比维度</td><td>3 万+使用（2026-07）</td><td><a href="https://www.yedengtech.com/" target="_blank" rel="noopener">yedengtech.com</a></td><td>免费（引流）</td></tr>
+            <tr><td><strong>粉笔选岗助手</strong></td><td>粉笔 App、支付宝小程序、手机端网页</td><td>多维规则筛选（偏自助）</td><td>表单多维筛选</td><td>数据可视化佳、偏自助，少顾问式</td><td>历年分数线（依托培训数据）</td><td>依托粉笔题库与大用户基数</td><td><a href="https://www.fenbi.com" target="_blank" rel="noopener">fenbi.com</a></td><td>免费 + 课程转化</td></tr>
+            <tr><td><strong>中公 / 华图</strong></td><td>App、微信小程序、PC 网页、线下网点</td><td>表单筛选 / 规则引擎 + 历年分数线</td><td>表单 + 线下咨询</td><td>线下人工咨询为主，线上弱</td><td>历年分数线 / 进面分</td><td>全国网点</td><td>中公 <a href="https://www.offcn.com" target="_blank" rel="noopener">offcn.com</a> ｜ 华图 <a href="https://www.huatu.com" target="_blank" rel="noopener">huatu.com</a></td><td>课程绑定</td></tr>
+            <tr><td><strong>AI 工具（豆包、千问等）</strong></td><td>App、网页端、微信小程序、开放平台 API</td><td>通用大模型语义理解（上传职位表与材料，语义级匹配）</td><td>自然语言对话 / 上传材料</td><td>对话式、可解释强，非专职易出错</td><td>无专门竞争度数据</td><td>亿级用户（公开资料）</td><td>豆包 <a href="https://www.doubao.com" target="_blank" rel="noopener">doubao.com</a> ｜ 千问 <a href="https://tongyi.aliyun.com" target="_blank" rel="noopener">tongyi.aliyun.com</a></td><td>免费（生态获客）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="foot-note">*表中覆盖端/渠道、规模等数据基于 2026-08 产品观察，发布前建议核实。</p>
+
+      <h3 id="s2-2">2.2 竞品短板（即市场空白）</h3>
+      <ol>
+        <li><strong>防误报与合规责任边界缺位：</strong>各产品均以"匹配准确"为卖点，未见以"绝不误报""以官方审核为准"作为明确责任边界；而误报（不符条件却被判定可报）对用户影响不可逆，是核心风险点。</li>
+        <li><strong>对话式解释薄弱：</strong>主流产品以列表输出为主，缺乏对"为何能报/不能报"及资格灰色地带的顾问式说明。</li>
+        <li><strong>企业端模块化缺失：</strong>高校就业指导中心、培训机构缺少可快速集成的选岗模块，尚无标准化输出方案。</li>
+      </ol>
+
+      <h3 id="s2-3">2.3 竞争度分析</h3>
+      <p>选岗工具市场呈"多强并立、同质化竞争"格局：头部综合平台领跑，大厂以流量与免费切入，培训机构依托存量用户，新锐以算法免费获客，通用大模型构成间接替代。竞争主轴集中于覆盖广度、免费与流量，专业匹配深度、防误报严谨度与解释性尚未成为焦点，间接替代进一步压低付费意愿、抬高获客成本。</p>
+      <div class="callout info">
+        <span class="tag">竞争度判断</span>
+        竞争强度高，但差异化空间明确——信任严谨与专业深度仍是空白；宜单点切入，不与现有巨头在规模与免费上正面对抗。
+      </div>
+    </section>
+
+    <section id="s3">
+      <h2>三、战略分析（SWOT 分析法 + 波特五力模型）</h2>
+
+      <h3 id="s3-1">3.1 SWOT（优势/劣势/机会/威胁）</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th></th><th>内容</th></tr></thead>
+          <tbody>
+            <tr><td><strong>优势</strong></td><td>可主打"严谨防误报/合规信任"（竞品空白）；专业匹配与对话式顾问可筑深度壁垒；轻量、迭代快</td></tr>
+            <tr><td><strong>劣势</strong></td><td>无用户基数、流量与品牌；数据与专业目录映射从零起步；低频属性致留存难</td></tr>
+            <tr><td><strong>机会</strong></td><td>考公热刚性需求 + AI 选岗渗透低；巨头免费教育市场；合规信任缺口与企业端模块化空白</td></tr>
+            <tr><td><strong>威胁</strong></td><td>公考雷达、腾讯等现有巨头流量碾压；培训巨头可快速复制；目录频调、低频且免费替代多致变现难</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info">
+        <span class="tag">SWOT 判断</span>
+        差异化支点在严谨合规、专业深度与对话式顾问，可弥补流量与品牌的不足；主要风险是巨头复制门槛低、低频抬高变现难度，故企业端模块应同步推进，不宜仅押注消费端。
+      </div>
+
+      <h3 id="s3-2">3.2 波特五力</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>力量</th><th>强度</th><th>判断依据</th></tr></thead>
+          <tbody>
+            <tr><td>现有竞争</td><td><span class="hl">高</span></td><td>公考雷达（3000 万+）、腾讯（免费+流量）、夜灯、粉笔、中公、华图六家以上已布局</td></tr>
+            <tr><td>潜在进入者</td><td><span class="hl">高</span></td><td>大厂、流量平台、培训机构均可复制选岗功能；腾讯入局已验证门槛低</td></tr>
+            <tr><td>替代品</td><td>中</td><td>小红书/知乎博主免费咨询、高校就业指导、Excel 手动筛选、机构人工选岗，零/低成本</td></tr>
+            <tr><td>上游议价（官方数据/职位表）</td><td>低</td><td>官方职位表与目录公开免费；隐性成本在持续维护而非采购</td></tr>
+            <tr><td>买方议价（用户）</td><td>中高</td><td>价格高度敏感、使用低频、转换成本极低、可被免费替代，付费意愿弱</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn">
+        <span class="tag">结构性结论</span>
+        行业吸引力中等偏下。仅做消费端通用工具难有出路，盈利须依托"信任 + 专业深度"的差异化溢价，或转向企业端与生态合作。
+      </div>
+    </section>
+
+    <section id="s4">
+      <h2>四、合规、商业模式与用户分析</h2>
+
+      <h3 id="s4-1">4.1 合规与数据隐私（《个人信息保护法》）</h3>
+      <ol>
+        <li><strong>敏感个人信息：</strong>收集的学历证、学位证、简历含姓名、学校、专业、证件号等，属《个人信息保护法》第 28 条敏感个人信息，需"单独同意"并遵循"最小必要"原则。</li>
+        <li><strong>合规要求：</strong>隐私政策明示收集目的与范围、获取单独同意、最小化收集、加密存储传输、提供删除与更正权；不留存证件原件影像（识别提取后即删）。</li>
+        <li><strong>AI 推荐与数据来源：</strong>推荐结论不构成官方资格认定，须显著免责并以"保守匹配+咨询提示"降低风险，服务条款设责任限制；职位表与目录为公开信息须标注来源、避免篡改，第三方数据注明出处。上线前应做合规评审，并将"合规严谨"转化为信任卖点。</li>
+      </ol>
+      <div class="callout info">
+        <span class="tag">合规判断</span>
+        处理敏感个人信息是上线前提，须守"单独同意、最小必要、提取即删"底线；合规严谨本身可作为信任卖点，而非负担。
+      </div>
+
+      <h3 id="s4-2">4.2 商业模式与定价（三种模式可单选或组合）</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>模式</th><th>形态</th><th>适用</th></tr></thead>
+          <tbody>
+            <tr><td>消费端免费 + 付费报告</td><td>基础匹配免费，进阶选岗报告 9.9–39 元/份（估计）</td><td>降低获客门槛，靠转化变现</td></tr>
+            <tr><td>消费端订阅</td><td>49 元/考季（覆盖国考+省考，估计）</td><td>提高年复购，缓解低频</td></tr>
+            <tr><td>企业端接口模块</td><td>按年费或调用量，面向高校就业中心、培训机构</td><td>避开消费端红海，收入稳定</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="s4-3">4.3 客户细分与痛点</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>细分人群</th><th>核心特征</th><th>核心痛点</th></tr></thead>
+          <tbody>
+            <tr><td>应届生</td><td>条件简单但信息盲区大</td><td>不知"能报哪些"、盲目报考竞争激烈岗位</td></tr>
+            <tr><td>往届/在职</td><td>基层经历、年龄复杂</td><td>资格判定灰色地带多、易误报/漏报</td></tr>
+            <tr><td>冷门专业</td><td>匹配岗位少</td><td>专业名与目录差一字即漏，难以匹配岗位</td></tr>
+            <tr><td>留学/特殊学历</td><td>目录无直接对应</td><td>专业如何对应国内目录无判据</td></tr>
+            <tr><td>风险厌恶型</td><td>怕报不上/诚信风险</td><td>需要"以官方为准"的严谨判定</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="s4-4">4.4 购买决策维度</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>维度</th><th>关键特征</th><th>对产品的启示</th></tr></thead>
+          <tbody>
+            <tr><td>决策标准排序</td><td>准确 &gt; 功能全 &gt; 免费 &gt; 体验</td><td>"严谨防误报"应作第一卖点，而非功能堆砌</td></tr>
+            <tr><td>价格敏感度</td><td>高，偏好免费；仅愿为"可靠/省心"付小额（&lt;50 元）</td><td>免费基础 + 小额付费报告可行</td></tr>
+            <tr><td>信息渠道</td><td>小红书/抖音/哔哩哔哩博主、知乎、高校就业群、机构老师</td><td>冷启动借合作而非硬广</td></tr>
+            <tr><td>使用频次</td><td>极低频（报名期约 10 天/年），爆发式</td><td>留存靠年复购 + 备考生态绑定</td></tr>
+            <tr><td>付费意愿</td><td>低–中；信任型/条件复杂用户（往届、冷门专业）更高</td><td>优先切"条件复杂 + 风险厌恶"人群</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info">
+        <span class="tag">购买决策判断</span>
+        用户最看重准确与可信，付费主体为条件复杂、风险厌恶人群。工具本身低频，若不接入备考生态或转向企业端，仅靠消费端难以留存。
+      </div>
+    </section>
+
+    <section id="s5">
+      <h2>五、产品方向建议（可行性判断下的切入点）</h2>
+
+      <h3 id="s5-1">5.1 切入点建议与避坑</h3>
+      <p><strong>不建议做通用型选岗应用。</strong> 不与现有巨头正面拼规模，以"信任/专业深度"为突破点单点切入；纯消费端通用工具难突围，企业端模块可作为并行稳妥路径。</p>
+      <div class="callout warn">
+        <span class="tag">需规避的问题</span>
+        <ul style="margin:6px 0 0;">
+          <li>不试图一次性覆盖三类考试拼规模——会被现有巨头流量碾压。</li>
+          <li>不承诺"保过/必上岸"、不编造分数线——属合规红线（见 4.1）。</li>
+          <li>低频工具（一年 1–2 次）须尽早规划留存与变现（绑定备考生态或走企业端）。</li>
+        </ul>
+      </div>
+
+      <h3 id="s5-2">5.2 差异化突破点建议</h3>
+      <p>建议将 2.2 中优先级最高的两类市场空白作为切入点，避免重复建设：</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>对应空白（2.2）</th><th>建议突破点</th><th>差异化逻辑</th><th>切入理由</th></tr></thead>
+          <tbody>
+            <tr><td>① 防误报/合规信任缺位</td><td><strong>"最严谨、零误报"合规定位</strong></td><td>保守匹配（宁漏不误）+ 每条附"以官方为准" + 灰色地带提示咨询招录机关</td><td>竞品均无此卖点；条件复杂/风险厌恶考生愿为"可信"买单</td></tr>
+            <tr><td>② 对话式深度解释稀缺</td><td><strong>对话式选岗顾问</strong></td><td>不止列表，解释资格逻辑、灰色地带、报岗策略</td><td>体验差异明显，大模型成熟可低成本实现</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="s5-3">5.3 核心使用场景</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>场景</th><th>触发时机</th><th>用户行为</th><th>用户需求</th><th>产品可提供的支持（建议方向）</th></tr></thead>
+          <tbody>
+            <tr><td><strong>场景 A：报名期集中选岗</strong></td><td>报名窗口（约 10 天/年）</td><td>高频反复对比岗位，先筛可报、再比优劣</td><td>全、准、快：不遗漏可报岗位，明确"报哪个更稳"</td><td>画像录入 → 硬筛 → 可报列表 → 竞争度排序 → 对比</td></tr>
+            <tr><td><strong>场景 B：报岗前资格自查</strong></td><td>提交报名前</td><td>核对学历/专业/基层经历是否符合</td><td>消除误报风险，避免报名被驳回或影响诚信</td><td>资格复核 + 灰色地带提示 + 咨询招录机关引导</td></tr>
+            <tr><td><strong>场景 C：备考期持续跟踪</strong></td><td>报名后至考前</td><td>偶尔回访看竞争度、留备选</td><td>心中有数；为下一年/其他考试留记录</td><td>竞争度更新提醒、画像与清单留存、省考衔接</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info">
+        <span class="tag">场景判断</span>
+        三类场景指向同一诉求——稳妥、可靠地完成报名。产品应将资格判定与决策解释做到零误报、可解释，而非堆砌功能。
+      </div>
+    </section>
+
+    <section id="s6">
+      <h2>六、零误报与可解释的产品实现条件及风险</h2>
+      <p>做到资格判定零误报、决策解释可解释，对数据、规则与运营均有硬性要求，同时带来相应风险。</p>
+
+      <h3 id="s6-1">6.1 实现条件</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>条件</th><th>核心要求</th></tr></thead>
+          <tbody>
+            <tr><td>数据权威且结构化</td><td>职位表取自官方当年公告并标准化；专业目录建成三层树（门类—类—专业）并维护同义词表；资格认定口径按官方解释逐条沉淀，建立年度更新机制</td></tr>
+            <tr><td>规则确定且可追溯</td><td>硬性条件用确定性逻辑筛除；专业匹配走"精确匹配+模糊候选+用户确认"；每条判定可回溯到具体字段与规则依据</td></tr>
+            <tr><td>解释克制</td><td>对"不能报"说明卡在哪个条件、差什么；灰色地带不自动判定，只给官方口径并提示咨询招录机关；画像抽取置信度偏低时转人工确认</td></tr>
+            <tr><td>策略保守</td><td>默认"宁漏不误"；每条结论附"以官方审核为准"；敏感信息单独同意、提取即删；服务条款设 AI 责任限制</td></tr>
+            <tr><td>持续校验</td><td>上线前用真实专业名做目录树比对压测（目标准确率≥95%、误报率 0）；灰色地带人工标注加灰度发布；目录映射长期维护</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="s6-2">6.2 主要风险</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>风险</th><th>等级</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>误报红线</td><td>致命</td><td>不可报判为可报致报名被驳、诚信受损，不可逆；"零误报"作宣传会放大法律风险，应作为内部红线而非对外承诺</td></tr>
+            <tr><td>数据时效性</td><td>高</td><td>目录与职位表逐年微调，映射滞后即误报或漏报，是持续运维负担</td></tr>
+            <tr><td>抽取传导风险</td><td>高</td><td>OCR 或简历抽错专业名，错匹配致误报；上游任一环节出错都会击穿红线</td></tr>
+            <tr><td>漏报与信任矛盾</td><td>中</td><td>保守匹配会漏掉可报岗位，用户感知"不准"；需在防误报与覆盖率间平衡并透明说明策略</td></tr>
+            <tr><td>专业名对齐天花板</td><td>中</td><td>同义词表维护成本高，长尾与新兴交叉专业难覆盖；目录版本切换易错</td></tr>
+            <tr><td>灰色地带难全自动</td><td>中</td><td>应届认定、基层起算、留学对应等复杂个案须人工或咨询兜底，"零误报"在边界退化为"不判定"</td></tr>
+            <tr><td>成本与低频</td><td>中</td><td>保守匹配加人工复核加年度维护持续耗成本，低频弱付费放大盈利压力</td></tr>
+            <tr><td>差异化难守</td><td>中</td><td>匹配逻辑不深，巨头可快速复制"零误报加可解释"，护城河在数据与口碑</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="s6-3">6.3 权衡结论</h3>
+      <p>零误报、可解释不宜作为对用户的承诺，而应作为内部质量红线，对外只作保守声明。可行做法是依托权威数据、确定性且可追溯的匹配规则、灰色地带不自动判定的边界处理与显著免责提示，以"宁漏不误"策略建立信任。其中误报红线与数据时效是两项关键约束：误报危及产品存续，数据滞后决定其可维持的时长。</p>
+    </section>
+
+    <section id="s7">
+      <h2>七、需一手验证的部分（待核实）</h2>
+      <ol>
+        <li>各竞品<strong>真实匹配准确率与误报率</strong>（公开横评多为机构自陈，需实测）。</li>
+        <li>用户为"防误报 / 专业准确"的<strong>付费意愿</strong>与价格敏感度（验证 4.4）。</li>
+        <li>消费端选岗工具<strong>真实留存与转化</strong>数据（低频变现是否成立）。</li>
+        <li>专业目录各版本（国考/各省/事业编）的<strong>差异粒度</strong>，决定映射引擎工作量。</li>
+        <li><strong>市场规模实测：</strong>各省省考、事业编年度考生规模的官方/权威统计，修正本报告估算值。</li>
+        <li><strong>单位经济实测：</strong>小规模投放与转化测试，验证单位经济模型（见 4.2）。</li>
+        <li><strong>《个人信息保护法》合规评审：</strong>上线前引入法律顾问，确认敏感信息处理方案（见 4.1）。</li>
+      </ol>
+    </section>
+
+    <footer>
+      数据来源：国家公务员局历年公告、中研普华《2025-2030 公务员培训行业报告》、中公/华图/粉笔/夜灯/腾讯/公考雷达公开资料及行业媒体报道（2025-2026）。单位经济相关数值为基于公开数据的估算，部分竞品数据为媒体引用口径，落地前建议交叉核实。竞品官网网址经 2026-08 检索核对，发布前建议再次确认。<br/>
+      本报告为 v1.9 版本：第二章调整竞品矩阵（合并冗余列）并重写竞品短板、新增竞争度分析；第五章与第六章之间新增「零误报与可解释的实现条件及风险」，原第六章顺延为第七章；全篇去除冗余重复表述、统一书面化行文。源文件 v1.0–v1.8 内容不变。
+    </footer>
+  </main>
+</div>
+</body>
+</html>
