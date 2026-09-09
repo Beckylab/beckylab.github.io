@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html data-page-node-id="LwamgrjuXTl6kRQsl9RUgw" lang="zh-CN">
+<head data-page-node-id="hYK58u21MaYmwUnCwffnR2">
+<script data-page-node-id="Z1OYP9ysd2OsY5hSArsopW" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="15SuqYEvUf27iqLxr7sETU" charset="UTF-8">
+<meta data-page-node-id="BCmeT1RliOZ0HXgrZ6ylrx" content="width=device-width, initial-scale=1.0" name="viewport">
+<title data-page-node-id="3KCsdetm2tNrKBblYQnQuq" data-pnid-children="XFF91YMYF3PUfQKS6HFjKF">千里马及子产品调研报告</title>
+<style data-page-node-id="LiEgoRxymiW8ZFZeyoe3LL" data-pnid-children="UCGpnoRBWSh0VjKnajTeTO">
+  :root {
+    --primary: #1d4ed8;
+    --primary-dark: #1e3a8a;
+    --primary-light: #eff6ff;
+    --primary-border: #dbeafe;
+    --th-bg: #1e3a8a;
+    --accent: #ea580c;
+    --accent-light: #fff7ed;
+    --accent-border: #fdba74;
+    --warn: #b45309;
+    --warn-bg: #fffbeb;
+    --warn-border: #fcd34d;
+    --warn-ink: #78350f;
+    --danger: #b91c1c;
+    --danger-bg: #fef2f2;
+    --danger-border: #fecaca;
+    --danger-ink: #7f1d1d;
+    --success: #047857;
+    --success-bg: #ecfdf5;
+    --success-border: #a7f3d0;
+    --ink: #1f2937;
+    --ink-soft: #4b5563;
+    --ink-faint: #6b7280;
+    --line: #e5e7eb;
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --zebra: #f8fafc;
+    --row-hover: #eff6ff;
+    --insight-bg: linear-gradient(180deg, #f8fafc, #f1f5f9);
+    --read-w: 820px;
+    --sidebar-w: 264px;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(16, 24, 40, .08), 0 4px 16px rgba(16, 24, 40, .06);
+    --shadow-lg: 0 8px 30px rgba(16, 24, 40, .12);
+  }
+
+  html.dark {
+    --primary: #60a5fa;
+    --primary-dark: #93c5fd;
+    --primary-light: rgba(96, 165, 250, .13);
+    --primary-border: #2f4b78;
+    --accent: #fb923c;
+    --accent-light: rgba(251, 146, 60, .14);
+    --accent-border: #9a4a12;
+    --warn: #fbbf24;
+    --warn-bg: rgba(120, 53, 15, .22);
+    --warn-border: #92610c;
+    --warn-ink: #fde68a;
+    --danger: #f87171;
+    --danger-bg: rgba(127, 29, 29, .20);
+    --danger-border: #7f1d1d;
+    --danger-ink: #fecaca;
+    --success: #34d399;
+    --success-bg: rgba(6, 95, 70, .22);
+    --success-border: #065f46;
+    --ink: #e2e8f0;
+    --ink-soft: #cbd5e1;
+    --ink-faint: #94a3b8;
+    --line: #334155;
+    --bg: #0f172a;
+    --card: #1e293b;
+    --zebra: #26334a;
+    --row-hover: rgba(96, 165, 250, .10);
+    --insight-bg: linear-gradient(180deg, #1e293b, #1a2536);
+    --shadow: 0 1px 3px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .32);
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, .5);
+  }
+
+  html { color-scheme: light; }
+  html.dark { color-scheme: dark; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ===== 阅读进度条 ===== */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0;
+    background: linear-gradient(90deg, var(--primary), #7c3aed);
+    z-index: 1000; transition: width .1s linear;
+  }
+
+  /* ===== 侧边栏目录 ===== */
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: var(--card); border-right: 1px solid var(--line);
+    overflow-y: auto; padding: 28px 0 40px; z-index: 200;
+    box-shadow: 2px 0 12px rgba(16, 24, 40, .04);
+  }
+  .sidebar::-webkit-scrollbar { width: 6px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+
+  .sidebar .brand {
+    padding: 0 20px 18px; border-bottom: 1px solid var(--line); margin-bottom: 14px;
+  }
+  .sidebar .brand .logo {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+    color: #fff; font-weight: 700; font-size: 17px;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 10px;
+  }
+  .sidebar .brand .name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .sidebar .brand .sub { font-size: 11px; color: var(--ink-faint); margin-top: 2px; }
+
+  .toc { list-style: none; padding: 0 12px; }
+  .toc li { margin: 2px 0; }
+  .toc a {
+    display: block; padding: 7px 12px; border-radius: 8px;
+    color: var(--ink-soft); font-size: 13px; font-weight: 500;
+    border-left: 3px solid transparent; transition: all .15s ease;
+  }
+  .toc a:hover { background: var(--primary-light); color: var(--primary); text-decoration: none; }
+  .toc a.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+  .toc .lvl-1 { margin-top: 6px; }
+  .toc .lvl-2 { padding-left: 30px; font-size: 12.5px; }
+
+  /* ===== 主内容 ===== */
+  .main { margin-left: var(--sidebar-w); padding: 0 clamp(16px, 4vw, 48px) 80px; max-width: 1040px; }
+
+  /* ===== Hero 头部 ===== */
+  .hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #6d28d9 120%);
+    color: #fff; border-radius: 0 0 18px 18px;
+    padding: 44px 40px 36px; margin: 0 -4px 28px;
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; right: -60px; top: -60px; width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(255,255,255,.14), transparent 65%);
+    border-radius: 50%;
+  }
+  .hero .tagline {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; letter-spacing: .06em;
+    background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28);
+    padding: 4px 12px; border-radius: 999px; margin-bottom: 16px;
+  }
+  .hero h1 { font-size: clamp(22px, 3.2vw, 30px); line-height: 1.35; font-weight: 800; letter-spacing: .01em; }
+  .hero .meta { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,.92); display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  .hero .meta b { font-weight: 600; color: #fff; }
+  .hero .meta .chip {
+    background: rgba(255,255,255,.14); padding: 2px 10px; border-radius: 6px;
+    font-size: 12px;
+  }
+
+  /* 版本说明折叠 */
+  .version-note {
+    background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.22);
+    border-radius: 10px; margin-top: 18px; font-size: 12.5px; color: rgba(255,255,255,.94);
+    padding: 12px 16px;
+  }
+  .version-note summary { cursor: pointer; font-weight: 600; font-size: 12.5px; }
+  .version-note p { margin-top: 8px; line-height: 1.7; }
+
+  /* ===== 章节 ===== */
+  section { margin: 40px 0; }
+  .chapter {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 30px 34px 34px; scroll-margin-top: 20px;
+  }
+
+  .chapter h2 {
+    font-size: 21px; font-weight: 800; color: var(--primary-dark);
+    padding-bottom: 12px; margin-bottom: 18px; position: relative;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .chapter h2::after {
+    content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px;
+    background: linear-gradient(90deg, var(--primary-border), transparent 85%);
+  }
+  .chapter h2 .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 34px; height: 34px; padding: 0 8px; border-radius: 9px;
+    background: linear-gradient(135deg, #1d4ed8, #6d28d9); color: #fff;
+    font-size: 15px; font-weight: 800; flex-shrink: 0;
+  }
+
+  h3 { font-size: 16.5px; font-weight: 700; color: var(--ink); margin: 28px 0 10px; }
+  h3 .sec-tag {
+    font-size: 12px; font-weight: 600; color: var(--primary);
+    background: var(--primary-light); border: 1px solid var(--primary-border);
+    padding: 1px 8px; border-radius: 6px; margin-right: 8px; vertical-align: 2px;
+  }
+
+  p { margin: 10px 0; color: var(--ink); }
+  ul, ol { margin: 10px 0 10px 22px; }
+  li { margin: 5px 0; }
+  strong { font-weight: 700; }
+
+  .one-liner {
+    background: var(--primary-light); border: 1px solid var(--primary-border);
+    border-left: 5px solid var(--primary);
+    border-radius: 10px; padding: 16px 20px; margin: 16px 0;
+    font-size: 15.5px; line-height: 1.8;
+  }
+  .one-liner .label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 800; color: var(--primary); letter-spacing: .05em;
+    padding-bottom: 6px; margin-bottom: 8px; border-bottom: 1px solid var(--primary-border);
+  }
+  .one-liner .label::before { content: "◆"; font-size: 11px; }
+
+  /* 关键洞察卡片 */
+  .insight {
+    background: var(--insight-bg);
+    border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 10px; padding: 16px 20px; margin: 18px 0;
+  }
+  .insight .label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: .05em;
+    padding-bottom: 6px; margin-bottom: 8px; border-bottom: 1px solid var(--accent-border);
+  }
+
+  /* 警示框 */
+  .alert {
+    background: var(--warn-bg); border: 1px solid var(--warn-border);
+    border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14px;
+    color: var(--warn-ink);
+  }
+  .alert .label, .alert-danger .label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 800; letter-spacing: .05em;
+    padding-bottom: 6px; margin-bottom: 8px;
+  }
+  .alert .label { color: var(--warn); border-bottom: 1px solid var(--warn-border); }
+  .alert-danger {
+    background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-ink);
+  }
+  .alert-danger .label { color: var(--danger); border-bottom: 1px solid var(--danger-border); }
+
+  /* 结论框 */
+  .conclusion {
+    background: var(--success-bg); border: 1px solid var(--success-border);
+    border-radius: 10px; padding: 16px 20px; margin: 18px 0;
+  }
+  .conclusion .label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 800; color: var(--success); letter-spacing: .05em;
+    padding-bottom: 6px; margin-bottom: 8px; border-bottom: 1px solid var(--success-border);
+  }
+
+  /* ===== 表格 ===== */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 10px; border: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 560px; font-variant-numeric: tabular-nums; }
+  thead th {
+    background: var(--th-bg); color: #fff; font-weight: 700; text-align: left;
+    padding: 10px 14px; white-space: nowrap; font-size: 13.5px;
+  }
+  tbody td { padding: 10px 14px; border-top: 1px solid var(--line); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--zebra); }
+  tbody tr:hover { background: var(--row-hover); }
+  td .price { color: var(--danger); font-weight: 800; font-size: 14px; white-space: nowrap; }
+  td .hl { color: var(--accent); font-weight: 700; }
+  td.src, td .src { color: var(--ink-faint); font-size: 12px; }
+  .td-num { text-align: right; }
+
+  .price-tag {
+    display: inline-block; background: var(--danger-bg); color: var(--danger);
+    font-weight: 800; padding: 0 8px; border-radius: 6px; font-size: 13.5px;
+  }
+  .pill {
+    display: inline-block; background: var(--primary-light); color: var(--primary);
+    font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; margin: 0 2px;
+  }
+  .pill-orange { background: var(--accent-light); color: var(--accent); }
+
+  /* ===== 卡片网格（产品矩阵） ===== */
+  .grid { display: grid; gap: 14px; margin: 16px 0; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px 18px; transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .card .c-title { font-weight: 700; font-size: 14.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .card .c-title .emoji { font-size: 18px; }
+  .card p { font-size: 13px; color: var(--ink-soft); margin: 4px 0; }
+  .card .c-price { font-size: 13px; margin-top: 8px; color: var(--ink-soft); }
+  .card .c-price b { color: var(--danger); font-size: 15px; }
+
+  /* ===== 漏斗图 ===== */
+  .funnel { margin: 22px 0; }
+  .funnel .f-row { display: flex; justify-content: center; margin-top: 8px; }
+  .funnel .f-seg {
+    background: linear-gradient(180deg, #2563eb, #1d4ed8); color: #fff;
+    text-align: center; border-radius: 8px; padding: 12px 14px;
+    box-shadow: var(--shadow); transition: transform .15s ease;
+  }
+  .funnel .f-seg:hover { transform: scale(1.02); }
+  .funnel .f-seg .f-name { font-weight: 700; font-size: 13.5px; }
+  .funnel .f-seg .f-price { font-size: 12px; opacity: .92; margin-top: 2px; }
+  .funnel .f-seg .f-desc { font-size: 11px; opacity: .8; margin-top: 2px; }
+  .funnel .f-seg.level-2 { background: linear-gradient(180deg, #7c3aed, #6d28d9); }
+  .funnel .f-seg.level-3 { background: linear-gradient(180deg, #ea580c, #c2410c); }
+  .funnel .f-seg.level-4 { background: linear-gradient(180deg, #059669, #047857); }
+  .funnel .f-arrow { text-align: center; color: var(--ink-faint); font-size: 14px; margin: 2px 0; }
+
+  /* ===== 金字塔（用户群） ===== */
+  .pyramid { margin: 20px 0; }
+  .pyramid .p-row { margin: 7px 0; border-radius: 8px; color: #fff; padding: 10px 18px; font-size: 13px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .pyramid .p-row b { font-size: 13.5px; }
+  .pyramid .p-row .p-num { background: rgba(255,255,255,.22); padding: 1px 10px; border-radius: 999px; font-size: 12px; white-space: nowrap; }
+  .pyramid .p-l1 { background: linear-gradient(90deg, #0369a1, #0284c7); }
+  .pyramid .p-l2 { background: linear-gradient(90deg, #1d4ed8, #2563eb); }
+  .pyramid .p-l3 { background: linear-gradient(90deg, #6d28d9, #7c3aed); }
+  .pyramid .p-l4 { background: linear-gradient(90deg, #be185d, #db2777); }
+
+  /* ===== 五维表 ===== */
+  .dim-table td:first-child { white-space: nowrap; font-weight: 600; color: var(--primary-dark); width: 110px; background: var(--zebra); }
+  .dim-table tbody tr:nth-child(even) td:first-child { background: var(--zebra); }
+
+  /* ===== 编号列表 ===== */
+  .num-list { counter-reset: nl; list-style: none; margin-left: 0; }
+  .num-list > li { counter-increment: nl; position: relative; padding: 8px 0 8px 42px; }
+  .num-list > li::before {
+    content: counter(nl); position: absolute; left: 0; top: 8px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border);
+    font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ===== 弱/机会 双栏 ===== */
+  .weakness { border-left: 4px solid var(--danger); padding-left: 14px; margin: 6px 0 14px; }
+  .weakness b.lead { color: var(--danger); }
+  .opportunity { border-left: 4px solid var(--success); padding-left: 14px; margin: 6px 0 14px; }
+  .opportunity b.lead { color: var(--success); }
+
+  /* ===== 结论编号 ===== */
+  .concl-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .concl-item:last-child { border-bottom: none; }
+  .concl-item .ci-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, #1d4ed8, #6d28d9); color: #fff;
+    font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 3px;
+  }
+
+  /* ===== References ===== */
+  .ref-group { margin: 18px 0; }
+  .ref-group h3 { font-size: 15px; }
+  .ref-badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 6px; margin-right: 8px; }
+  .ref-a { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+  .ref-b { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+  .ref-list { list-style: none; margin: 10px 0 0; }
+  .ref-list li { padding: 7px 0 7px 26px; position: relative; font-size: 13.5px; border-bottom: 1px dashed var(--line); }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before { content: "↗"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+  .ref-list .ref-meta { color: var(--ink-faint); font-size: 12px; }
+
+  /* ===== 返回顶部 ===== */
+  .back-top {
+    position: fixed; right: 24px; bottom: 28px; width: 42px; height: 42px; border-radius: 50%;
+    background: var(--primary); color: #fff; border: none; font-size: 18px; cursor: pointer;
+    box-shadow: var(--shadow-lg); opacity: 0; visibility: hidden; transition: all .25s ease; z-index: 300;
+  }
+  .back-top.show { opacity: 1; visibility: visible; }
+  .back-top:hover { filter: brightness(.85); }
+
+  /* ===== 移动端目录 ===== */
+  .toc-toggle {
+    display: none; position: fixed; top: 14px; left: 14px; z-index: 400;
+    width: 44px; height: 44px; border-radius: 10px; border: none;
+    background: var(--primary); color: #fff; font-size: 18px; cursor: pointer;
+    box-shadow: var(--shadow-lg);
+  }
+  .toc-mask {
+    display: none; position: fixed; inset: 0; background: rgba(15,23,42,.5);
+    z-index: 150; opacity: 0; transition: opacity .25s ease;
+  }
+  .toc-mask.show { opacity: 1; }
+
+  .sidebar.open { transform: translateX(0); }
+
+  /* ===== 主题切换按钮 ===== */
+  .theme-toggle {
+    position: fixed; top: 14px; right: 14px; z-index: 400;
+    width: 40px; height: 40px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    font-size: 16px; cursor: pointer; box-shadow: var(--shadow);
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .theme-toggle:hover { border-color: var(--primary); transform: translateY(-1px); }
+
+  /* ===== 正文限宽（表格/卡片网格保持全宽） ===== */
+  .chapter p, .chapter ul, .chapter ol, .chapter h3,
+  .chapter .one-liner, .chapter .insight, .chapter .alert, .chapter .conclusion {
+    max-width: var(--read-w);
+  }
+
+  /* ===== 来源标注徽章 ===== */
+  .src-badge {
+    display: inline-block; font-size: 11px; font-weight: 600; line-height: 1.6;
+    padding: 0 6px; border-radius: 5px; margin: 0 1px; vertical-align: 1px; white-space: nowrap;
+  }
+  .src-badge.a { color: var(--primary); background: var(--primary-light); border: 1px solid var(--primary-border); }
+  .src-badge.b { color: var(--ink-faint); background: var(--zebra); border: 1px solid var(--line); }
+  /* 可点击来源：链接色继承徽章等级色，悬停下划线 + 外链箭头 */
+  a.src-badge { text-decoration: none; cursor: pointer; transition: filter .15s, box-shadow .15s; }
+  a.src-badge:hover { text-decoration: underline; filter: brightness(.96); box-shadow: 0 0 0 2px var(--line); }
+  a.src-badge:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+  a.src-badge::after { content: " \2197"; font-size: 9px; opacity: .65; margin-left: 1px; }
+
+  /* ===== 目录分组折叠 ===== */
+  .toc li.has-group { display: flex; align-items: center; }
+  .toc li.has-group > a { flex: 1; }
+  .toc .caret {
+    cursor: pointer; color: var(--ink-faint); font-size: 11px;
+    padding: 6px 10px; user-select: none; transition: transform .2s ease;
+  }
+  .toc li.closed .caret { transform: rotate(-90deg); }
+
+  /* ===== 桌面端表格：sticky 表头（取消横向滚动容器后生效） ===== */
+  @media (min-width: 760px) {
+    .table-wrap { overflow: visible; }
+    thead th { position: sticky; top: 0; z-index: 6; }
+    thead th:first-child { border-top-left-radius: 9px; }
+    thead th:last-child { border-top-right-radius: 9px; }
+    tbody tr:last-child td:first-child { border-bottom-left-radius: 9px; }
+    tbody tr:last-child td:last-child { border-bottom-right-radius: 9px; }
+  }
+
+  /* ===== 移动端表格：首列固定 ===== */
+  @media (max-width: 759px) {
+    .table-wrap thead th { z-index: 3; }
+    .table-wrap th:first-child, .table-wrap td:first-child { position: sticky; left: 0; z-index: 2; background: var(--card); }
+    .table-wrap thead th:first-child { z-index: 4; background: var(--th-bg); }
+    .table-wrap tbody tr:nth-child(even) td:first-child { background: var(--zebra); }
+    .table-wrap tbody tr:hover td:first-child { background: var(--row-hover); }
+    .dim-table td:first-child { background: var(--zebra); }
+  }
+
+  /* ===== 主题切换过渡 ===== */
+  body, .chapter, .sidebar, .card, thead th, tbody td {
+    transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+  }
+
+  /* ===== 打印样式 ===== */
+  @media print {
+    .sidebar, .progress-bar, .back-top, .toc-toggle, .toc-mask, .theme-toggle { display: none !important; }
+    .main { margin-left: 0; max-width: 100%; padding: 0; }
+    body { background: #fff; font-size: 12px; }
+    section { margin: 12px 0; }
+    .chapter { box-shadow: none; border: 1px solid #ddd; padding: 14px 18px; }
+    .hero { border-radius: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .table-wrap, .card, .insight, .alert, .conclusion, .one-liner, .funnel, .pyramid, .concl-item, .ref-list li { break-inside: avoid; }
+    .table-wrap { overflow: visible; }
+    thead th { position: static; }
+    table { min-width: 0; font-size: 10.5px; }
+    tbody td, thead th { padding: 6px 8px; }
+    a { color: inherit; }
+    .ref-list a::after { content: "（" attr(href) "）"; font-size: 10px; color: #666; word-break: break-all; }
+  }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 1024px) {
+    .sidebar { transform: translateX(-100%); transition: transform .28s ease; box-shadow: none; }
+    .sidebar.open { box-shadow: 8px 0 30px rgba(16,24,40,.18); }
+    .main { margin-left: 0; padding: 76px 14px 60px; }
+    .toc-toggle { display: flex; align-items: center; justify-content: center; }
+    .toc-mask.show { display: block; }
+    .hero { padding: 32px 22px 30px; }
+    .chapter { padding: 22px 18px 26px; }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 14px; }
+    .hero h1 { font-size: 21px; }
+    .chapter h2 { font-size: 18px; }
+    h3 { font-size: 15.5px; }
+    table { font-size: 12.5px; }
+    .back-top { right: 14px; bottom: 16px; }
+  }
+</style>
+</head>
+<body data-page-node-id="xJunTOI9j4PAeUWxlV0Czl">
+
+<div data-page-node-id="G3TJ8KMU8eaMqGwbBzOLb7" class="progress-bar" id="progressBar"></div>
+<button data-page-node-id="PLoPO9XS1r6aiFle3nZw84" aria-label="打开目录" class="toc-toggle" id="tocToggle"><!--pnid:XAtIvwzTTA8dL6UF5lYaQx-->☰</button>
+<button data-page-node-id="q018NJKkMbxVUSxzL08iwS" aria-label="切换深浅色模式" class="theme-toggle" id="themeToggle"><!--pnid:cKjJhUjgID0xOOBMk4IpKV-->🌙</button>
+<div data-page-node-id="pnbJZKMiVO4t6xEirGcQNq" class="toc-mask" id="tocMask"></div>
+
+<!--pnid:cNpAaEiaW9Sx6NLz2sRcEv--><!-- ================= 侧边栏目录 ================= -->
+<aside data-page-node-id="IHSKF0PqyJbrIH26FjzZaH" class="sidebar" id="sidebar">
+  <div data-page-node-id="WIPlaTLoSpFfk4AQeYWTw6" class="brand">
+    <div data-page-node-id="Y0BIq2tqdcayP23yPZqscm" class="logo"><!--pnid:tErfnQmzKJg69v9g2NMDvC-->千</div>
+    <div data-page-node-id="SWiaAIYxMDQyOTa3rw0hMQ" class="name"><!--pnid:ZDLlca1pSu2EygQ9Ac7FJ4-->千里马及子产品调研报告</div>
+    <div data-page-node-id="ZrKkovUCsAnvTMzDYQ580T" class="sub"><!--pnid:RMCt8o5PV9uhmD1d7e4M5v-->2026-08-26</div>
+  </div>
+  <ul data-page-node-id="BkynB4QQlHFPWq37MQ1GMC" class="toc" id="toc">
+    <li data-page-node-id="JVq7qv5jlur9KUxLrTyTNe"><a data-page-node-id="hSqzI5vZm6Qjh19cplDZEX" href="#overview"><!--pnid:39ZRbUsd4ChtduZs9vQd0I-->报告概览</a></li>
+    <li data-page-node-id="Wv1nyu3H5S4upaUDnqRTNN" class="lvl-1"><a data-page-node-id="aMxNVDNuqG86UlodXTwU1N" href="#s1"><!--pnid:dUol5k47ceFcEQINirj6LC-->一、千里马是什么</a></li>
+    <li data-page-node-id="wousnhXpd5dXHMWiSFiE7s" class="lvl-1"><a data-page-node-id="Z7JDo6PZPvsWrcosZ8hXqj" href="#s2"><!--pnid:h40xPfqDFJGjFaRnQvc3QV-->二、产品矩阵</a></li>
+    <li data-page-node-id="eekTjqL6RViNjrkG37Mjj1" class="lvl-1 has-group"><a data-page-node-id="obXgFS3L5alqTNo1REq6eB" href="#s3"><!--pnid:jQXww9pEnTdPMRp81Qmu2m-->三、子产品分述</a><span data-page-node-id="KsmlbMQ5LE4TTfwMiMsCge" aria-label="展开或折叠子目录" class="caret" role="button"><!--pnid:uozbgr7iopeXCXIdvbLSPQ-->▾</span></li>
+    <li data-page-node-id="OWnpHOdacMI9t6NBpf8hKo" class="lvl-2" data-parent="s3"><a data-page-node-id="F8lg4qSBdgK6TvVKFRzuH7" href="#s3-1"><!--pnid:lzyBQi43c1Bfi06CCl2Vr0-->3.1 乙方宝（C 端）</a></li>
+    <li data-page-node-id="nNtVZDGJ0hYjZTiNe4figU" class="lvl-2" data-parent="s3"><a data-page-node-id="AWZIcn0ZJ4ejNAJHYHQTSU" href="#s3-2"><!--pnid:eh7hznYuWr5hqCaUP18ygI-->3.2 主站 + 会员（B 端）</a></li>
+    <li data-page-node-id="hCBb4nqY03fufsdWjBzX5Z" class="lvl-2" data-parent="s3"><a data-page-node-id="Fusz1iXjpkmVLvIErLsnwN" href="#s3-3"><!--pnid:IHVXbARnz9eZbW4sAgD7xA-->3.3 喜鹊标书 AI（写标）</a></li>
+    <li data-page-node-id="gQUn9LXiO0cIApSN6sUyHx" class="lvl-2" data-parent="s3"><a data-page-node-id="my2k8EQBuXrRRMcdddTe4j" href="#s3-4"><!--pnid:giL02errDNyo3L32NpZU4d-->3.4 企业智能商机服务</a></li>
+    <li data-page-node-id="JIGSxWTdUeaz9EP5I6OrKv" class="lvl-2" data-parent="s3"><a data-page-node-id="mvuwzhkrU4KCVMuSIEX0hz" href="#s3-5"><!--pnid:Yqwhr6Nqmy8wkQ5Wa4pXiX-->3.5 采购方侧</a></li>
+        <li data-page-node-id="hXrGd0EZPgYIuLCEwwqco3" class="lvl-1"><a data-page-node-id="8LeQTxUaj1mkPU4CCLL5NH" href="#s6"><!--pnid:KKymvnP6mCd5ANAbg3A1gI-->四、用户群体</a></li>
+    <li data-page-node-id="Ws41HqN9743VPjMq9BczpY" class="lvl-1"><a data-page-node-id="B7UDbnFb9GVHsAO6idiQME" href="#s5"><!--pnid:HsmTdnrCP6O1ukgBJ7LASl-->五、会员体系与定价</a></li>
+    <li data-page-node-id="TJoqB1zG3WGs8tpUQXIWE5" class="lvl-1"><a data-page-node-id="41Lrg6jItqFblZqWhNG9Rx" href="#s8"><!--pnid:8Et53eUfDIKW22Xc9Unsjd-->六、参考资料</a></li>
+  </ul>
+</aside>
+
+<!--pnid:JvqbY5s73QqZ5HAr0iP0ox--><!-- ================= 主内容 ================= -->
+<main data-page-node-id="pZFdT36y8mmJVHIx8caZ95" class="main">
+
+  <!--pnid:phsFxAIwGDfErI1PeebEMO--><!-- 报告概览 -->
+  <header data-page-node-id="Y2gCBs0xRkZsC5UQQzSrJY" class="hero" id="overview">
+    <span data-page-node-id="46kTEDtyVPModmMyLCAMko" class="tagline"><!--pnid:VZz1MO43wZ5eERfceHC3r0-->📋 投标平台立项调研 · 竞品拆解</span>
+    <h1 data-page-node-id="WbXnmaCYXJJcSkxSNA0tVa"><!--pnid:Ns1gIgU8rtWdGzIuppZCXD-->千里马及子产品调研报告</h1>
+    <div data-page-node-id="pr5d7CphXyFCmZI7Cyk3Zr" class="meta">
+      <span data-page-node-id="84jyJr7Oepszn9Cj3Udx72"><!--pnid:NB02Ig6dZikFhBHOhoOlne-->调研日期：<b data-page-node-id="OTOjUCsJTJtYwSPsaK2DKf"><!--pnid:FBwj3i4U3sKGilPPQx7lca-->2026-08-26</b></span>
+      <span data-page-node-id="0mb6cecetcftDLIo4K4oq5"><!--pnid:PWdWUjyTA2G6gRJvCWGbnm-->对标对象：<b data-page-node-id="74zZ6Dw3qZKNd4Xw2kYReR"><!--pnid:DNE8115babBYMvbeIehdUg-->千里马招标网</b><!--pnid:YqelGYZ0p1Cd5UTMOXCvXO-->及其旗下全部产品</span>
+    </div>
+  </header>
+
+  <!--pnid:azhaACsXuxmNvw3kCRxDOq--><!-- 一、千里马是什么 -->
+  <section data-page-node-id="i1mbWKeh5qfE0dTarSSe4l" id="s1">
+    <div data-page-node-id="RpVKtR9qYDnBrPe4hoKq30" class="chapter">
+      <h2 data-page-node-id="dh10hedgtKNPQTPQC3SiUT"><span data-page-node-id="xwzEM2CP5qAVzoHDwsOFqo" class="num"><!--pnid:QZzHD07BaBazPaNOu7ux7g-->一</span><!--pnid:X7zZoVOqbaQ0ILE2wzCyGO-->千里马是什么</h2>
+
+      <div data-page-node-id="3o2Alv3Wnby3ClWbKlt7fv" class="insight">
+        <span data-page-node-id="zVhYSPVafib1oxq3m9LqMP" class="label"><!--pnid:HMMjyiMV3GtRRrdjPc0nv0-->◆ 产品定位</span>
+        <p data-page-node-id="IfcxUXw8aH0ytC3Fom1jPt" style="margin-top:4px"><!--pnid:6uFfNo4fBJo8PT2T82H8ZT-->将原始标讯加工为<strong data-page-node-id="pDdlwxdvVGdZ4S5WrDiL3k"><!--pnid:JVIjG8oBS8LecUMoeezUc8-->商机</strong><!--pnid:eMrxpVsjw6dkY1LpzvpZ2N-->，提供企业<strong data-page-node-id="HhhnUIZNGS0payrzfqElNi"><!--pnid:9Oz8U50oCaA5ywbwiqd6ZM-->拓客与投标决策服务</strong><!--pnid:jR7C8zZZVHcqDWIav0mIwz-->，核心优势在于<strong data-page-node-id="YjOJeveHa9aEyjAiQTVdV0"><!--pnid:3bweRHdPQD34Sff86ej0dE-->底层数据量与清洗结构化能力</strong><!--pnid:QendOVB43ndEkDlAiIqyUb-->。</p>
+      </div>
+
+      <h3 data-page-node-id="2G4ybgGeSHhv5y84BkuctS"><!--pnid:6rHYK4iPeTY3uvw6QHKjj7-->公司概况</h3>
+      <div data-page-node-id="1B8Y8iWPuq0LxiE33ctfS4" class="table-wrap">
+        <table data-page-node-id="v4PLHOq7fkI35i8H8iuW3P">
+          <thead data-page-node-id="6Nn3FPOoRq1LjU7nbBcHg9"><tr data-page-node-id="QvpV16kihaA3XoMDEmWF3U"><th data-page-node-id="yghQS7tl0lp74qFjdbuI64"><!--pnid:YoJWIrCMWpLVr9PVg1elHy-->项目</th><th data-page-node-id="G0HNKRTmyU62W8UHaF5zhf"><!--pnid:l2EeVqwz2LvwwP6XwxcSOZ-->内容</th><th data-page-node-id="hEeN2CPCeAl4nn14ovNJBT"><!--pnid:WqfC3Niwi6AL8RuI3TUNyB-->来源</th></tr></thead>
+          <tbody data-page-node-id="B9sJeYzjZqCCfPtRJuRArG">
+            <tr data-page-node-id="pT7gu6bIMFn9VOnIKttzCS"><td data-page-node-id="4U7zv9y6ZfbcGNM6niFna5"><strong data-page-node-id="MsTK2fqLnFIPfVYsiZu8NJ"><!--pnid:XqWcJls2bIH7jO9HSozvGr-->运营主体</strong></td><td data-page-node-id="YdtNKPJEzB0uAvbnScVakB"><!--pnid:7GkInD0vvQMI7rDrKxYLsV-->北京千里马网信科技有限公司，2012-03-13 成立。</td><td data-page-node-id="Dv6eFVphK4gKI05pYqCUvn" class="src"><a data-page-node-id="JMRBTOjQI7PTao2ByFGjci" href="https://www.gsxt.gov.cn" rel="noopener" target="_blank"><!--pnid:wQR9JyHsilWhbxw2HjyONW-->[工商]</a><!--pnid:LkQ10VaqouHHOC0YjEEHrh--> 国家企业信用信息公示系统</td></tr>
+            <tr data-page-node-id="rdecSg4TG1XHfUepve5NDj"><td data-page-node-id="0e4ibB6D4DQdbIgUEIyTru"><strong data-page-node-id="ZxAMc2M9rW5lfiKssGn1fH"><!--pnid:61vMTEwsl277KKr4JohJf3-->法定代表人</strong></td><td data-page-node-id="ulD5216SaHq2HZQtfcFgq9"><!--pnid:Fqp1lA5Ks6nOUZZSORzXDi-->王剑波（创始人兼 CEO，董事长/经理）</td><td data-page-node-id="Rhn6mDijiwN6RmiqK0Bx3g" class="src"><a data-page-node-id="0DWFx4Ur60qKiRVUpmiFel" href="https://www.gsxt.gov.cn" rel="noopener" target="_blank"><!--pnid:gtBKNa9gNvJnN4wZNFUvf9-->[工商]</a></td></tr>
+            <tr data-page-node-id="bfyCzI5l4l1Cb8HI8MEsfb"><td data-page-node-id="4M0ZkXFv4C7JApX56vi2LQ"><strong data-page-node-id="yAb3jupZiGVD42ZoJeWsEV"><!--pnid:n3LhbqgSeSPIj22X9kOHo8-->注册资本</strong></td><td data-page-node-id="XrIvc0WLOihytjuwDUOB6M"><!--pnid:Ia0xBvFGLMrffSyS96Ojii-->1000 万元</td><td data-page-node-id="zdpJ6N0MZ63gdjk2JRLbop" class="src"><a data-page-node-id="Du9oY3hwP2TWTh0ixC2m1z" href="https://www.gsxt.gov.cn" rel="noopener" target="_blank"><!--pnid:yn1wkzAR8eMwtJo6XGPKHC-->[工商]</a></td></tr>
+            <tr data-page-node-id="KgMusFK6ZGu0VCZRUOICaq"><td data-page-node-id="dXFJqPUgYe1oYST4KBInqW"><strong data-page-node-id="7fP5iPCDbdVA5RseMdkroC"><!--pnid:rlOLKD05cLEKapC7HHK70R-->资质</strong></td><td data-page-node-id="nwtsah5lcqTnN6gR0idkQI"><!--pnid:2y8MA8MCcus2vHIWi9bLw8-->国家高新技术企业、ISO9001、CMMI、信息安全等级保护三级、30 项软著、12 项商标</td><td data-page-node-id="LNlkLHj3NOhgWlKaKt5RzS" class="src"><a data-page-node-id="f7vhB02lFwQXyjqL6Ku75E" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:iAOceiHNMYOWJVujWDx5YS-->[官网]</a><!--pnid:I5cA6y4xpWcNYSRH4puikB-->；<a data-page-node-id="j1OFVzOwAz9t0MmczNGCVx" href="https://aiqicha.baidu.com" rel="noopener" target="_blank"><!--pnid:sQyquIGUa3yTNNXJUDKp0y-->[爱企查]</a></td></tr>
+            <tr data-page-node-id="WRupsuj8S6Ps1Gf2TOJhmX"><td data-page-node-id="SxKwxOkzDF0YfrHGTicpiO"><strong data-page-node-id="xB6hRSYmVOXE29groNTGso"><!--pnid:V8sKl9ya2PyMGVhnCOIfwB-->分支机构</strong></td><td data-page-node-id="72epDyQel850W4tuPmxyxJ"><!--pnid:dtc5xqcvuXPHXT8oKWToGx-->济南、武汉、北京（昌平/海淀/通州/房山）在营。</td><td data-page-node-id="rifDKywMVf8NfAsazPycp9" class="src"><a data-page-node-id="9BY5Ln2xt4maZKZY9GCwQQ" href="https://www.gsxt.gov.cn" rel="noopener" target="_blank"><!--pnid:rkNoGM91Tqy5qYk6dnDcoH-->[工商]</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!--pnid:X3mv5BYbebndZUvubcF3m7--><!-- 二、产品矩阵 -->
+  <section data-page-node-id="anNm4YX8nnP1zfbvjj6ARP" id="s2">
+    <div data-page-node-id="h4tI1BYd6apDoK7tHwwqco" class="chapter">
+      <h2 data-page-node-id="BQQL9vHkJkpfZoNvoGtzvx"><span data-page-node-id="rf74cUU7QUICbRHLPCU0cc" class="num"><!--pnid:CEl1HDQ1XE9lXbbevQZw6Q-->二</span><!--pnid:RlPGccGO8IviGUVB93ghTf-->产品矩阵</h2>
+      <p data-page-node-id="7skFpn74v35RAe5HrxforP"><!--pnid:ngjvw6qrCZ6YkSfn6yYqNx-->千里马为"<strong data-page-node-id="NWZODryMP6Z7slODG1VHvd"><!--pnid:9uwLEF2xD8M6rOSuIFMhe8-->一数据中台 + 多产品线</strong><!--pnid:ZD4hxHE5rvcMhMOtwoKqlF-->"的集团矩阵，产品与子服务按使用人群归并为 5 类，覆盖数据底座、低价找标、主站商机与增值服务、AI 写标、数据定制，对应不同痛点与转化路径。</p>
+
+      <h3 data-page-node-id="WOr6TUCb7SFcaMp5R2BocZ" style="margin:20px 0 6px"><span data-page-node-id="CjfGBP42PhYgFmXgn50HIl" class="sec-tag"><!--pnid:ZJy8vGnKDiT39IsNulSAmP-->1</span><!--pnid:GCLEMhOc7YUeLJlWtC306y-->产品矩阵</h3>
+      <div data-page-node-id="s23ls0IXhgcjsjYHuahjoG" class="table-wrap">
+        <table data-page-node-id="bPcIGoweyZ6jDJ75MhJs9S">
+          <thead data-page-node-id="OVMMcyQAVw2p3eM5nBWiTo"><tr data-page-node-id="IZmYSkVGVZ0B4PA02oCoed"><th data-page-node-id="ZBaYU0Xq3ic2wW3vJqQLeI"><!--pnid:uUsIjhKcyDrFsOPNpduqZX-->产品/子平台</th><th data-page-node-id="mOAduYjbbJc9YZh9JwWmG8"><!--pnid:JHRijjlkPFmF9KR6D0UXIC-->使用人群</th><th data-page-node-id="hHfOD9XyBrNnZTiMJ9d0y5"><!--pnid:2CJ2x0Arqx1BW9wKFH8lUR-->作用</th></tr></thead>
+          <tbody data-page-node-id="JtQofHHDEdF428prvdT0EY">
+            <tr data-page-node-id="PqUKgrpwSY08kBJBWXeJpa"><td data-page-node-id="3Em1GdQidpOCsXyEwBmd2G"><!--pnid:YOZ4PikaLPvRv2q0N1CxHl-->招投标数据库</td><td data-page-node-id="GkGTh8Kqj5W03NuKRK7uHJ"><!--pnid:B7PgVszye9Ubp5RwFh0VDL-->全人群（基础设施）</td><td data-page-node-id="ghX0ukPCylWz4r3FyzU7Qy"><!--pnid:JJu2TkMu3bnV3Hy8wb02Up-->监测 20 万信息源、清洗结构化，是所有产品底座。</td></tr>
+            <tr data-page-node-id="LiBdLQX1RzmQLtViTF8FiC"><td data-page-node-id="eNFcLf5qFtDK3kkAL4cMVD"><!--pnid:ILB5gwgRPme1SvZzhKkBVI-->乙方宝</td><td data-page-node-id="p95pmdWG6KMHJuHmdSW6tv"><!--pnid:7SHC074q2cKWswxxI6x5Pm-->C 端·个人/小微</td><td data-page-node-id="GRatrupka0kJrummRsUTme"><!--pnid:BBwQeO82TyiMd9vtud7Oie-->低价付费标讯（黄金 <span data-page-node-id="XUjEN3Ykbq7reMkWgVJRkw" class="price"><!--pnid:96o32O6iTgC8g8WdC6Xqju-->29元/月起，199 元/年起</span><!--pnid:52IBfKWzFBfdFIHt6Fv9tO-->），<strong data-page-node-id="7FxnmkgcEumDe1PjvbuaKh"><!--pnid:K0zIUdfaiw6h0e4YvpxVNE-->转化链前端。</strong></td></tr>
+            <tr data-page-node-id="uuR3uPajFvF7E5HbjbAC2b"><td data-page-node-id="m6SC6jjKsdZh4EpVRCqHJU"><!--pnid:aNrRfz3Y5sFDibqruSdv8H-->千里马招标网主站（含商机拓展工具、标讯发布、增值服务）</td><td data-page-node-id="E5c8S8RC2GuxywrC54WPBp"><!--pnid:kmSzx3bpNsmQMVuZ7f6t7b-->B 端·中小企业·销售/市场</td><td data-page-node-id="Ukrqf813IQ053eYRqhAfc8"><strong data-page-node-id="Vq2j5c8ZWXreETjlwvdA2x"><!--pnid:LcPOfbf3m72kcNnFuaYNrX-->综合门户与三档商机订阅</strong><!--pnid:Ad5IfXlswB1w73KZR0HaIU-->（含移动端/VIP/省级分站）；<strong data-page-node-id="IP06qPDOJ3a7N3FD2F7evy"><!--pnid:5CLK0YgdJBU2Z9b5fgtOct-->商机拓展</strong><!--pnid:X7b9P5BAOxQFezbR5I26LK-->（智能匹配推送/找人脉/企业监控/企业商情/拓客宝）；<strong data-page-node-id="2hkkI0JoSF3aijDgnP5J4m"><!--pnid:NL5T2r39gwzKBsM0p7f6Ij-->标讯发布</strong><!--pnid:gSPLZSqDb7O4LfiEcjcPH3-->（发布/邀请/推荐招标）；<strong data-page-node-id="A4LUngD6FY47QLCrOC54zU"><!--pnid:U3LBjSoXXcmIwWqCe0UX7n-->增值服务</strong><!--pnid:5Wab10YT0vZewv9IfTN78A-->（标书代写、向甲方推荐、项目专盯、企业子账号/招标工程师）</td></tr>
+            <tr data-page-node-id="jYWE6AcqkOZlxBIcKeEbxF"><td data-page-node-id="BOaU9BcNLabDS6rVsdPthV"><!--pnid:gS2jXPry0KoJia6BCixaOj-->喜鹊标书 AI</td><td data-page-node-id="1epQIQNFaVJv2JH5pPGQkm"><!--pnid:53Zs09Y3jg9BRg00RJaYVD-->B 端·投标专员</td><td data-page-node-id="4kqXAggpivpQ91OS3Tz4sD"><!--pnid:o71fXUIxIwhoM42Si0PdNl-->AI 标书全流程制作。</td></tr>
+            <tr data-page-node-id="tRvSIEP02Xo35Uats2JIrr"><td data-page-node-id="Q2aFGOnPNH0s9BCgQK08Ab"><!--pnid:1ElViKNpX2Kvtd6vqE7YHW-->企业智能商机服务（定制）</td><td data-page-node-id="2T8YLqD34JYFPNq9cV3dwT"><!--pnid:86wePJck6IDfOqsnIeVUAV-->B 端·集团/大客户</td><td data-page-node-id="V44dOW3tqwVtUWcC47Hetm"><!--pnid:jI3p3Shl1FCYxyTA4WC5Ah-->分行业数据、API/BI 定制（单项目最高超 150 万）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 data-page-node-id="L9A4QDyzaEekVCNgpPeTBh" style="margin:20px 0 6px"><span data-page-node-id="HIQJ7FDZyBNibNowxiVsBO" class="sec-tag"><!--pnid:kXqakSRhNt9rSoybtWC7AO-->2</span><!--pnid:Ce60eIE8msK9ASRhbtBiAS-->服务清单</h3>
+      <div data-page-node-id="UB6V7mICWwUgfqzKoZhnm4" class="grid grid-2">
+        <div data-page-node-id="kMtqwbsId3R0B4D589qoVb" class="card"><div data-page-node-id="PDpvfQ80E8hWSmprkUwQ9J" class="c-title"><span data-page-node-id="zhz5XUKDpZ0irWJmn5ekjo" class="emoji"><!--pnid:RoyxJbbeMxhji4sj1ExcKu-->🔍</span><!--pnid:GWvs5GV4O4VDyVbDvCqr2T-->1. 找标 / 商机</div><p data-page-node-id="ht2EKQwUJ0cwyOIRlMqts5"><!--pnid:uPdsNYq7XbkkbFjHNxjpxg-->千里马主站 + 会员</p><p data-page-node-id="h7EA6QVENujRpTXseOAW9I"><!--pnid:DlzvTEb5ERnscDPXZrnups-->招标查询、拟在建/审批/采购意向、VIP 与采购方委托独家项目、附件预览导出 <a data-page-node-id="RIEUWspCfXrAjk3J6eDyrA" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:G1wYYE9afA8SGWC0b6G2m7-->[官网]</a></p></div>
+        <div data-page-node-id="rfteLkWmsqA13ocks2O5XF" class="card"><div data-page-node-id="HKH0zbUXmCMtogxa2ApiLu" class="c-title"><span data-page-node-id="VZmDkzQTWl3JvucjYP6IIZ" class="emoji"><!--pnid:bjCzblRb7hT6lD9OF1jt91-->📡</span><!--pnid:Jg7RiRGBjIbQx6NG0K2OpF-->2. 荐标 / 商机拓展</div><p data-page-node-id="A09S0zjS273cq9eXUbuQq1"><!--pnid:8zTnsjjp1dWSfFmbRK4dUz-->千里马会员</p><p data-page-node-id="DFUjrW4dmcCkLv2w4iPDM8"><!--pnid:PAFESujD9GoGVxJpeG1s1a-->企业监控、找人脉、企业商情分析、智能匹配推送 <a data-page-node-id="oRCx9fWoM58h56uQ3Zx77A" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:fqIBx9VsqY9N0hVxI58P6T-->[官网]</a></p></div>
+        <div data-page-node-id="WYLEvHJgKS2MDhlsOvpCgm" class="card"><div data-page-node-id="Bvtm3uStmodLzFyLULIZ1D" class="c-title"><span data-page-node-id="qyaH4sDCnFDtRB9ZX33wvi" class="emoji"><!--pnid:fXAAGHukYcmBfff33MQvBT-->✍️</span><!--pnid:9Qwxfk36qg1seJP1YJQAlv-->3. 写标（AI）</div><p data-page-node-id="kuZNFmMO1HWIGNCwbbO5S0"><!--pnid:zP63tPkRum5VUQQWZQ7ypP-->喜鹊标书 AI</p><p data-page-node-id="HAvzfg8IgWN5ikJDjSjSMv"><!--pnid:OsD0t3hpa7ruh1rOfBmKX9-->招标文件解读、投标决策评估、技术标/商务标/施工标生成、大纲架构、风险审查、防重、模拟评标、述标 PPT <a data-page-node-id="3PG0LRu813gJE85IB1gb3j" href="https://www.ithome.com" rel="noopener" target="_blank"><!--pnid:6DqDdhFB4jHX2eK9St6EzG-->[IT之家]</a><!--pnid:07fHZD8XmChr5zHYyPxpUb-->/[aitop100]</p></div>
+        <div data-page-node-id="JsXl3NfyW48ZSzpdcUYu5g" class="card"><div data-page-node-id="3wWIXjZxuvolpqln6VS3yp" class="c-title"><span data-page-node-id="N3XPaHJhAVGlnKCJflQrIJ" class="emoji"><!--pnid:7EH4xcntYj4jugXOpHB5OG-->✍️</span><!--pnid:8WUokDqG728Zy5PcCmxKBS-->4. 写标·人工</div><p data-page-node-id="WpUqjLXcNH5qmUx0W4C2tR"><!--pnid:tlSvRHWavUpQdy5ANWJX1b-->主站</p><p data-page-node-id="J1kzj5MM7hjunefi2SII9s"><!--pnid:UT8qsRaToixjP8Wk2vAGWK-->标书代写、模板下载、合规校验、资质比对 <a data-page-node-id="f1dIOqRg3jQ3NYfksntnJX" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:rW3wib4ekzuhIEf3ksoFCe-->[官网]</a></p></div>
+        <div data-page-node-id="Bf0hCOjv5qHKZFzBxHSR4r" class="card"><div data-page-node-id="i1LbhyvhrwjyTJzHdOg9C2" class="c-title"><span data-page-node-id="K8x0ef3dIcK9LHy1hX3pvK" class="emoji"><!--pnid:GQxUBytU0m6Keoyp2ftU6N-->🥇</span><!--pnid:l7YmCxI7Sh68rCkU2hiQde-->5. 金牌服务</div><p data-page-node-id="ckm6ho6dGoxZci7xIzqYk5"><!--pnid:sDCwqZjeDqbKnjWuyMqVSj-->高客单</p><p data-page-node-id="jMgwtbq8afjOb2uBwbRAPT"><!--pnid:ZlUz54jW2kXg10RJReaBqj-->向采购方推荐、项目专盯 <a data-page-node-id="3zJk3ZxRPg6IlD4NlYwezq" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:pULqMOIAq6ootwnIwB6R9V-->[官网]</a></p></div>
+        <div data-page-node-id="6IngumRYiHfmG6hX0jYXxE" class="card"><div data-page-node-id="SMLMS1Vhy7ItCsKDo1TQqB" class="c-title"><span data-page-node-id="0A8kPXgdjByLufxUXESW7J" class="emoji"><!--pnid:nS70ABcADyRHKOMHRsFA73-->👥</span><!--pnid:yAD8xZb5aPYbzTJuPjEjF8-->6. 企业协同</div><p data-page-node-id="9npjvxwpP6DzrLimynu3YW"><!--pnid:1qMOJAcYXAqWQzoXxxXis5-->团队版</p><p data-page-node-id="GeFLcjQeLkHqS2kZzqHg8D"><!--pnid:rONPihDRjZGPn1Zic2PbSK-->企业子账号、商机线索自动分配 <a data-page-node-id="fmO1LW94O92jh8aWGYLnLv" href="https://home.qianlima.com/choose-package?sourceType=2" rel="noopener" target="_blank"><!--pnid:d07FTOmzY2DVDARJ6EynSe-->[套餐页]</a></p></div>
+        <div data-page-node-id="SECXrgEsWltQG1wWJ1kRPC" class="card"><div data-page-node-id="4QCzXnqTDGP1LJreKZpSKl" class="c-title"><span data-page-node-id="RR4vwcuEQGweKivyI6EAPw" class="emoji"><!--pnid:OnQAYNp1DMzVPEhcaTKkrx-->📊</span><!--pnid:1knCbTd4rh3t4mtFcfeeUZ-->7. 数据与定制</div><p data-page-node-id="4G1l8UNFvbQndXhvXCSbHU"><!--pnid:Bjg9Ayv4gAwlaSywXTVOMN-->大客户</p><p data-page-node-id="mT0p2K809VcO7LfZVb8wVn"><!--pnid:10BF7xYfjAo9Zi7H5Se38E-->数据商城、API/BI 定制、保函、CA 证书代办、培训 <a data-page-node-id="mlc9hhcJ3yYhf261venmfA" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:0XpnDsP0ihqKj30AlbfwUV-->[官网]</a></p></div>
+        <div data-page-node-id="mprnLIErDADPlX2rnZepdy" class="card"><div data-page-node-id="9D29iOZy3IlHn1qAudYl1Z" class="c-title"><span data-page-node-id="kT2v38kaGN0QTRogIX9fxx" class="emoji"><!--pnid:djfcupe6dswgbdXlJQKLEy-->🏛️</span><!--pnid:Gf4dqdHUW48p0svSajV7AF-->8. 采购方侧</div><p data-page-node-id="U67k438RhjYtL9slVVGhYq"><!--pnid:6p6UzroWtT6B9YUliYXUJp-->甲方</p><p data-page-node-id="GZorB54C3XsRMDuK6HZtgF"><!--pnid:xQGWg0iJ1PhZOtzDhuGVzF-->发布/邀请/推荐招标 <a data-page-node-id="jP3Oh2BXZI9YIQJS0qUw5Y" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:TfebKiGAwD70ZQITbHIs8h-->[官网]</a></p></div>
+      </div>
+
+      <div data-page-node-id="4VWrdISvdyiO5XtdC8xPsW" class="insight">
+        <span data-page-node-id="YORh9NyhKommuipYGFGigK" class="label"><!--pnid:AgBnXzvpIRPKqQNUti6bTN-->◆ 关键洞察</span>
+        <p data-page-node-id="M9tNUXUBZUfHjPvy2SsGT6" style="margin-top:4px"><!--pnid:CpcW3TdiIxecnpW9bkCZlw-->底层逻辑是用户路线，不是网站数量的简单叠加；产品功能对应六个关键节点<strong data-page-node-id="xgXAGrd4MCbpkte99SMlNi"><!--pnid:gGtVk2rq1wQ5Lcsc8JeGZG-->"找标→荐标→人脉→写标→投标辅助"</strong><!--pnid:xdLUNkq2AN3KM5Wr9vK1Vm-->形成闭环。</p>
+        <p data-page-node-id="XQzVMg256H2dRRT5HJlufS" style="margin-top:4px"><!--pnid:Z7s1Zwu8fmhDGS2J5Nhgsa-->三个关键设计：</p>
+        <ol data-page-node-id="SaagxV6L3WZI5v9cBDAg6g" class="num-list">
+          <li data-page-node-id="XKSaKmgpaToVZTCiZFSVnz"><b data-page-node-id="JVdtsjyJThz1dK7LV2Gdc1" class="lead"><!--pnid:HuxflFCXopzIcud86kNVaO-->分层收费</b><!--pnid:yBEQB8xJ4fkvjisypVCFuc-->：拆分为低价入门版（乙方宝-拉新）和高价深度版（千里马-变现），实现同一需求点的分层收割；</li>
+          <li data-page-node-id="1UDuf9Mu11pLdiIIYi77RK"><b data-page-node-id="NELJltrfoAnfsSkH3bwgYO" class="lead"><!--pnid:zjd3YagRmdcmCKHr2ZisWZ-->产品独立</b><!--pnid:uu68gjTCR6yI13dngMDxB7-->：将写标功能模块独立为「喜鹊标书」产品线，单独定价、独立运营；</li>
+          <li data-page-node-id="t22D3fy00J77wUnXDf1fkr"><b data-page-node-id="XzFpUTCAbgs0KBxflSArTF" class="lead"><!--pnid:1jnX7wq34kEqip8JS9wdqB-->商机串联</b><!--pnid:r8cEs3H0gcDqRkcda2FO8c-->：标讯数据是整条链路的核心，把找标、写标、投标形成串联。</li>
+        </ol>
+        <p data-page-node-id="a9FVfW3o3QOvxcjVLNCPT2" style="margin-top:4px"><!--pnid:stVqPpHRTppDI93x0oiXMO-->建议产品可在推送基础上<strong data-page-node-id="SHWYLlFllYVJycHKkwFQTB"><!--pnid:MowAOvIMG0BPn2XPX7sQ4V-->叠加"中标概率预测"与"投标决策建议"</strong><!--pnid:f9emFvNKNZ7NhCV9BUcgTJ-->，从"告诉用户有什么标"升级为"告诉用户该投哪个标"。</p>
+      </div>
+    </div>
+  </section>
+
+  <!--pnid:NYJbuuRRCEJ3P6HkE8WBfp--><!-- 三、子产品分述 -->
+  <section data-page-node-id="0cYKghYtIM6kZVhNSl2Z4C" id="s3">
+    <div data-page-node-id="3v9dUz3OkOKcCL3TqUp5DT" class="chapter">
+      <h2 data-page-node-id="MgUpOtHnW3zPmKMoueCdHO"><span data-page-node-id="P1Nc094RkcXVc0hddPD0FG" class="num"><!--pnid:6VpoWbj9LhArN1PKSmfAjw-->三</span><!--pnid:KThJhUVauX8AProMF0jp19-->子产品分述</h2>
+
+      <h3 data-page-node-id="qOHG8oYlUUCziPcUvOdH0v" id="s3-1"><span data-page-node-id="PqzZNYmtUfntKO8cqpJOCG" class="sec-tag"><!--pnid:DOkqdJ8KZ1f0u6XkkbCysV-->3.1</span><!--pnid:97oH9rDVEZt5QFT2zZuE24-->乙方宝（C 端·低价找标）</h3>
+      <p data-page-node-id="lJD0GfAYbbxrDZIX2gNSmV" style="margin:6px 0"><strong data-page-node-id="BfHY35Il7T7xIyA2DdpIUw"><!--pnid:1rudGpl3fl5LdDvCJLyome-->产品定位</strong><!--pnid:RfDXXMcxZ5of0QD7M5DCAZ-->：移动端招投标信息查询与订阅工具，2017 年上线 <a data-page-node-id="lgcV2GZNxdW1wMzeaRZ7en" href="https://www.toutiao.com" rel="noopener" target="_blank"><!--pnid:8w8Y8WHwiOsz0olVbgoJIG-->[软文·今日头条]</a></p>
+
+      <h4 data-page-node-id="bON0kY7xrzImixgEYn9l5v" style="font-size:15px; margin:12px 0 8px"><!--pnid:latvxVUKPzsKbZcBFGvvly-->核心能力</h4>
+      <div data-page-node-id="bPlpZxlkc45unUvOKmfoLx" class="grid grid-2">
+        <div data-page-node-id="5rVrDtF21WhEPhVoya4dXo" class="card"><div data-page-node-id="biAR4ul2BF0Uw2Zf0YWwmP" class="c-title"><span data-page-node-id="sVxKkaM3FFWOK7wUkVjkEF" class="emoji"><!--pnid:rQpzEz6qgMV1gYW7kiW0Cn-->📱</span><!--pnid:rncnJ50PlXAwziWctBKkGL-->多端检索与订阅</div><p data-page-node-id="oIOd3wT4UaTbWEM6ZmH0z1"><!--pnid:FWlwkXyRaQd76KRwQZAETN-->APP/小程序随时检索招标公告、关键词订阅推送、项目预告、中标查询</p></div>
+        <div data-page-node-id="JKmu6vIciFQd099wcFjBfd" class="card"><div data-page-node-id="mBhla1jVn76nlwjPSi4GR5" class="c-title"><span data-page-node-id="roNfZgTssymOE2ftnCe3pn" class="emoji"><!--pnid:t62VUGJlwNeRAdXkdDfhOn-->🔓</span><!--pnid:d8ybHB6ThaJnC5uHfXuiTQ-->入会门槛低</div><p data-page-node-id="19C8WLSZb2QFGa7fBVVvaT"><!--pnid:7TeNZ5GsWZ4IDI4gqoa0Bq-->低门槛引客，升级解锁更高配额及权益</p></div>
+      </div>
+      <div data-page-node-id="vJX0WsTfYmX7I151jIUJZk" class="table-wrap">
+        <table data-page-node-id="pImFAV1dgSY6Ibctm80ESI" class="dim-table">
+          <thead data-page-node-id="6ASUYBI3r5MCjNrjbKuvEz"><tr data-page-node-id="aCzOwxS0U6CJKObQTR7TRp"><th data-page-node-id="uzgrjUXZMk0M5GqntFYJYQ"><!--pnid:IOOac0TOMhXyGvQ1uExCJs-->维度</th><th data-page-node-id="yN4vq3cQLbbEYkaX1giZX5"><!--pnid:Fzhi8MSikNDrFC0U6uMJR0-->分析</th></tr></thead>
+          <tbody data-page-node-id="Td7tc4S1Xh6b6tfy3XrQcN">
+            <tr data-page-node-id="rcnKd9I2Oalf8S6d9Fmigm"><td data-page-node-id="C0hVstm4EgdVFFWfgb71sW"><!--pnid:P0PhWGEoKnX4JZpweKtj6m-->页面给谁看</td><td data-page-node-id="oOfrUiAGmNk1EwhMGcNA9I"><!--pnid:OVEl8aXhvUGKFV159aDtEp-->个人/小微经营者、经常出差的销售与项目经理 <a data-page-node-id="qOmbvHegMSGULT5MgDwrZV" href="https://www.toutiao.com" rel="noopener" target="_blank"><!--pnid:Rq1Vguql8xaS0cSP6K9jzd-->[软文·今日头条]</a></td></tr>
+            <tr data-page-node-id="7A0HKzdX8n0ivNhbTp6qfD"><td data-page-node-id="uPuwIOnyzx6480M7435pef"><!--pnid:mCIUooy4BnJJBbinwxTwBe-->解决什么痛点</td><td data-page-node-id="9hqXcutglfrfHbPixEnpjT"><!--pnid:bbVwnZ2KFCbQIJltCxhL8c-->移动场景下随时查标、碎片时间找标、出门在外不漏标</td></tr>
+            <tr data-page-node-id="djVtvtkIYZ3MSRR8x0KaCD"><td data-page-node-id="Q0CLbiMzQUw7nSfOcf2QF3"><!--pnid:2QIPjQwBS0deFJjzYZaZ3b-->为什么选它</td><td data-page-node-id="uOoktuxEOLWFPiBXhXRHux"><!--pnid:YvVU3AXItr3BBoVfVskQl6-->低价降低试错成本；推送及时 + 手机随时看；付费解锁 100–300 条/天配额 [乙方宝开通页截图实测]</td></tr>
+            <tr data-page-node-id="HbDIrfaMLoVbP17sgaTIz7"><td data-page-node-id="omFWp8g1a4ffp8smvYmBZV"><!--pnid:XpygKYYbL8LQQvdkg1aqSd-->转化点设在哪</td><td data-page-node-id="BHrFXkd4ljiWCbpYPW4azx"><!--pnid:VUn0PbXiwSUbJhZrjiswHb-->注册免费→配额触顶→升级黄金/铂金/钻石→引导至千里马高价会员（<strong data-page-node-id="yXw0ohwXOzGQearXs7M9cX"><!--pnid:lag0ybhyeHEcjHwx7hL04O-->转化链前端，以低价沉淀用户</strong><!--pnid:CZp170HIpqegCooL7J1PXc-->）</td></tr>
+            <tr data-page-node-id="mx5kEvDCGJQCXWYzdHyV9I"><td data-page-node-id="qVfRJhcyN95V4MXh3xvEPt"><!--pnid:UkLmHoKuhoqclx0v4AwVTK-->差异化定位</td><td data-page-node-id="vI9yNPl2YUdyALw9x3hmyX"><!--pnid:7TFoMLdRSdiNPiyDIps8UV-->千里马矩阵的"流量入口"与"用户沉淀池"，承担拉新与向上转化职责</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 data-page-node-id="QBZtWlzQYH1D9CnW1xDpL0" id="s3-2"><span data-page-node-id="TCiXA6HryJwRV3Os4534Xh" class="sec-tag"><!--pnid:jLU4Hb1iUOdE5VgUiOaVtW-->3.2</span><!--pnid:4OpHmGMM33pwxV8heX57di-->千里马招标网主站 + 会员体系（B 端·付费商机）</h3>
+      <p data-page-node-id="y8MxD4UzDxEK46knd0Q79e" style="margin:6px 0"><strong data-page-node-id="2Xu2zgZJpWxNAkWaeaKxas"><!--pnid:xWSW0yogQfoxup2TsUf3Iv-->产品定位</strong><!--pnid:M4A7eoeXFFM0Bvoav6YUza-->：千里马集团核心变现产品，B 端商机订阅 SaaS</p>
+
+      <h4 data-page-node-id="0qtXxCRyqhswddr5M9LwK5" style="font-size:15px; margin:12px 0 8px"><!--pnid:tNt2U11lkRj5TIExdutZ4l-->核心能力</h4>
+      <div data-page-node-id="XzFPL9enbfMiMTE8gNLrnb" class="grid grid-2">
+        <div data-page-node-id="aok0ZXAmXu9LMcxoSlBnax" class="card"><div data-page-node-id="Tdp1oHwwTj5S0TFd1144cI" class="c-title"><span data-page-node-id="qQruWh2jkkxxTDLXFgNI4p" class="emoji"><!--pnid:IaslmaOTZiBaYzvI3m0hk0-->🗞️</span><!--pnid:IWXIIyXWCK4hWFIaffTmY7-->标讯查询</div><p data-page-node-id="czFU0Jvq6ilIwTo8Gcmcsw"><!--pnid:AVbAXGgz1QjGf9USK1Fitk-->招标预告/公告/变更/中标查询</p></div>
+        <div data-page-node-id="sdNp0DS2RMBn9TK1Rj0XtD" class="card"><div data-page-node-id="AfedkESDeMq0oLQueDKCo0" class="c-title"><span data-page-node-id="9vUymDMdhEZ5J2eAXEcEK7" class="emoji"><!--pnid:tSljYPXFACN5cNJgXC8Bf1-->🏗️</span><!--pnid:RNHt0FravLjStHD54OVgx1-->前期项目</div><p data-page-node-id="KOrxIuqEAgHpHTW5jFSZUK"><!--pnid:ONm5LZtAe2s2aaYOLcYZLO-->拟在建项目（公告前 3–12 月）、审批项目、采购意向</p></div>
+        <div data-page-node-id="5cbhhGutnXHTOR5kTT024L" class="card"><div data-page-node-id="D9k0u9QjqtOhC1581FOO4Q" class="c-title"><span data-page-node-id="sBwSzopUOwFjNK1GgWUWty" class="emoji"><!--pnid:InwvUvzYYHq6oYfv4us8FS-->⭐</span><!--pnid:9IK1zuuWAz99pzktRWIqBf-->VIP 独家项目</div><p data-page-node-id="yzdZep6qMfULOA4mCYullE"><!--pnid:4h2viPhyQ2oex7n2lim02o-->VIP 项目/采购方委托独家项目</p></div>
+        <div data-page-node-id="d2zTJ1modUe31EJZuUK5w8" class="card"><div data-page-node-id="gz626YUIaAkOnxrXDLEBVr" class="c-title"><span data-page-node-id="eiNLJoYeWqiWI5ebTwChmw" class="emoji"><!--pnid:GrrHU7d2Lsgzt56BYgYDZS-->📡</span><!--pnid:Rq5Q6bLzYM1xx5bYTCNAUf-->商机拓展</div><p data-page-node-id="q4MgZSQfCRpsVtuntOX0CW"><!--pnid:uY57Qf1qjwSzkqXGj4ZejA-->企业监控、找人脉、企业商情分析</p></div>
+        <div data-page-node-id="V4e5i3iKRiTi3v7NpMkvPc" class="card"><div data-page-node-id="5OPuKneLN4YrxtbsIHs5Jh" class="c-title"><span data-page-node-id="2MNIa7GKvWowigdzSYs60C" class="emoji"><!--pnid:9hzUJ957UP5ckyf3wl3pL5-->🎯</span><!--pnid:O2M4HF29UIFOTLlCySlMk8-->智能匹配推送</div><p data-page-node-id="i4np92Abn6xI7wIZeQupJ2"><!--pnid:p97AYDW6cE0MlXiujKwsX6-->基于企业资质/经营范围/历史中标，NLP 语义匹配 <a data-page-node-id="JwnpEH3U3luPqsmqSPn7fd" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:aU3AdmtpNv5OICtbuVe6gU-->[官网]</a></p></div>
+      </div>
+      <div data-page-node-id="a8yTqUxlzcXub6hSy6lAsh" class="table-wrap">
+        <table data-page-node-id="iaNREloVI8VG77axS4QAmd" class="dim-table">
+          <thead data-page-node-id="eZNG3RN0qFcahb03fp1Pym"><tr data-page-node-id="mBpIVksT2elLm2uJxZ3YN5"><th data-page-node-id="tyu2e1DtdQ7RwU6v4Xyo8D"><!--pnid:KdBilth7IA1jVdebPao8d9-->维度</th><th data-page-node-id="10TCnIJ1XKJEUmfFxCMVD0"><!--pnid:eLKsLhjZ0hRorqDMCNkljq-->分析</th></tr></thead>
+          <tbody data-page-node-id="GRPPMjeG87DKv5rYDFIjg4">
+            <tr data-page-node-id="djp6WpsgYxFlMfptD7xUau"><td data-page-node-id="85rXDRTXrWyZspjtjUiVCz"><!--pnid:1Wy5svU4PUwQqLal7G27Wh-->页面给谁看</td><td data-page-node-id="9Zy8o64rWCrkHnIzc4PQCU"><!--pnid:KwRcoa7HVr9sEuAPPvDsbn-->主：B 端中小企业销售/市场；辅：大客户、采购方发布、C 端轻用户引流</td></tr>
+            <tr data-page-node-id="D2nseZKk00aPsYdLecLFIS"><td data-page-node-id="qsLpLKmwwX1yZPcUblXdhb"><!--pnid:l36C04ufxUHR767VZK6B7G-->解决什么痛点</td><td data-page-node-id="guR12vACRmWdB1GzHzMVuX"><!--pnid:XvIMLhoef3TukjDSbPxs1k-->标讯分散与虚假/无效信息过滤、匹配度低、前期项目缺失（拟在建/审批）、写标与拓客难（转喜鹊/找人脉/企业监控）</td></tr>
+            <tr data-page-node-id="VfwfbbPH3i4BFzNp70bhMk"><td data-page-node-id="j2DCue5NJc6AWmPV0cdfrP"><!--pnid:IkCQq4Qnk8EokuR5rL7aan-->为什么选它</td><td data-page-node-id="uhkjEHbHF4KgkHrABcEeaP"><!--pnid:N0ayI1KgiOf0FPkdE8NZlG-->数据规模、深度及资质过硬（4 亿条/20 万源/高新/CMMI/等保三级）、大客户案例（华为/海尔专区、单项目超 150 万） <a data-page-node-id="JJXwQMopsvpdeQQKelu7Xx" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:4g0yxHHmNUXOEOLqOCHFDc-->[官网]</a><!--pnid:HGAmzRl0lnGIX4J196tsXI-->/<a data-page-node-id="tJuQiIUEDDdrmc0M6ET3fa" href="https://www.sohu.com" rel="noopener" target="_blank"><!--pnid:SMSyTrPCsE88I1MT8tofK9-->[软文·搜狐]</a></td></tr>
+            <tr data-page-node-id="tmPZBK2VmtCy69cCNdKy3w"><td data-page-node-id="JBJf2dtpF8kHRUf7ChJUwC"><!--pnid:zyKeTuuHGEWHAEjFo1D9Bb-->转化点设在哪</td><td data-page-node-id="3Glzf1hTui1SAhTMjcKYvh"><!--pnid:iSaNwidxPcGri4qNK9t2uU-->以 SEO 获取流量（分站/软文）→ 注册 → 服务墙登记 → 销售跟进 → 套餐对比（信息分级解锁） → 引导续费升级</td></tr>
+            <tr data-page-node-id="J5eL2VCvS43BBC0nvuNL5C"><td data-page-node-id="AYaYYTLLyF6co8GqXXM4yj"><!--pnid:B9mLRFu1OKC1IKuMvCK451-->差异化定位</td><td data-page-node-id="EwIq5poU6XAsuVQB3TJ1UX"><!--pnid:pcDwThyTx8sPWl8T5vhbQJ-->转化链枢纽（乙方宝低价引流 → 主站深度订阅 → 喜鹊写标）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 data-page-node-id="EUD3yuDPr7VaUw3umMYHsU" id="s3-3"><span data-page-node-id="hD69nimy3weCeQWXjQcCcQ" class="sec-tag"><!--pnid:tzGu1TzlYVWZPkV3XZK26z-->3.3</span><!--pnid:lgbnl47uyeXSIDPm4pbeZ4-->喜鹊标书 AI（写标）</h3>
+      <p data-page-node-id="Ah8DzurWjGo8ivReWx2Ohk" style="margin:6px 0"><strong data-page-node-id="4xT7wM8fAeCNAz2bnoq6gS"><!--pnid:64WIYisLy6KDLHd8dqb71Y-->产品定位</strong><!--pnid:g9MvcVcAz0FEp9BvUCWNKG-->：千里马旗下独立写标产品线，2024 年成立 <a data-page-node-id="JWCP49uS5TqwYO08BgKoiF" href="https://www.aitop100.cn" rel="noopener" target="_blank"><!--pnid:VIN1eFVWXeaxvTeAj9oBv1-->[AITOP100]</a></p>
+      <h4 data-page-node-id="ORWGkrGlrU4drUMB5OTOiy" style="font-size:15px; margin:12px 0 8px"><!--pnid:77QlpQ5A8KA6ahGctKH5wG-->核心能力</h4>
+      <div data-page-node-id="JIX72BEMLVKT98N69psR7G" class="grid grid-2">
+        <div data-page-node-id="l0OunpUjidO85FsYQAOksq" class="card"><div data-page-node-id="3D1ywMCvMg7eL6C9CBl1n3" class="c-title"><span data-page-node-id="DxcySB5V9Yqsyf3hmkqkKl" class="emoji"><!--pnid:rhBIX8pQQJCJHgIx1E0PdG-->📄</span><!--pnid:ZcwzDzMEh4bIfaRilzsJ7x-->1. 招标文件解读</div><p data-page-node-id="fGDLrOUd9jLqmeW7OPjNCl"><!--pnid:ikJE4swO8oybdATpdHEG19-->深度解析招标文件，自动提取项目概况、资格门槛、评分细则、废标条款、时间节点等关键信息，把几十页标书压缩为结构化摘要，避免人工遗漏关键门槛。</p></div>
+        <div data-page-node-id="dYE3U3r04gQLOSpgLSIk8M" class="card"><div data-page-node-id="0EF39vjkhzHuqqwkNrckOf" class="c-title"><span data-page-node-id="2QbHI9K5QkS6V1RSeOLrvT" class="emoji"><!--pnid:mhoKCTjhZlgsBqZSyGjceu-->🎯</span><!--pnid:q3h9kpmu7YoOlzuAPq9XNQ-->2. 投标决策评估</div><p data-page-node-id="LNGRfmxHTi7YtmUUT57pGQ"><!--pnid:X510omQMecYuMB6b0aUBUI-->基于企业资质/经营范围/历史中标与项目门槛匹配，给出"可投性评分"与投标策略建议（竞争强度/金额匹配/资质门槛/历史中标胜率），辅助决策"该不该投、值不值得投"。</p></div>
+        <div data-page-node-id="uXjpCexuKA6rsfqrXDkppb" class="card"><div data-page-node-id="HdKVH55ZRPnuaOPhwAfAEt" class="c-title"><span data-page-node-id="UjYXXGx1oikYiVg8n8JuQt" class="emoji"><!--pnid:AZVlHppzeeddhLlz6dj8MG-->📝</span><!--pnid:l13uujDQoB06bYGyYaN8s0-->3. 智能大纲与正文生成</div><p data-page-node-id="Voso9R8qP0SbrAIkh30yNz"><!--pnid:cDZpVGbAIxJ10a2bWvFp5h-->一键生成技术标 + 商务标 + 施工标大纲与正文，复用历史中标模板与行业知识库，10 分钟可生成 20 万字初稿（自称）。</p></div>
+        <div data-page-node-id="HwcoTZ4mLNNYg6q9CPDfWq" class="card"><div data-page-node-id="YS8oj9DJa3HvrLBqsCqpjQ" class="c-title"><span data-page-node-id="XCdm7HlDedyoBvOMe6wbNu" class="emoji"><!--pnid:2qrxB8b63T9KQzxidFFXm0-->🏢</span><!--pnid:1thEPypKdjrJrSYBuu7prI-->4. 企业资信库复用</div><p data-page-node-id="LuhleLrJVN7Sg9h5CkO6Qu"><!--pnid:AYytbHglezyoYLVt2ouZsT-->沉淀企业资质、业绩、人员、设备等资信资产，跨项目复用，避免重复整理；新员工可直接调用资深标书经验。</p></div>
+        <div data-page-node-id="cnXZ0GLzmM3cidYQHt0kQG" class="card"><div data-page-node-id="zo41P6GTnWJ70AIq5GGZnh" class="c-title"><span data-page-node-id="qVHGslDlLdMapO7mvjgZwm" class="emoji"><!--pnid:l1FIVkaEdWsmiSI5NY0YbE-->🛡️</span><!--pnid:J69sf4Abs32t0MQFJB1iO4-->5. 风险审查与查重</div><p data-page-node-id="CTNf4ssPTQthQwZCyinldz"><!--pnid:HjPmHw1FyudX0Q0oNmHYTJ-->自动检测废标条款、格式错误、内容遗漏；查重防串标（响应完整度、准确度提升 40%，自称），降低废标风险。</p></div>
+        <div data-page-node-id="Xrn0YkcJgbK8HSoZL2JGmS" class="card"><div data-page-node-id="mmn9bZEsEHNHtXHWijYdEU" class="c-title"><span data-page-node-id="vWzWgayOrEo5LD4FQrUCFh" class="emoji"><!--pnid:wUQwS87zROcmpLz8pRecDn-->🔎</span><!--pnid:08F98l6khFunYfu76AwWEH-->6. AI 模拟评标</div><p data-page-node-id="MVqMHOKf4zKf6D6wtnu9T0"><!--pnid:mMfgvtV4j5LNoxsHnDd4PN-->模拟评标专家视角，对标书打分并给出优化建议，让投标人在提交前"预演"评分结果，针对性补强弱项。</p></div>
+        <div data-page-node-id="PGc2BvA4IFspo4SubKx4zX" class="card"><div data-page-node-id="odUoh2h4KmKNJoNu8sjPWE" class="c-title"><span data-page-node-id="fOlKBkphsrqZBvlYaC3UJC" class="emoji"><!--pnid:96vcdw8l1wMlFlSeK6WunK-->📊</span><!--pnid:9OpbYkEs5BKNz0TOKjvK0c-->7. 述标 PPT</div><p data-page-node-id="dmtrn0doteRgtCO9MojRun"><!--pnid:zSIyZdfnLvUu7rQfvidqFY-->基于标书正文自动生成述标演示文稿，技术标/商务标要点结构化呈现，缩短述标准备时间。</p></div>
+      </div>
+      <div data-page-node-id="ajler42Faul4TScv0lP2Ac" class="insight" style="margin-top:12px">
+        <span data-page-node-id="IQtICueOGo4nJxK4Kko9bE" class="label"><!--pnid:IMTDhcV1hJo0aj1npc05aU-->◆ 产品洞察</span>
+        <ul data-page-node-id="ufP1Slxa1aQxbn57sr2RIG" style="margin-top:6px; margin-bottom:0">
+          <li data-page-node-id="kmIJd0jopdpFhvX1xSpgmm"><b data-page-node-id="nzWtY9z6lebw6fexD04vw7"><!--pnid:lnj7TwZK7u2ceL8RFEDZOk-->产品形态：</b><!--pnid:upmQfbLUcBExlQXYkvEowq-->网页端 + Windows/Mac 桌面客户端 + WPS 插件三端 <a data-page-node-id="jJteEcFqGDxDznGMqi0f6I" href="https://www.aitop100.cn" rel="noopener" target="_blank"><!--pnid:ojX2PcC0c5pOkFuLvHOfBY-->[AITOP100]</a></li>
+          <li data-page-node-id="5jGVF6kfsslRzhUOLKemse"><b data-page-node-id="3ubFSRBwDyD1yQkHsDEXds"><!--pnid:evqPJp9tFBI358rcYprh9M-->战略合作：</b><!--pnid:ANdooZ1UuuQKfSK6zpZBFM-->2026-01 与金山 WPS 达成战略合作，为 WPS 应用提供标书智能生成能力，自称服务"国内上百万标书用户" <a data-page-node-id="d1Qj2p8cqQgJ1wlzbEu7BP" href="https://www.ithome.com" rel="noopener" target="_blank"><!--pnid:uZeghFtBCQXAiGDIcoFsgJ-->[IT之家]</a></li>
+          <li data-page-node-id="DHTT05TidAJeYgyvr7hH8B"><b data-page-node-id="9zMruDBgSUQI2mrgrsRjrl"><!--pnid:PE7GBr67whepUo1qRvVftz-->技术合作：</b><!--pnid:v99AwOYYOIbf9FEtEegRth-->与阿里云人工智能团队合作、基于 DeepSeek <a data-page-node-id="hzMI8AeJ40CwLMCBFMbw4F" href="https://xq.qianlima.com/" rel="noopener" target="_blank"><!--pnid:Eyuj6man396jQbHhhhaCrw-->[官网·喜鹊]</a><!--pnid:1Uxyx5Ezovf6Co7LVULwxx-->；自称依托千里马"20 年招投标行业数据积累"训练标书知识库 <a data-page-node-id="euounHpunZmkoecQmKVCYI" href="https://www.ithome.com" rel="noopener" target="_blank"><!--pnid:ip45pqs0Q2Z9W2hK4RF8X1-->[IT之家]</a><!--pnid:Y8MCrgCP3bzICz1tcI2Dm6-->/<a data-page-node-id="l0Iin5EbG8z62hBBxZ1vD2" href="https://navxd.com" rel="noopener" target="_blank"><!--pnid:9wVafmiHn1HVPeWoMHQ1QR-->[navxd]</a></li>
+        </ul>
+      </div>
+      <div data-page-node-id="amvojrNuE6Q6SzRod2rryI" class="table-wrap">
+        <table data-page-node-id="6zdJPfFYuASgNEK5HSdQlG" class="dim-table">
+          <thead data-page-node-id="hpfhAhb0QY5EKJU9KOvcit"><tr data-page-node-id="v5UCNwC7k1zBvdqxjXtnNm"><th data-page-node-id="t49NaFPwkREkSu2bzjuO0X"><!--pnid:tUO9HfCuyskvp0ew7OcfNH-->维度</th><th data-page-node-id="36eodypC94JgiCftE9agM0"><!--pnid:ruRpys2z6C2IUPwd96xYgY-->分析</th></tr></thead>
+          <tbody data-page-node-id="RePGCESj2v0IBrZtJBG8Ju">
+            <tr data-page-node-id="D3HN0C0MfDsy15WUQIvsip"><td data-page-node-id="l1DS3nsgjfaQSWNWk1rBPC"><!--pnid:92zB0JgfNf3WQGg2YjkBiI-->页面给谁看</td><td data-page-node-id="OzFj2HY4aVqhP58CD5RuAg"><!--pnid:adW1QKS469gVyjRH45dSsr-->投标人员/标书制作团队/中小企业商务岗；"不会写、不想写"标书的人 <a data-page-node-id="3uS96VdVAduDC9seNbK1v9" href="https://xq.qianlima.com/" rel="noopener" target="_blank"><!--pnid:ICciP75QwthQsWTvzgbGwN-->[官网·喜鹊]</a></td></tr>
+            <tr data-page-node-id="4p8LP0PTYpdKEqWfHVPh1U"><td data-page-node-id="dPssp5TfS3txUbTfABd1ph"><!--pnid:T0yxTZO6aifwCN3aCfkWIu-->解决什么痛点</td><td data-page-node-id="574K9nOkjMDJTm0czOzpgi"><!--pnid:mKyRhspyt7VUys4ugmDLaK-->标书耗时长、废标风险高、团队知识不沉淀、新员工不会写、查重率高被认定串标</td></tr>
+            <tr data-page-node-id="sW5m8uM8VQxijh5rgocEOy"><td data-page-node-id="jff0XXkYfJDDOcCqS1bV3k"><!--pnid:6IbJZprLz7rbwGSaM7VVCu-->为什么选它</td><td data-page-node-id="4Qx6Pz5w66pP21YUr9JG3H"><!--pnid:OPy9ACGUL6DDty0e1X9Udz-->降本增效（"5 人 3 天→1 人 1 天"）；金山 WPS 战略合作、阿里云合作、DeepSeek、百万中标标书知识库；防废标、复用历史中标经验、暗标格式支持 <a data-page-node-id="38FXd1djpuXDrjLgbz0r4n" href="https://xq.qianlima.com/" rel="noopener" target="_blank"><!--pnid:i6hBEumBDDB1dR9rn0iHmm-->[官网·喜鹊]</a><!--pnid:ynQCW6Tv1Q14wJiVnjIHxq-->/<a data-page-node-id="UzTG6BdBmmKbbAh2RGynW4" href="https://www.ithome.com" rel="noopener" target="_blank"><!--pnid:txLAGnUFO7ije5kK6uGkn7-->[IT之家]</a></td></tr>
+            <tr data-page-node-id="Z0mgTR8ztKWDTk9tprnW9T"><td data-page-node-id="zXc5fgmxevUrG7We5mlwW9"><!--pnid:J6BcbC7RKc8AucoGihOxq9-->转化点设在哪</td><td data-page-node-id="LpyUzNaZgoztv66vS0lxh7"><strong data-page-node-id="3dgUUR3PeRKQKu0USVATLr"><!--pnid:p60JlzXPQKLmZgpzS0OUCl-->99 元体验卡</strong><!--pnid:E2MF7cemeZLT0owIEUGfzc-->为试用入口，引流至永久喜币充值；另作 WPS 插件内置借其流量二次获客</td></tr>
+            <tr data-page-node-id="y5LC6SEfCzD2G0VToyBx5H"><td data-page-node-id="mFosvURkC1XNUJvcUxlbx5"><!--pnid:3mAUmPxIyGHQldxIZeaKk0-->差异化定位</td><td data-page-node-id="SwoHGuohofdHv8nKD4WaqA"><!--pnid:I2CxXKLI99s42F3gy41xfT-->集团"写标独立产品线"，单独定价、独立运营；已具备"招标文件解读 + 投标决策评估"能力，与写标深度绑定</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 data-page-node-id="lpXcosbCF0sxA2FtV2P2Os" id="s3-4"><span data-page-node-id="FUkQutY13UURg8DhRqihQ4" class="sec-tag"><!--pnid:xAdZKN3s4AZDmHv7iApCJ7-->3.4</span><!--pnid:kJXf3H0FhTkFmZIP1VbGFN-->企业智能商机服务（大客户·定制）</h3>
+      <p data-page-node-id="sgijGxT1zkkQRA5gIalXp2" style="margin:6px 0"><strong data-page-node-id="3atdEqQN4nGhPRJpw4tKGU"><!--pnid:K32Ze6hxKnPMzsQB84nM4y-->产品定位</strong><!--pnid:AHXWyoOjGiRY5WHaezxots-->：大客户产品线，面向集团/政府的数据变现</p>
+      <h4 data-page-node-id="VSJwbHJnun2pAKGePgUWxs" style="font-size:15px; margin:12px 0 8px"><!--pnid:lQApQTpVjRcrBhhSiHy5Nb-->核心能力</h4>
+      <div data-page-node-id="sqiYyUAMr5BJqCJj6LS1wC" class="grid grid-2">
+        <div data-page-node-id="HY86cbflBEwRpCyuNMSJlq" class="card"><div data-page-node-id="zqzakasY9kGe8ynE4JM3XI" class="c-title"><span data-page-node-id="bt9PKIHksFQRJuS6wgJSQ2" class="emoji"><!--pnid:LomhKc6QaCBHwIRZDzCCEC-->🔧</span><!--pnid:OwE7zMxqYAeoWTj34kmt0P-->数据定制</div><p data-page-node-id="kNW9CJb2SuYRy0uvDByurk"><!--pnid:VMOKsGGyHBAeyfAEUbEUyT-->API 对接企业 CRM/ERP、BI 看板、维度定制 <a data-page-node-id="WrHA5MDXu6n3hXOvvi2kVp" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:VdPgsIAEs7OQliWh7X8UUA-->[官网]</a><!--pnid:SDX1r0F82e3lZryuBQBr4Z-->/<a data-page-node-id="jmFoM1NQBYgkClzaUwfK2T" href="https://home.qianlima.com/choose-package?sourceType=2" rel="noopener" target="_blank"><!--pnid:zmOIPIz5qDcMguCcmbhAEM-->[套餐页]</a></p></div>
+      </div>
+      <div data-page-node-id="mBU6DdiR4X0F1mCi02zcuU" class="table-wrap">
+        <table data-page-node-id="b5VHOnBmeBJKSOlNpc0or7" class="dim-table">
+          <thead data-page-node-id="i05NaFpyNwpkQX8uDX4IL5"><tr data-page-node-id="iczurBdaFSXJdAmBiTrpUS"><th data-page-node-id="8PMC9bPm3L7XVp6ioV9Fiy"><!--pnid:tYMfIwgbe8CkF1JYzkKnlV-->维度</th><th data-page-node-id="Ttj22tdJOJLltSMqi5fuiY"><!--pnid:dz2RLjoywcqtJXYKA23HGZ-->分析</th></tr></thead>
+          <tbody data-page-node-id="v506zdxKbnyfYLlT6KtVyQ">
+            <tr data-page-node-id="eqqCrZqJY0tOZNJpwBWd3O"><td data-page-node-id="Nj7ljTPb2lcLVXhs9VvH3G"><!--pnid:AE3sH0SIvyPHifO3KDvwt4-->页面给谁看</td><td data-page-node-id="WPMccgJcapAoHxMQHhctGx"><!--pnid:NwxvQ5f7XM1yZHv0HwD4ts-->集团企业数据/市场团队、政府财政机构</td></tr>
+            <tr data-page-node-id="LaPdKnWy9dYnNh7oDqHQBm"><td data-page-node-id="e51AUmQgvKtFeitCHfcTbl"><!--pnid:m5IaD171IsJNg3v1JXgp0J-->解决什么痛点</td><td data-page-node-id="7vZzTbfYAK1rMA92V93BwR"><!--pnid:qsxkVNHEIwc6EkTkj34Q6B-->自有渠道覆盖不足、需接入 CRM/ERP、需定制行业报告</td></tr>
+            <tr data-page-node-id="pl01Jmmbk2IU0qZLh9kKxo"><td data-page-node-id="QIz8ymSOBBI8Wq6jm7qlMY"><!--pnid:ENarWsdZvNsneMWjGtsunA-->为什么选它</td><td data-page-node-id="SwdrYzUgKrjmmekBNuspeZ"><!--pnid:rVfDYQaTRpoGg48GdsiPMm-->数据量级（4 亿条/3 亿 企业数据）+ 大客户案例；API 打通、定制 BI、专属数据服务 <a data-page-node-id="dH8B1yB3whskWAqfCJpjrM" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:hHBRov5YFHX1Si7BgXEa77-->[官网]</a><!--pnid:qsS6tByLB94cJBj52QonPh-->/<a data-page-node-id="uKgievoOHs8SYcqC624Vda" href="https://www.sohu.com" rel="noopener" target="_blank"><!--pnid:b0hKZaQcZkmRO3yZGp2M1x-->[软文]</a></td></tr>
+            <tr data-page-node-id="vuRiPwWibrmjM4gv40iPtH"><td data-page-node-id="x5Jr9j4fTL7QR5oT8m21v8"><!--pnid:cSCa7gZOI7NPrj8VBvdKKB-->转化点设在哪</td><td data-page-node-id="LLM7NfFtICjr4Wqlf0A4QN"><!--pnid:eijCYbeAfUp3DWNUbVBlEG-->由千里马 VIP 升级延伸至数据定制与 API/私有化（<strong data-page-node-id="vl2qtIrjijrNRtTQDeDwsR"><!--pnid:1Zoe9GCKvSrymU4fXBmXRA-->客单顶层</strong><!--pnid:8tVwrtS5FcDK65JjSzfXzj-->）</td></tr>
+            <tr data-page-node-id="VcqLMDSmpZYnwdYRTL15NI"><td data-page-node-id="iST5IXhQJrYi9icFV7dNFJ"><!--pnid:ItZScOMpb5bAB3jCnm3KUP-->差异化定位</td><td data-page-node-id="ALvUgSDlwirSWJZ5o8tPHb"><!--pnid:mN79lt0KjSd12CqzvvAlXf-->千里马数据资产变现终端，依赖底层数据积累，构成高客单业务的竞争优势</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 data-page-node-id="5AXLLFtJcGjj4wPOw3wPC8" id="s3-5"><span data-page-node-id="i6W7TgnFnelpK10yBU9xB3" class="sec-tag"><!--pnid:i2kKPDOIu0BXLFNX1rjyoo-->3.5</span><!--pnid:YuU365YUr1DcyWU4v3RtSD-->采购方侧</h3>
+      <p data-page-node-id="2W2FQV7OupIXAUpaYsVTKK" style="margin:6px 0"><strong data-page-node-id="7TbMC175dSadwRegbBu1OX"><!--pnid:oDB2iVNTYGrlWWQN3IZwP5-->产品定位</strong><!--pnid:2iw1xchcrFrAjxHknvQgsp-->：面向招标人/采购方，以免费/低价发布吸引流量，再向供应商一端变现</p>
+
+      <h4 data-page-node-id="OSRRi4ohUDKKzJWQYH98OL" style="font-size:15px; margin:12px 0 8px"><!--pnid:nX4eMuqkbTvJD9soRBz68L-->核心能力</h4>
+      <div data-page-node-id="T0UdPos8EArp7ywBKNiD8P" class="grid grid-2">
+        <div data-page-node-id="CsgHikjYGYQI8tAqXZG1uw" class="card"><div data-page-node-id="SQzFop0Jotk5m6wbXFTdqs" class="c-title"><span data-page-node-id="Z8R5v9OEwEZXX1TfxcnG1D" class="emoji"><!--pnid:AoUJrujyQ2HaaRNMFeovwU-->📢</span><!--pnid:I3vLnqcEqRdxSWr16fEukN-->发布招标</div><p data-page-node-id="f8Z539NR2tmcndltxfZwnH"><!--pnid:5C2oPdTxOrh72YarZ8kfia-->发布招标、采购信息</p></div>
+        <div data-page-node-id="obAmSR0KtlZdit5u6dihKb" class="card"><div data-page-node-id="fNlTfoVD5YC9gRx5EEb7wT" class="c-title"><span data-page-node-id="fHuJ7ND4sYlDOHdr86iqR2" class="emoji"><!--pnid:aAyMRZAhd5t2ZeBTM4Rl8H-->✉️</span><!--pnid:Z5T5Dp1cBRsmblq99hnfxE-->邀请招标</div><p data-page-node-id="0N4svmv87MiIiT2YUoV8Nc"><!--pnid:RbtHK0qZdTj6SoDCrxUzKX-->向采购方推荐优质供应商</p></div>
+        <div data-page-node-id="ize4G001A5YYguVkoCyDgz" class="card"><div data-page-node-id="j47ofL8eWVvxWqJ88BO9Oq" class="c-title"><span data-page-node-id="uxu3i1GODjo77EWVA8yEMt" class="emoji"><!--pnid:cCLm3siPOPFIzqNEe15P8x-->⭐</span><!--pnid:E9AZxKetE1hpaeswv805PC-->推荐招标专区</div><p data-page-node-id="zJa9EUkPvPRKkiy1x2i2T2"><!--pnid:zf99j845dNr8VUYI2xBZjq-->知名企业独享专区</p></div>
+      </div>
+      <div data-page-node-id="pDb4JPpnldN1Bh97TU3eeB" class="table-wrap">
+        <table data-page-node-id="4iddZcfTkUpMieC4lYZUn7" class="dim-table">
+          <thead data-page-node-id="43TGz7LROPb3B0IRgYTWJQ"><tr data-page-node-id="qEwveUeMprGOLyva76lyTe"><th data-page-node-id="Kn9r3Iao6ueVr1FzJwL89B"><!--pnid:J9IJCRV2xstnjHbRYo6e9y-->维度</th><th data-page-node-id="3VcwIQlu3AAv6Yytzo0CnZ"><!--pnid:hqfRI1pkpnmPYV2nrQRnSL-->分析</th></tr></thead>
+          <tbody data-page-node-id="tK3E1O75bXircsz6Al7ryC">
+            <tr data-page-node-id="Nxb3HaPfI1g4uX4pyqY4eG"><td data-page-node-id="jBaiTtyVTtSFDFlARyK6aT"><!--pnid:vPuXobsTkef7ob9hVIGjbz-->页面给谁看</td><td data-page-node-id="Ukubz53sfC0nkILRkCsNmm"><!--pnid:tAA0o0q9e0f7amDHhcaEZi-->招标人/采购方</td></tr>
+            <tr data-page-node-id="gG82BWzqGb29GoRkYWL6lh"><td data-page-node-id="SXV5Et0u8q5YRI58Qd6qbL"><!--pnid:hUhoCosq5ki0qfYCKCsZpo-->解决什么痛点</td><td data-page-node-id="dD5nrmucadYOLTjz3UDPZH"><!--pnid:es8A8gSaUjJ5w4tSiuyQi5-->找供应商难、扩大招标曝光、邀约优质供应商</td></tr>
+            <tr data-page-node-id="pwgyfjOdcqgsDGFvyzu6Fr"><td data-page-node-id="mNNkFLExR7LXgboMaiZh0Z"><!--pnid:xuRZe7SzQy9r1zZ8mMT6X2-->为什么选它</td><td data-page-node-id="2kweMuelyPv4tUNJpLRlmZ"><!--pnid:EdsQXs46rO1zV2MJAxjwqt-->海量供应商库、长期运营资质；免费/低价发布 → 推荐招标专区提升曝光</td></tr>
+            <tr data-page-node-id="0n2poTd74DTG96geRGXyMN"><td data-page-node-id="TvVIrtq84kBeA8vprPN5ox"><!--pnid:jeSySR7MjTDSsBiI5uDUBD-->转化点设在哪</td><td data-page-node-id="qtpxfRfw2h8oTmV31ceP7J"><!--pnid:SGum1JzwYgA9jDtWwLL9Pe-->免费发布 → 推荐招标专区付费 → 向采购方推荐</td></tr>
+            <tr data-page-node-id="SRdhQ2Y8kW5qOtIKvOZSmD"><td data-page-node-id="hqWNGM6tGLzZIsOwywFCD6"><!--pnid:gx5LIbGQyNlKTvAnxBB443-->差异化定位</td><td data-page-node-id="Rs9MpIrG6jzNMTr5vjwPjs"><!--pnid:mEPYfLmrzD33JhV4PRSUeV-->双边平台供给侧入口，以采购方为流量来源，向供应商一端变现</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      
+    </div>
+  </section>
+
+
+  <!--pnid:Xx74KhxZLa6eFGRLhtQbIm--><!-- 四、用户群体 -->
+  <section data-page-node-id="oeQer4G8sHJQ6tZ92vTs5g" id="s6">
+    <div data-page-node-id="fZdrnyomjIoYR4bYiicXiU" class="chapter">
+      <h2 data-page-node-id="HOkxUFhWmNjbdCrAJhXRgA"><span data-page-node-id="EYU4YAaGTI7tZVfaC1aOne" class="num"><!--pnid:xJbujBws5p5ySuHNnEjDwW-->四</span><!--pnid:TnLwl8LTHT16lLF37kp18k-->用户群体</h2>
+      <div data-page-node-id="q6L7TAKJsZrAtvnKyRqihY" class="table-wrap">
+        <table data-page-node-id="Ch1YGDfpVt68UNiYN0GKKP">
+          <thead data-page-node-id="p07FlZ02F5n52xaZwHMueR"><tr data-page-node-id="jGfU6jmy27puhfzCmypAKw"><th data-page-node-id="rC3NwzI2yHX48yiZGwSYsa"><!--pnid:ulopqOoUtlHQPXpkUDnOde-->群体</th><th data-page-node-id="4ApWf1dlCtLQLj0WduabWl"><!--pnid:YLWk7HWgbBwZI4yZsPJwyk-->占比/角色</th><th data-page-node-id="OyRcTTrOvOVptUWPCSms76"><!--pnid:URhbWHU3tOcrTfaO0mOR3y-->核心诉求</th><th data-page-node-id="urWyYSswOSVDWzPyUBiNao"><!--pnid:s7hpZQKhRooOVPxFA1ULjl-->对应产品</th></tr></thead>
+          <tbody data-page-node-id="PHczApmvCzNV7k29d8en6H">
+            <tr data-page-node-id="NpzE3CbMUOS7rp0iDvzsPE"><td data-page-node-id="7NIUe3N3fshj4KPekv0oWI"><strong data-page-node-id="X5j45sY3hkUg5RKIZ8yFd3"><!--pnid:rvqngmO9lwTXiXsmkz729d-->C 端个人/小微</strong></td><td data-page-node-id="yvngGt6z5jFEY8RUEqueay"><!--pnid:XhqKO0nj3Zj1THJIkvxouj-->转化链前端</td><td data-page-node-id="Bc7tzoSIiIddzKN8gNYDM9"><!--pnid:kYUcyFx8MS3TAyeEkFMEct-->低价轻量找标（注册免费，黄金 199 元/年起）</td><td data-page-node-id="dpByKFR41IwvyIY5qlf26b"><!--pnid:1eD5f3rbGtX8iAVd6bc4UK-->乙方宝</td></tr>
+            <tr data-page-node-id="V5EwJleUazidqgx9FWk8l4"><td data-page-node-id="CP669vAfDpV24MJqmfhMme"><strong data-page-node-id="SbGJ9fCZkEFDrS7Zso3zEx"><!--pnid:wFdkOi7tQcKpJlWPSZ50Sd-->中小投标企业</strong><!--pnid:uQzlno4W6UGx8AOZ12KYOe-->（建筑/工程/制造/供应商）</td><td data-page-node-id="TdFzVTBkA253QSAQAT02VC"><!--pnid:Y2W3yqFu09eO6dI6tkJoJL-->约 70%，核心客群</td><td data-page-node-id="Kk7tCwXvTVuriAW53DDLBE"><!--pnid:mJyjGo0sFLC4uXGV4Sb4pv-->找项目、降获客成本、少漏标</td><td data-page-node-id="XHHejKbSb6PMEWv8P8c4dW"><!--pnid:f84v6skr3EicoG2F9CeBqc-->千里马普通会员/APP</td></tr>
+            <tr data-page-node-id="AgOSp8l4RqqxQtRaYJkbZD"><td data-page-node-id="O9tbUReLk9OUxdUPgjVEDD"><strong data-page-node-id="OZzHOWP5o7GSkApguAzx2K"><!--pnid:AflTU03WRMEVlbFfUxHHA2-->投标人员/标书制作团队</strong></td><td data-page-node-id="SxkmAbG4WQJ1ZizP432JRR"><!--pnid:UB5jfZPMZtqlAs6H6XlAhL-->写标主力</td><td data-page-node-id="yiAk3ttUmX238yz7vB0QHt"><!--pnid:FAR8DLZu1Hx6QNG2stb6EI-->标书快写、防废标、知识沉淀</td><td data-page-node-id="i09uKcLPLu139gAhnXYFd3"><strong data-page-node-id="S31DxcS1yjuIv2XvzzVUaL"><!--pnid:ytOZrdmzPcet50OiU5fhEF-->喜鹊标书 AI</strong></td></tr>
+            <tr data-page-node-id="QixeVwEKHWSvA30YjLDCCR"><td data-page-node-id="bW927ialVXy971cwu0sp7K"><strong data-page-node-id="YdpIwbpOmUd0fvc6eRQ4Gk"><!--pnid:VSzSrC27eoXQBKtVPNH4fb-->中大型/集团企业</strong><!--pnid:dE0XnUSbiQt60Y9fIrVr0c-->（联通/华为/国家电网等）</td><td data-page-node-id="k8K3rhHWoiCXLHp1iQv2uB"><!--pnid:hWDiNskOTvQIcfRQFlGirq-->高客单头部</td><td data-page-node-id="j1t9SZe0VCNlfXv5gHTUvY"><!--pnid:YZIQKLeMrvFxumJTrcGmCe-->全国商机监测、竞品分析、数据接入 CRM</td><td data-page-node-id="63d7tpWmuvJNpMOD229h7q"><!--pnid:d7EjJq4lzXvgDpIhotYY8y-->千里马 VIP/数据定制</td></tr>
+            <tr data-page-node-id="Bl8UcAEb9v3ZW87hKm7R8S"><td data-page-node-id="Ryx1bStseymgnCWQXjW2fR"><strong data-page-node-id="P1pAPobVUnjWJmbATtrxjK"><!--pnid:xFD1t9BfDaohhOqlIWxXsZ-->采购方/勘察设计单位</strong></td><td data-page-node-id="Lq0UVKTCgW6TVg87GtyJng"><!--pnid:yqSv64HYsXTIgRFtFxMeOn-->甲方/前置需求方</td><td data-page-node-id="k96ZmocPKjnfGJI2gA4pK0"><!--pnid:ii9Esyd4JDA1VglSbEFKnS-->发布招标、找供应商、跟进拟在建项目</td><td data-page-node-id="gjfbgJNOH2ID56LZtqJ0Rb"><!--pnid:QMiIkfgtT1CSg7kNfkUswA-->千里马采购方侧</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div data-page-node-id="Q8Z9RmGtYJYL6IY8Duf8Yt" class="pyramid">
+        <div data-page-node-id="N5p8x3nbvsZpsdp1dufiUA" class="p-row p-l4" style="width:100%"><span data-page-node-id="2oiofnXXtQdjkqm6OVrpej"><b data-page-node-id="6ypHwX7rWnNSq0JUvbaRx7"><!--pnid:KtL6trvSG7uMPBVOq3eAIP-->集团定制高客单</b><!--pnid:tCKGygWaCIKgZ2odvpZGLR-->（联通/华为/国家电网等）</span><span data-page-node-id="voSr8QY10GAcsoxo4nXdBd" class="p-num"><!--pnid:N2ZIYKHU00xcpc3DiYEWmX-->数据定制 · API/私有化</span></div>
+        <div data-page-node-id="0aYdkKCG1zG5XW8eeTunNS" class="p-row p-l3" style="width:82%"><span data-page-node-id="sqz7r1K2U5JtimDsPHtxsQ"><b data-page-node-id="llp0ImRPSZeHaU7ODd5nTA"><!--pnid:GJQar8XezzeMSMBsaka7Hw-->喜鹊写标付费</b><!--pnid:EUogNB3ZfYab7Slg7h2SNq-->（投标人员/标书制作团队）</span><span data-page-node-id="EvcC39OZykwvR8EUK88iRC" class="p-num"><!--pnid:H0h7B8gb60enitDv41wJBn-->99 元/2 篇体验卡起</span></div>
+        <div data-page-node-id="RP8ZgYuAu6sjcDeoieH5Wd" class="p-row p-l2" style="width:66%"><span data-page-node-id="sOoNaFkixfqu475izKK2SA"><b data-page-node-id="XXEdJLTsyPJQgZrORZ2Glh"><!--pnid:xsLHhWwXjlCZjXTT8u86Zq-->千里马付费会员</b><!--pnid:Jf86fpIdh9tBj2qnC6b7Mz-->（中小投标企业，约 70% 核心客群）</span><span data-page-node-id="5AJnCnCJEssvysIBxHnB0B" class="p-num"><!--pnid:cF7FB68wM3ezV9WVBo6BPF-->240 万 · 6,799 元/年起</span></div>
+        <div data-page-node-id="DQBMBPTTnEfSTfysStAqar" class="p-row p-l1" style="width:50%"><span data-page-node-id="Mk3taVJTTHKwdYnqrJuffY"><b data-page-node-id="u6eAp5O87yFQT9f9gbEwKl"><!--pnid:IXdoGQP70LHEtAFzZYRZI1-->乙方宝低价入门用户</b><!--pnid:Nb79JaDXEwYbHJAqx2Kiu1-->（个人/小微）</span><span data-page-node-id="aciHyJMuGKpHG8ZAYVJdp9" class="p-num"><!--pnid:uujYB0m7KFHdaJnF51dxQN-->3,000 万注册 · 199 元/年起</span></div>
+      </div>
+
+      <div data-page-node-id="4jkizf9nZBwHqbsITZmr6v" class="insight">
+        <span data-page-node-id="ixT5GqCq4Gqzfi0ChGQNiP" class="label"><!--pnid:Bp3kAxzDZt3Xtll1HJnfdU-->◆ 关键洞察</span>
+        <p data-page-node-id="rzcYcSeLd5dW2p7zJalrZ2" style="margin-top:4px"><b data-page-node-id="6iePsinAS3o2VfKQpPCXYv"><!--pnid:FbzwP2YlWlk74BIhNExJx2-->用户分层：</b><!--pnid:TX2vs4tFDVwBiXz6wIzFBg-->自下而上形成四级金字塔——乙方宝（低价引流）、千里马（会员订阅）、喜鹊写标（工具付费）、集团定制（高客单服务）。</p>
+        <p data-page-node-id="kUV2GHdWGup7MFwpMIAGdt" style="margin-top:8px"><b data-page-node-id="H3PKuIBbUFAwsBpszr7KnG"><!--pnid:1ETaRUQKDHiopsqRpLmFaK-->客户画像：</b><!--pnid:wismdJk5SWvx60j1WBcNTr-->实际付费主体并非"投标企业"整体，而是企业内部三类核心岗位人员：销售（找线索）、市场（挖商机）、投标专员（写标书）。</p>
+      </div>
+    </div>
+  </section>
+
+  <!--pnid:IY2NKZ6qxao8G97n3AumgZ--><!-- 五、会员体系与定价 -->
+  <section data-page-node-id="ggrFZbVivltfFPJEGBDrBv" id="s5">
+    <div data-page-node-id="iXgXWqrtAu9oKK9hARAWQB" class="chapter">
+      <h2 data-page-node-id="nRkNKs72eVKdM2O5GLNLX4"><span data-page-node-id="XYJ0TRcvxAraOD4wv4lXVn" class="num"><!--pnid:sVXSwRkhlrMCl1NRmHC64O-->五</span><!--pnid:Upw9pcM8ZHYd8C5IfvEI1K-->会员体系与定价</h2>
+
+      <h3 data-page-node-id="Rw0n7WtanMZJVhmmyjbZpt"><span data-page-node-id="fbGns3YlwMcRhqsoyyBeWd" class="sec-tag"><!--pnid:qPcmIvuWsSRL6Kqjqf4elA-->A</span><!--pnid:bCmdjj2MET2rZfewMF6XM5-->千里马会员</h3>
+      <div data-page-node-id="jKrGRRMFJuqoTSXRxxOEVc" class="table-wrap">
+        <table data-page-node-id="u420tPwnpTRa7TCNIggm6v">
+          <thead data-page-node-id="5K1Fo6s97iv8m735U5kyfL"><tr data-page-node-id="naEKP0beAMAvd5uiBAlrj8"><th data-page-node-id="ix3JEpew88Q3WsyQCNpyj5"><!--pnid:gYgSbX2rrYlHkakGCAhyad-->档位</th><th data-page-node-id="bk6SQJJang8ObP3N823ZRn"><!--pnid:Jf5cognW8RlG9FtxSSwYlj-->现行官方价</th><th data-page-node-id="ija4WuZMjgYJbJbkzupWvd"><!--pnid:LDJKU7E3z7SdIyaED4g04i-->涵盖内容</th></tr></thead>
+          <tbody data-page-node-id="qvhuPEojO7Rg1UibqKvYOB">
+            <tr data-page-node-id="DK5o3t0Nb0SxSHafdBwqRY"><td data-page-node-id="P1tNLwgu1GnuzXj8akF6jx"><strong data-page-node-id="8FJepDVyuIevctScf0n1hd"><!--pnid:0ARf8O2HxIdzUE1A3ttgBA-->普通会员</strong></td><td data-page-node-id="2HKg4QEi37kig2TH6OCgAR"><span data-page-node-id="iqINyAWLdOMHFLtyCAWYXg" class="price"><!--pnid:CVbal9Lgf6fjT51y4NW8VF-->6,799 元/年</span></td><td data-page-node-id="Mt3RisYb70RBICX9FQDaC5"><!--pnid:shWLZllwDlXpbmFOXhdzpI-->1. 所有招投标类、询价类、直采类项目信息每天同步更新（订阅关键字 240 个，或自行登录账号检索想要的项目）；2. 历史信息查看（可查看同类型项目历史近 10 年所有项目信息，包含审批、报备、公告、中标信息）；3. 招标文件免费下载；4. 专属客服对接项目，每天早中晚 3 次直接推送邮箱或微信。</td></tr>
+            <tr data-page-node-id="zO0lCu2KqBA3PmPaYdddpQ"><td data-page-node-id="wOcNorWLhiHjk3o5t977mo"><strong data-page-node-id="AZHALrtjwONHOvdbOCe6wM"><!--pnid:LDZje4cT2MMxGe02U0shLa-->高级会员</strong></td><td data-page-node-id="AdmBTtfPM2Ug9zoi77BGMg"><span data-page-node-id="8vepfyw5KH2CXGLLHwLWwx" class="price"><!--pnid:0RojaaJjLOOcVcvwimef60-->12,999 元/年</span></td><td data-page-node-id="vxq3fiC1bUX5fdl4H2U6ew"><!--pnid:wG3c2DUG0g0oyiXlPqr8wY-->核心差异：前期商机（拟在建/采购意向）抢占先机</td></tr>
+            <tr data-page-node-id="IHjKNrTBCQVMhsE68RfpiC"><td data-page-node-id="xCf6dQgAfFpyrVCA78UfN7"><strong data-page-node-id="oLK3bizqdwFt9OrRpbY6Lm"><!--pnid:wbc4HTLuejKOF4wQMIj05W-->VIP 会员</strong></td><td data-page-node-id="0JXzEyNtTX3gTLGTt5ngyn"><span data-page-node-id="keHnLlyvdHfgHWuDTivM87" class="price"><!--pnid:1KbuRBSoqN7mZoLHw8TS5o-->21,999 元/年</span></td><td data-page-node-id="FlWkily9SX854gyj2M5gwr"><!--pnid:lcO0hX0x79ZiVEHmF4oPol-->核心差异：VIP 项目 + 商机拓展（找人脉/企业监控/向采购方推荐）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div data-page-node-id="mrBvN9V9cjBA4vecNChhdK" class="grid grid-3" style="margin-top:18px">
+        <div data-page-node-id="LTfquOFSGlO2S6Z6kiI63D" class="card"><div data-page-node-id="OyUGwhog3UJ5hREX74R8D0" class="c-title"><!--pnid:HZKkj3kjsrSkjJHXHW1WRR-->普通会员</div><p data-page-node-id="2zlaTcMM37nxQxEYfTq605"><!--pnid:vpi2OnziruzllpptKgDtvX-->全国标讯查询 · 基础入口</p><div data-page-node-id="Cr7pTbVxIxVzCg39Dyj8C2" class="c-price"><!--pnid:WcblyW6FsIL7Vxrfuw6SHv-->¥<b data-page-node-id="krwczOtI7ca8tz1m4KSwNz"><!--pnid:2lSqOk3ZHZp4iBPwuOgLnL-->6,799</b><!--pnid:k3iWaRBVQ8tvB2cJvyuLcC--> / 年</div></div>
+        <div data-page-node-id="0oQvlLKwFJcM5i6ouukmMU" class="card"><div data-page-node-id="VWFJ9PKtLSUdgLILVs1MCK" class="c-title"><!--pnid:TgctV1Ypb8VIfMgDNBWvde-->高级会员</div><p data-page-node-id="U5pDBV7PnMbrgd8RcBFyQk"><!--pnid:N9FRwzSX1vJ1xBhLYRWUze-->前期商机（拟在建/采购意向）</p><div data-page-node-id="XB7xDdSdvad9DHmZinUoAh" class="c-price"><!--pnid:cxEcZ8lR0ygzpeuplhCU0M-->¥<b data-page-node-id="OHQ3B2W4Z6AjHjRBsa6iJM"><!--pnid:K2h7lLz1ahAr1yCUw7D7ZP-->12,999</b><!--pnid:F1K19SdOeZLzYv5I5OxeOc--> / 年</div></div>
+        <div data-page-node-id="zjYMhi6VRe77fUH6HlsJJX" class="card"><div data-page-node-id="aSQXks1BgaOqD6P8IKLPWT" class="c-title"><!--pnid:Fj9wW78amH3OgxMCbkwy7G-->VIP 会员</div><p data-page-node-id="OPELhnKelrX4qpoiIytNxK"><!--pnid:8wtgLwsXWQU7nhHdkKxjKv-->VIP 项目 + 商机拓展</p><div data-page-node-id="d4IjRCmsRRAdhZDG8aFRpy" class="c-price"><!--pnid:67W96LJ1ZG9jwChgnG1bAd-->¥<b data-page-node-id="mMC48z2JLAX0nds8OQ3M4d"><!--pnid:A3E5JdKTV1OI6NmTd8O3Bb-->21,999</b><!--pnid:KDrw0IsiYfUYAlvmImbwXp--> / 年</div></div>
+      </div>
+
+
+
+      <div data-page-node-id="BdpdNcyyaKR9oZ8VtLGPTy" class="insight">
+        <span data-page-node-id="hu6W79zNTBiVKeXtF4SHjK" class="label"><!--pnid:PXso5pn0JW5KWtPnhfecQP-->◆ 优惠政策</span>
+        <p data-page-node-id="Z0yjwc6yPrxfrQNBGRISjn" style="margin-top:4px"><b data-page-node-id="sjlF9ST2MSUqmq8YDUMTzT"><!--pnid:JpU4zsEMDFPM7IR2fdiljD-->电话调研方案 1：</b><!--pnid:OcznX8n9vJuW5whGO11eFu-->7999+1 元（2 年），买 2 年赠 3 年。</p>
+        <p data-page-node-id="KutWcHKwG1LIkX4dvAwvE2" style="margin-top:4px"><b data-page-node-id="oJzsae0MpRYc6rvJaCEVTU"><!--pnid:RWZ8jMtkNSTStwT3WthTQe-->电话调研方案 2：</b><!--pnid:Tr1qk6ZFIaemi7ErabHhLc-->8000 元（18 个月，赠送半年），10000 元（3 年），16000 元（5 年）。</p>
+      </div>
+
+      <h3 data-page-node-id="GATyvm7dQrtU7A84M7lhQN" style="margin-top:24px"><!--pnid:arb5zsaTmaSVCaBnX9rT8E-->可选参数与加购项</h3>
+      <div data-page-node-id="aBYSyUimxbexUTtmCKPA9A" class="table-wrap">
+        <table data-page-node-id="e7nXWKa95MAY2M1fpdQUlN">
+          <thead data-page-node-id="Bf8vaQAjTznpm803ic1ZEV"><tr data-page-node-id="HwnfTRun946ztkHWiXHRHP"><th data-page-node-id="0B54mherYAVY5O1dIDr5c2"><!--pnid:Wc5HtGFssmPDnUJdHR7mIv-->项目</th><th data-page-node-id="uurGUpZH1lyfC1qG2aWjZi"><!--pnid:pFUNJUacJnjzFnSgAVEgGJ-->价格 / 配额</th><th data-page-node-id="4ondWjHqp3bhJyU1DvdZau"><!--pnid:lrdYl170aNt5PehPMy7CX6-->适用档位</th></tr></thead>
+          <tbody data-page-node-id="xNEulsCiutuHQfA6TTdTnm">
+            <tr data-page-node-id="ZzoQ9l9od1zEUTeU9AKN9G"><td data-page-node-id="gx5Q4KpiOPXX79Ua10E8NB"><!--pnid:NUQNGP8291OFVAXw9q4abH-->开通参数</td><td data-page-node-id="P7IKNwJcrvCzGo4lJHyryp"><!--pnid:a5GGUpw95oPAB4mKq9etpf-->区域（全国 / 多省 X 省，<span data-page-node-id="3uGHxnSnoOfuTwjsdeaMBJ" class="hl"><!--pnid:KU6sWHSdJIdFIDBkFeo6ZQ-->多省加价</span><!--pnid:OQAAA9qe6Qm45IzbrFwB9v-->）；期限（1 年 / 2 年）</td><td data-page-node-id="IKnegxpON3rvTQVPiHdiRe"><!--pnid:qX7T6DSON4xLn8iUG84vQZ-->三档均可</td></tr>
+            <tr data-page-node-id="5WgLeoN2pCIgU9B9sNPjmq"><td data-page-node-id="7354CJpLru6vo5OCDvjnwa"><!--pnid:G2VtNmQjOA2RBg4oP1Ajau-->企业子账号</td><td data-page-node-id="G7kaxlibewwWk2YtjlxdU7"><span data-page-node-id="DENg5g2TB4YcD4zyNWeRP2" class="price"><!--pnid:0PnmmCBLwYmCHlLOYrvUOy-->100 元/个</span></td><td data-page-node-id="XcO9okGSOu115J1SXfDS9i"><!--pnid:O5snPO3aZTwgC3FPw8vyDz-->三档均可加购</td></tr>
+            <tr data-page-node-id="rmkyuRMpeTo0dPwDdYt6OK"><td data-page-node-id="PWJbN3BQEV9nlyckMOGzIL"><!--pnid:Mnb7RhnJIs4zz4CuWJVkel-->企业监控</td><td data-page-node-id="6WREkSVQJxo2fsyyyYbu25"><span data-page-node-id="dGCArQbVRWaC16TtBQOAQr" class="price"><!--pnid:M1tEMgpLICXvrlNzh54xnz-->1,990</span><!--pnid:KeUGvZiPym85eBoTseN1ir--> / <span data-page-node-id="wzM7Ge0ll9ze9xYpVGSTAy" class="price"><!--pnid:aSMrswtxMHJjjy9oRGwNAz-->4,990</span><!--pnid:02mMlLWs0BJRXwf6Ik0J7F--> / <span data-page-node-id="zQcteZi4KVTGNLw0rCvp5P" class="price"><!--pnid:vX9j3PzM2Y6qcreeBi2h12-->9,999 元</span><!--pnid:Kddee2BxJb9sGmPbCf7KT1-->（VIP 含）</td><td data-page-node-id="Qv4R7ykRCcMY9YWKVXBI2h"><!--pnid:24dXsp7M2Hchf9X9LnSSXh-->普通 / 高级 / VIP</td></tr>
+            <tr data-page-node-id="KjRM6UNLjtwmBLFvkfjl3Z"><td data-page-node-id="vYZQJJRuJl5KAtzMKaV7CN"><!--pnid:WoaB8XhwVWilMPzxVrbgoY-->向采购方推荐</td><td data-page-node-id="RjNgmJSf9xwqAgbafEs9aQ"><span data-page-node-id="n3j73QgPlvU0tmQ1N9olD2" class="price"><!--pnid:JlNhjSXrkGNW1Ctics5zF7-->4,790 元/次</span><!--pnid:flGmETMR3gFwJbytHo2yfy-->（高级）/ <span data-page-node-id="DbGdFDRAkq6f7n8a0OQZxs" class="price"><!--pnid:L76uxl06hVYohViUeC1s63-->19,990 元/次</span><!--pnid:1z9IY6RLl1Uze6NkQiOvEv-->（VIP）</td><td data-page-node-id="JqGCOaVZ3IPpovFdyYrpnc"><!--pnid:gKtDTIvM8IDLM9cDl2uptI-->高级 / VIP</td></tr>
+            <tr data-page-node-id="nxqs64GKhHTRS5yCcEuN3Y"><td data-page-node-id="MJiZBTVAvNxIATpaLBKBLG"><!--pnid:9RM4IJ2vJobG6PVMYgxez6-->拓客宝</td><td data-page-node-id="RR4B7ylH5dfwYSwnomLW1Y"><span data-page-node-id="uLhRiA27wjcJ0Yo83Sp2l1" class="price"><!--pnid:Rs2DA94eUgTgrmjcEVu05R-->13,990 元</span><!--pnid:Xq3KiLbekogXPbC6k2J6L7-->（高级加购）/ VIP 包含</td><td data-page-node-id="9nU8uUtmY71rxY7hK5NXDn"><!--pnid:flRCCaESveL0J3xVUqlVjk-->高级 / VIP</td></tr>
+            <tr data-page-node-id="u8CQtxf2DV50xDACZSSTTJ"><td data-page-node-id="QLvEDIjRuKGqyuUm5rJeqs"><!--pnid:ct4IAYuyhyalpHbl4QLe9H-->招标工程师 VIP</td><td data-page-node-id="pJYr7YHltFWO7o3P3Ve8to"><span data-page-node-id="pQhFIkyeshQy3AYFRiYHMd" class="price"><!--pnid:OolGsGIsV0dWVvk81y7FJA-->1,999 元</span><!--pnid:7lK7LP1vmPYDXUara6uu3v-->（高级加购）/ VIP 包含</td><td data-page-node-id="0zfiarsPKnRTbYEAiDpLSg"><!--pnid:247mfJkBhgZlbVpEaeGjg3-->高级 / VIP</td></tr>
+            <tr data-page-node-id="ZzgH2wRVpfjvzncuiIU1C2"><td data-page-node-id="b7e6ylMgm7wKfYtAmA4DdK"><!--pnid:Aq82x0ETlgNDvY3B8k17cd-->项目专盯</td><td data-page-node-id="zPwyQtSof4NIzUTey5fKuX"><span data-page-node-id="yatS9gUdcIue4QdAFRxb8F" class="price"><!--pnid:iMO6FSWeIfS9NV9BWCMAsZ-->500 元</span><!--pnid:sOecW6bMvzxeGY7mF8Oas4-->（高级加购）/ VIP 包含</td><td data-page-node-id="CCIJZ3hKppXON3zGJWzjQh"><!--pnid:55jfH6Ec7H6NqNcr5BcnKA-->高级 / VIP</td></tr>
+            <tr data-page-node-id="YMHSyA6V4l1nl4ApjPjlLc"><td data-page-node-id="RCEIsPbWPRoJvSsZQ75XGL"><!--pnid:3zhFLTJJXyZDjd4RFPa0RL-->找人脉配额</td><td data-page-node-id="y9mcJidoIbsJKSmkXXcLGJ"><!--pnid:BXnS4HwyzNKisstnjIJqnE-->5 条（普通）/ 6 条（高级）/ <span data-page-node-id="2dy7krkwaknJnkbjM5MNz1" class="price"><!--pnid:Uq57qhCITBoOQM7OpsHeOi-->9,999 条</span><!--pnid:4XhX4c87CpfIDw3HXNKJcY-->（VIP）</td><td data-page-node-id="NaLtBQXthtaKYRfFiamQe5"><!--pnid:r4bO27dH0J2tzgVQR5YOtZ-->按档位</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <div data-page-node-id="QWeMZKGCl62g1VNxHi6P3O" class="insight">
+        <span data-page-node-id="sVGcsamjgpnnFKGOUbpUGj" class="label"><!--pnid:olEDxnmjqhZfvHjWMWXg87-->◆ 优惠政策</span>
+        <p data-page-node-id="ITEUVOBRgLZ47VIwxJqIMO" style="margin-top:4px"><b data-page-node-id="hNkZPkAxxwDILS9ibbZqWS"><!--pnid:ft5lfG5Fsj7lCBw0nvWLu7-->电话调研方案 1：</b><!--pnid:BeQ14wDzXK0LU1azo6eRaW-->999 元一次的找人脉，数据定制包服务一次。</p>
+        <p data-page-node-id="iTKOWYIl6ex9OJpH49OwNa" style="margin-top:4px"><b data-page-node-id="HU9PdKQyNY0gNKX9SjBF7u"><!--pnid:TD60q2TpPHe0wX0l0xRL5F-->电话调研方案 2：</b></p>
+        <ul data-page-node-id="QhWC8zDSrA0l6LBYzkyCPX">
+          <li data-page-node-id="1d8O6YAatAvpKQzbOrIL1j"><!--pnid:lVCToknbnZGzK65SMulnn7-->查看更多联系人服务</li>
+          <li data-page-node-id="0qXGwkG8lT8Z0ZyTFeMidU"><!--pnid:kM79uUndXnxwqMWuZNFvc2-->老甲方委托项目直接推荐</li>
+          <li data-page-node-id="qZUi0etU5jySDN2TLpNGmV"><!--pnid:zisIbvXqv593A72Dutjjih-->搜索广告推广服务（同服务周期）</li>
+          <li data-page-node-id="FFadTCEHFXLNJa8CpHURqc"><!--pnid:qQ6clgs6p70gJJkZv7dXja-->找人脉服务 5 次（针对重点项目以悬赏形式找甲方的其他合作单位引荐）</li>
+          <li data-page-node-id="izl6rkdwpzgK6xflvcYfqq"><!--pnid:oY3FujPVpxEv9UP4ZY1GCq-->企业商情分析服务，通过平台大数据推荐潜在业务提前对接（比如当前企业历史固定时间需求提前触达）</li>
+          <li data-page-node-id="03WKVtgMoaXxObR0iWmHFe"><!--pnid:atGuwhoQ9mqwZyOU3YDamF-->优秀供应商认证服务，享受项目优先对接权限</li>
+          <li data-page-node-id="VWMEhHlMqCj4K56OWM45DT"><!--pnid:Fuz8ajW6eQlPRmJ3Mih33i-->子账号赠送 4 个（原价：1000元/个）</li>
+        </ul>
+      </div>
+
+      <h3 data-page-node-id="oeOcpz6PRw7VRh0ecwkFEn"><span data-page-node-id="2KS6HDuzYx73xx4EwCbBLi" class="sec-tag"><!--pnid:8wkYEdnICntbO7UtMdx0h1-->B</span><!--pnid:hvAiErlXg3sTHpIAcHqBde-->乙方宝</h3>
+      <div data-page-node-id="3Cw7LTIw4XspvlQWjEJtyF" class="table-wrap">
+        <table data-page-node-id="apLUq9dAKr5F1JZXj6e7Jv">
+          <thead data-page-node-id="7lrsQCUnIDliAHmVQaGP9b"><tr data-page-node-id="liAt8gciRu0J3MI6geUk0D"><th data-page-node-id="JgDzqG5FRjLtQiv1KUMGgp"><!--pnid:ZIpOBxkJFiGydqk9uqRseU-->档位</th><th data-page-node-id="bQLU21cJ7ayfSZsdzg9nLy"><!--pnid:THF01rTpYo4RaIw3a9Mkid-->现行官方价</th><th data-page-node-id="Z0fkHpvVUOBoiYD8LZTa7R"><!--pnid:kKTsjdtaBkTL9n2g4L3XdW-->信息配额</th><th data-page-node-id="tnGfVYUlEiv11QxojysGXp"><!--pnid:twLKmKJmPi1XaV8waxufwN-->核心差异</th></tr></thead>
+          <tbody data-page-node-id="xXjKqRqaH9fPOp34Yb1y6T">
+            <tr data-page-node-id="C0l4trhRMJ8lsQ9iq8b6KS"><td data-page-node-id="dadHBhfayAvctR7T80B1tA"><strong data-page-node-id="qIAjyWrsUB84m73SBVwUMI"><!--pnid:6aXpVOOb031YuyjxmO97hn-->黄金会员</strong></td><td data-page-node-id="Nb8S6z6NC1dnm1At0AVlxI"><span data-page-node-id="nXTkaVHuM6SdNiZ1MsFym9" class="price"><!--pnid:uq8VDGQ2K59waIMZGWBxLK-->¥199/年</span></td><td data-page-node-id="CbOWBrNquk6AYrtHIhHUd1"><!--pnid:IIcrWfKxLdrLHZFtOY2x8o-->30 条/天</td><td data-page-node-id="IpJPqcMyvgKz9iZjzrLGwl"><!--pnid:S8posLydJjBtB8faEqJhcr-->查看招标/中标、关键联系人（项目/甲方联系人）、高级筛选</td></tr>
+            <tr data-page-node-id="ZD3i7Gq2PpnrKVCoYsQg1P"><td data-page-node-id="9PTstPcxLmjwrRXmWJ7XJe"><strong data-page-node-id="75bibKJATU5EA6fUISy61C"><!--pnid:FBWiWA730ZdXvI0MzlSeMT-->铂金会员</strong></td><td data-page-node-id="YTQ6Qesa1SC5vBbPUrYvIw"><span data-page-node-id="V9aOtIXQOgOeWgY7LIvDwB" class="price"><!--pnid:a58Z6o9WqrVQkJZz2MoNIW-->¥359/年</span></td><td data-page-node-id="ayYJ0VRoX3u96HznNldtLr"><!--pnid:r7DzydiZrTqeefecxPHivo-->100 条/天</td><td data-page-node-id="yQDB9xJBlO38RVHkD7eiqR"><!--pnid:Pl5pFGlPotWElq0Lt7L1Ct-->新增前期项目（前期通知/项目预报/项目意向/项目审批/拟在建）、查看采购甲方、下载附件 10 条/月、商机分析（招标单位详情/招投标评估）、订阅 20 个关键词、批量导出 150 条/天、企业监控（潜在客户/投诉处理/竞争对手详情）</td></tr>
+            <tr data-page-node-id="X56Xn6ga2FlpJwwN4jvd7h"><td data-page-node-id="k7EPipsH0HLudnhUryVWFV"><strong data-page-node-id="TZe3Marl8Fp6x0PwdkL98s"><!--pnid:pilmAzQsRhIStPwOi3UCBh-->钻石会员</strong></td><td data-page-node-id="EFocyaDLTJjP8Rwi5VvVF1"><span data-page-node-id="ty5zTiPHTH6g5WzKKoNzJz" class="price"><!--pnid:nLkGVRZql2JSeZdoxHBWqX-->¥699/年</span></td><td data-page-node-id="VehqQinYWru2yMyFYqIOBV"><!--pnid:gyk7StkwAWbTbcG0CTp7Fy-->300 条/天</td><td data-page-node-id="zlCfBQaVX4AxGKAzn8ukTn"><!--pnid:TlNCuatr270BALxQ0SWHfo-->在铂金全部权益之上新增 <strong data-page-node-id="lAPcoBjS8GnN4uJXSlOI6r"><!--pnid:1Q2fNT1HFBZE6bihzPOriK-->独家采购信息（直接采购）</strong><!--pnid:xmIcHSy00wYNiXyxYIIZVM-->、<strong data-page-node-id="Qy2AN7Gm319Am7GJjRqGLO"><!--pnid:rrLkIp40ifyiYl80NsY3by-->查看拟在建项目</strong><!--pnid:JkcRWsIt7Sww42jM8mbN3c-->（铂金无）；升级项：附件下载 30 条/月（铂金 10）、订阅关键词 30 个（铂金 20）、批量导出 500 条/天（铂金 150）；特权 19+ 个</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul data-page-node-id="MoEbSqHcbXrPivj2IimB9O">
+        <li data-page-node-id="0bRmgIoUGM10Aw6gffnElo"><strong data-page-node-id="8BNCKnvqnCPxVNnVogSDNG"><!--pnid:9P9qBkTsb2uC7KUeVKF48Z-->功能梯度</strong><!--pnid:ea0ONQrJSfj0dcCXOMW4K3-->：查标（三档都有）→ 关键联系人（铂金起）→ 前期项目（铂金起，钻石新增拟在建）→ 附件下载/商机分析/订阅/批量导出（铂金起）→ <strong data-page-node-id="AL5fr9P6liaOnqs06DXtD1"><!--pnid:k8DfL5tLCl222tDtB77x68-->独家采购信息（仅钻石）</strong></li>
+      </ul>
+
+      <h3 data-page-node-id="WDecDSBAEdcf1JnjbD9UID"><span data-page-node-id="PzmBscqAF9vFF98UqR8q3m" class="sec-tag"><!--pnid:UGAT04ke0UkKHdsP3KDlIM-->C</span><!--pnid:DryDybJTQQE2Qrp0yxgoIO-->喜鹊标书 AI</h3>
+      <h4 data-page-node-id="59PzQQ3SjMjxqI07J4R4Rs" style="font-size:15px; margin:0 0 8px"><!--pnid:QMUgdI9iTjWtNopIIpxUHu-->个人版（永久喜币/月卡喜币）</h4>
+      <div data-page-node-id="fdojJEXntjo4J2cja8uRrw" class="table-wrap">
+        <table data-page-node-id="PaThyL27TpVaynDjHou09Z">
+          <thead data-page-node-id="Uf438uvg9a0XzB1t1hLAHy"><tr data-page-node-id="irlmsMhb1hi4vZtqlAvkno"><th data-page-node-id="HEsQyLcjJmfQB2IEf6WzxZ"><!--pnid:Ih0WrLU4Z1dS3Fws7uzSUN-->类型</th><th data-page-node-id="ChUObqyogSR6rxWlBzhlbl"><!--pnid:n7z2ZFNsDH6PGRP2XVZury-->档位</th><th data-page-node-id="2dZZdcWBkih12MvqmfY3S6"><!--pnid:LNvjVrdm1qGfrlyXEMyKo2-->现行官方价</th><th data-page-node-id="H1qjIf8NS0Wo9rJYhDZgi3"><!--pnid:d9FFAg2ajKvSZGPne4eziA-->喜币</th><th data-page-node-id="rMRV8DfY5QPLYHw6reIzUs"><!--pnid:EAnrtJ5CXlpcFFR4pdP0Nb-->单价</th><th data-page-node-id="SMt0RPZ4WzStNzun4hSwp8"><!--pnid:RwFeoLbJfIVRz2mVPOFjeB-->可生成篇数</th><th data-page-node-id="8DLTcvGpgtYirXL4Z94Pqc"><!--pnid:cJ0tfYxLjUQPh3IY81Gpxn-->有效期</th></tr></thead>
+          <tbody data-page-node-id="FIeuIAZWcNuDCL6LJLkhEW">
+            <tr data-page-node-id="wvk6WUpifQ4vQ7kAaS93Yu"><td data-page-node-id="KdwRPS1lxgDgM328Waocnq" rowspan="5"><strong data-page-node-id="AmkE4PbiUisCRePpZKnSIx"><!--pnid:y39DjkIYJPimIopeso264b-->永久卡</strong></td><td data-page-node-id="rVpK3LZ26sy96lXOO34RFZ"><!--pnid:3AWdWGhn1Nu9P5CXbpXp7F-->两篇标书体验卡</td><td data-page-node-id="I6A6z3JVLVfVC0AgTUrPDI"><span data-page-node-id="0bTAx0hYhkzTFCQObBV2mN" class="price"><!--pnid:Qj37p0VwwbQ2f58UBbxLjJ-->99 元</span></td><td data-page-node-id="UadWh0cs1UvidiBRA7BGgU"><!--pnid:zDWtiz3orO8PPmhzsRoYjG-->—</td><td data-page-node-id="FoJV1vuqxi2ZlZsuttIPpd"><!--pnid:NxVuYe3KEv6QWuhLscjifI-->—</td><td data-page-node-id="4va99ODefc7YuURx05FgrT"><!--pnid:ArxzYSaNP3Fnmc2giB5fgJ-->2 篇（限购一次，不限篇幅）</td><td data-page-node-id="pdG40FmxjgY3gA9lOiOzLA"><!--pnid:fln5XLcvD6tTzHLlBIg0Ab-->永久</td></tr>
+            <tr data-page-node-id="EHXhGj8n4vdtWQj2pHNder"><td data-page-node-id="KRJELDWumFVCIcdQt4vGVz"><!--pnid:ul3S0j9ZjFgkob9lw2rLqD-->600 币</td><td data-page-node-id="GWcgwboc7a5ZfatBd1GSu6"><span data-page-node-id="o2SsxNeTcgkZ0YRknHtz2X" class="price"><!--pnid:KVY2wT37kw7lZ6EMCPxxr8-->199 元</span></td><td data-page-node-id="wsvp1Gylmuhx4lACZ5wKc4"><!--pnid:FhXNzrzKYXGC5nmnLPxXw0-->600 币</td><td data-page-node-id="bE2xneSB45cYeiwg4a6ZwY"><!--pnid:4swlq2L9NS9tpPrQdDozuM-->≈0.33 元/币</td><td data-page-node-id="PNnuOwIYvUjYGfEVj4YcZ1"><!--pnid:utF09EDkxSVccEYQNasH3t-->3–5 篇</td><td data-page-node-id="3c56dj4a9AzHdiuN4SnQcT"><!--pnid:RFHi7dtrWEljzdThSa1PWM-->永久</td></tr>
+            <tr data-page-node-id="dZK78iSy2NyR3u7iHLsMlD"><td data-page-node-id="Ec6sD3lvVyAAh5xbpCGxzp"><!--pnid:HxuoDVnzmpomgEQ7qYoQTd-->1,800 币</td><td data-page-node-id="KThbNlPrKL2jc1RN3xWDIg"><span data-page-node-id="rFQU94NZlZo93WpmP2bMPY" class="price"><!--pnid:vpowAkDEdjNgXKH7rqBohU-->399 元</span></td><td data-page-node-id="dsUMSnz0LRCvdrmMgkkMHD"><!--pnid:MqOHNrNjHTSyeWprUxFfIh-->1,800 币</td><td data-page-node-id="N7QIubWEyO7caL8WgumKLv"><!--pnid:HsBQXMYCzLbQ429tlXKIfp-->≈0.22 元/币</td><td data-page-node-id="MF73BVSe4KqijiU2c5XxXd"><!--pnid:VnojD5lhl3d6jUFnfL52mQ-->10–15 篇</td><td data-page-node-id="x9tBh0MYWWICAQsaxK9oAk"><!--pnid:9TbrQmqUDWvkhcV8S0Bg7A-->永久</td></tr>
+            <tr data-page-node-id="HkvsrD8QJvsJeFENREjhOo"><td data-page-node-id="aHQKzde8iObHiNcv2rtRF8"><!--pnid:lTVrhqV3beeUi9bjP9O1U4-->5,400 币</td><td data-page-node-id="RR3LJ3GM0fJnUjQb9D7oA9"><span data-page-node-id="lu2TaDQUBjNlZgOIbqlIqr" class="price"><!--pnid:iMlloxVELbwUqNsxuStN0e-->899 元</span><!--pnid:jmgVw74GH8HzPAlnGCDlrS-->（补贴 200）</td><td data-page-node-id="fAXwJqjk1ByCWQIeRwisat"><!--pnid:eZUsYjwqMS5Zwh5xDTxJlI-->5,400 币</td><td data-page-node-id="TRoPshSjsN4jLdlshbdgDY"><!--pnid:P3VQMdGXEmCcuKXmgLIILd-->≈0.17 元/币</td><td data-page-node-id="f4XSaRMin9vvapgFNoM5xw"><!--pnid:FIyEWiouzITKqenQrsf8Kx-->40–45 篇</td><td data-page-node-id="mR858arIbvSR8mHfkPKQwd"><!--pnid:9HAqY25DbAdyRKwwD5aefO-->永久</td></tr>
+            <tr data-page-node-id="w4jtLTWBqytRxR3PNPdI7E"><td data-page-node-id="Ajd2V2fzFitG6JMADTd9Wj"><!--pnid:3o17MzclOtbtzVzpYPX1Ee-->14,000 币</td><td data-page-node-id="rLuQK376lqhrYo45VzcCvb"><span data-page-node-id="FcpCfF7ymASq3n3zAE8wSx" class="price"><!--pnid:W5kyfOGZTLSVjWjuhrDEEP-->1999 元</span><!--pnid:jdijd8sx1Zcl7mgcsk9zbt-->（补贴 600）</td><td data-page-node-id="rIZ9gROopkRG24BTvdHFa0"><!--pnid:nYXc94YeCfSHFCH6CNxdGt-->14,000 币</td><td data-page-node-id="7SrOKQqsLLhpSVij0VSjR8"><!--pnid:dHg7WhQ4GevOIHi6hiQgAD-->≈0.14 元/币</td><td data-page-node-id="FDrZ4Hgqzy9A8KM1Q6Wpx3"><!--pnid:b6VsNO2sX3f5RJkG80YXpD-->约 28–116 篇完整方案</td><td data-page-node-id="wBHEfXzZ8VF1FKo0Vma9ev"><!--pnid:xXd4rSrzDETTANQFblTJqB-->永久</td></tr>
+            <tr data-page-node-id="oo57ZjNIDai5ifOPp3NySN"><td data-page-node-id="W6QM3H9r3TOlEYqBIDTpVi" rowspan="3"><strong data-page-node-id="6va2lz3LB9oYOcaI4DtqhQ"><!--pnid:PEWkQTbp5E2QTTNeqS2v0v-->月卡</strong></td><td data-page-node-id="BTczhs6NsDzWVp52DwEfLn"><!--pnid:8ywRi4dxx8HWVopCstmVqf-->1,500 币/月</td><td data-page-node-id="yHzL3swMLNZnMSiTC7jm4b"><span data-page-node-id="FkA008ks767Rfv9u1Fq9Pw" class="price"><!--pnid:bYuB11keTKu8JDqQhHnjTQ-->299 元</span></td><td data-page-node-id="WRCtUv16HXlQtOLxfeeReu"><!--pnid:LoCLVApJch4NDwuip5kyex-->1,500 币/月</td><td data-page-node-id="634NIPjEbO1pW0E2r2DjE6"><!--pnid:qeLOgGMtwmyDaIqcVfm0Hk-->0.20 元/币</td><td data-page-node-id="tI5bUqUELqjzIfqyt3UfrP"><!--pnid:tcmH4BcgDOt1BL5II2Sknf-->3–5 篇</td><td data-page-node-id="8y3IYRtluNTtHZuDt7DeWp"><!--pnid:Nrq3ZakmJgUT3ieMaGnP5b-->30 天</td></tr>
+            <tr data-page-node-id="D7BpkzsqnskMFOALTzuWwY"><td data-page-node-id="linSN66cWlnmRzxnWPHzeb"><!--pnid:MYz7IFOWXzwrB9WSqeARNg-->3,000 币/月</td><td data-page-node-id="0sLr81SdADzaY172dU7QN1"><span data-page-node-id="ldH3q3Nck6BMwAD5e7COLz" class="price"><!--pnid:41eDOdToNiKhbsNNI4Zmlx-->459 元</span><!--pnid:sqXHUzh8sgp9sxobO6vC4k-->（补贴 40）</td><td data-page-node-id="hu3jkAOsvsxVtPsmeQAUq3"><!--pnid:RXaZb2Ia0c8LjK8IOqMEZl-->3,000 币/月</td><td data-page-node-id="B1cb51lD5AwTbwOXCRJHEl"><!--pnid:KHwi2r7RgdGGHGVdXW4ts9-->0.15 元/币</td><td data-page-node-id="jU2T4cu3esIrFmlV4Wuuh4"><!--pnid:pObPuBOVTkL0PvXhpKEif9-->10–25 篇</td><td data-page-node-id="fFMq8ix7hUASDIMPTj8NtA"><!--pnid:SowIyFOzwGNZaGxhrI2Pt7-->30 天</td></tr>
+            <tr data-page-node-id="2s52KCOkHMIqdbm4i6FEPb"><td data-page-node-id="nkfj6k103a3ozBJq5HVA54"><!--pnid:XfRgDwhlhEU7C7cif7y66J-->9,000 币/月</td><td data-page-node-id="egpRWJDhBdHEL5CVI0oVZj"><span data-page-node-id="1S0GUl7eBOq9FM6c3TMzGX" class="price"><!--pnid:qkhdWRnc6y01PdTl710ct6-->919 元</span><!--pnid:vRUQvBnNfvDjVozmjYGTQ0-->（补贴 80）</td><td data-page-node-id="VgRLWgB4sSD8PARc8DuQ8K"><!--pnid:qCARmCyU90ylqjuzjf5APS-->9,000 币/月</td><td data-page-node-id="LnHmceQ0AuV0caRObItFQ7"><!--pnid:kpXiVc1g6ezNGiyolTf7Ia-->0.10 元/币</td><td data-page-node-id="DNb2WNVwYkm2i1Z02ZDA1L"><!--pnid:5qHpiC8LEtmtMKKWRkJYqH-->35–75 篇</td><td data-page-node-id="cXCN3Z2kiuJBGpOUVDXxGD"><!--pnid:YldCTjV2478BrQaGnLdWO1-->30 天</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div data-page-node-id="0QK7dgnq89iAxY3IBQInJN" style="margin-top:24px">
+        <h4 data-page-node-id="XaTEqVEXetvQTEK0FSWgxQ" style="font-size:15px; margin:0 0 10px"><!--pnid:kDhPbzkoX9JSItpT6QBCVD-->团队版（季付/年付·享 10% 优惠）</h4>
+        <p data-page-node-id="FomaIHZkNXMgaGclEdW8fJ" style="margin-top:4px"><b data-page-node-id="TGIrA1S2fpu1kbBNroJvXn"><!--pnid:4xbLBnuYUESTvBK6wYaAJs-->共享权益：</b><!--pnid:218ioYq5JuBUD7p26vBzrs-->喜币额度团队成员共享 · 管理员任务全览</p>
+        <div data-page-node-id="5aUkSTsIiyP47JMOVmqpfE" class="grid grid-3">
+          <div data-page-node-id="ojI8rryXBLIYdkvurimU5i" class="card">
+            <div data-page-node-id="vhBhKhEDmYMZtft1dLberh" class="c-title"><!--pnid:hhnrUe8TQnG1Rz7o4wVFx3-->启航版（年付）</div>
+            <p data-page-node-id="cSEIoaxdfbkvV3CGTp7j9x"><!--pnid:pZXrY3NNzqEq2n82iNza2T-->共享额度 <b data-page-node-id="nTibBRvnhvmWhZlT2210xu"><!--pnid:BAe6XsrpWWAFBTReKdA7kz-->48,000</b><!--pnid:rrzZ6TrptWvhJz7pWPrzgG--> 喜币 / 12 个月（约可生成 96–400 篇标书）</p>
+            <p data-page-node-id="WrOLQ1Bb5igc5v03V5J0Oh"><!--pnid:zXPojaMeaKoDdF7rNuAADa-->3 席 · 席均价 <b data-page-node-id="rBZABZJfqTpRT5PMlrN0nD"><!--pnid:QnIVVBqOb2MwT2HLzrZTJq-->¥200</b><!--pnid:RIPAYXoK0orKAuZBAkvj0K-->/月</p>
+            <div data-page-node-id="7yM5cR3DGqb5q2O002iYqp" class="c-price"><!--pnid:sY9YXtKVteZ5netyHSs9cj-->¥<b data-page-node-id="qyjeagwJSxTHiZyMmx34p6"><!--pnid:bovmrX8CwN4stQMrBNfjPQ-->7,199</b><!--pnid:90r6sAO22FQy7a83IdVPdK--> / 年</div>
+            <p data-page-node-id="7tGm3QD4l7h3lgc6zB9Duz" style="color:var(--muted); font-size:12px"><!--pnid:oJCKlpZWDgO6wUvgQl1nKM-->适合 3 人以内的投标团队、低成本体验团队协作</p>
+          </div>
+          <div data-page-node-id="hiCcqVLTVISD84mpVpKMX2" class="card">
+            <div data-page-node-id="w4oGf0FcPvfggtCTq6nL0u" class="c-title"><!--pnid:3XtXhLXblvpL6jjHKXkMck-->进阶版（年付）</div>
+            <p data-page-node-id="CyNYRGjMwA5WqaVUFwfV21"><!--pnid:wE5GGLGmcMkw90WJfKG5YZ-->共享额度 <b data-page-node-id="1wNP7E6S6t1i7el8CPwFW6"><!--pnid:5cfyqQrM4tfocI8ce7ld3O-->72,000</b><!--pnid:Kec9vW8gvs7EtgPvUVyUh3--> 喜币 / 12 个月（约可生成 144–600 篇标书）</p>
+            <p data-page-node-id="J8Fqan4EdhGzQHzuj8Yfp1"><!--pnid:DVbWRMJWQQVeB49r5vz1k3-->5 席 · 席均价 <b data-page-node-id="PRpT5rsQNv7E517HuQreA4"><!--pnid:UsohGiWNJnw71a9P3paM0b-->¥180</b><!--pnid:sIZgjyTWYFSEPLJnU3y7Od-->/月</p>
+            <div data-page-node-id="bNHwnsMtxcH04PxJkLoTmc" class="c-price"><!--pnid:c5qmfoDBM90lbN8gdBi3xH-->¥<b data-page-node-id="OGC3h4Q86DA0NqcYx2ERKc"><!--pnid:UACNKCtmRj6gYlWRjLGK2i-->10,799</b><!--pnid:faaf11X1ZEaL6zUmfeLUtq--> / 年</div>
+            <p data-page-node-id="ToUDVu4oDnBmCEVzTszece" style="color:var(--muted); font-size:12px"><!--pnid:b9D1oUAsQeZGyZfzomLDzS-->适合 5 人以内的投标团队、旺季标书量翻从容</p>
+          </div>
+          <div data-page-node-id="xorIdF3yLtThtuaTYyaAcN" class="card">
+            <div data-page-node-id="0soaLg3oCNkNI41see0U14" class="c-title"><!--pnid:JNayn0UtON30m0bZkX7Ooh-->旗舰版（年付）</div>
+            <p data-page-node-id="aTLLTv0flPSg0gahB49rBN"><!--pnid:84r9U3eBAptyXwfIRS3UJv-->共享额度 <b data-page-node-id="MEtwOiiI65f2AzDb0flZ5V"><!--pnid:lq4lCL5n0RDS8VtRnj8Zgz-->120,000</b><!--pnid:o1O8RGAiAm1ip3g3HLTZTV--> 喜币 / 12 个月（约可生成 240–1,000 篇标书）</p>
+            <p data-page-node-id="XS4dk6CtokPTGXAExhVj99"><!--pnid:K4K0O9I6txYRV5vsSPrt5Q-->10 席 · 席均价 <b data-page-node-id="DDkVJmbVxly2GXuVb6gcCT"><!--pnid:z9TIecTf5kQo68AlPhBPhy-->¥150</b><!--pnid:vaQMvEIYe38VtSkk0Y0KbY-->/月</p>
+            <div data-page-node-id="DGKEbsn2XbgUW1hkqQ927h" class="c-price"><!--pnid:hXI5s5UuWEMPFb0kr4YMtv-->¥<b data-page-node-id="sra7sCh6RczArdkA8mycwJ"><!--pnid:qb2ukmGkNsJekdtgxTyuMZ-->17,999</b><!--pnid:5Rpd374d5rWdBBWf8Q2D9w--> / 年</div>
+            <p data-page-node-id="FMU5U9RL0igfyKhcnTJzp7" style="color:var(--muted); font-size:12px"><!--pnid:4rgwjQ3XIutlMxkp9Je5aH-->适合 10 人以内的投标团队、统一管理投标任务</p>
+          </div>
+        </div>
+      </div>
+
+      <h4 data-page-node-id="vuBk5PSVwnB5EEqx7stPC2" style="font-size:15px; margin:20px 0 8px"><!--pnid:vSRCymJvauIVmHRcBvuEBT-->企业版（私有化）</h4>
+      <p data-page-node-id="uw9ghI3PT7SMPaGtIGmJIh"><!--pnid:IoWhvfC3XSAmsW0gl7k0os-->定制开发</p>
+
+      <ul data-page-node-id="blI0e6oBL9Qoe6jGIMIIX6">
+        <li data-page-node-id="IhNe3vOwREbkKGaJdwiKVi"><strong data-page-node-id="42XadkTXjXPZElJyXNbceC"><!--pnid:F1oM43jUAEjZ0UDzpxT1UL-->关键设计</strong><!--pnid:peCJApEnQc9FQKRr9qJQei-->：99 元/2 篇体验卡为新客试用入口；以"月卡试用 → 切永久"提升客单</li>
+        <li data-page-node-id="il2a9NtSqrjkS9nTH95nBu"><strong data-page-node-id="o8oC8ibimifsy0RY7lwupS"><!--pnid:7h8sbFz8zsm5QqfQU5wIpv-->喜币机制</strong><!--pnid:OxQlh24M4zLuI4WntlPUkm-->：喜币永久有效，按篇幅消耗，全功能可用按功能扣币</li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!--pnid:4kVoeb67jKvgIgQMMO7h7F--><!-- 六、参考资料 -->
+  <section data-page-node-id="oEqxzJM1AQeGa13cl2gu10" id="s8">
+    <div data-page-node-id="uAjt6Ns4QmauTQGrAZQKMZ" class="chapter">
+      <h2 data-page-node-id="vJ41myObvcFBxhSNxOec8h"><span data-page-node-id="fGS9IFfQG886HE32ng5OE2" class="num"><!--pnid:iBYfy1ceTlpB0uhfPFymwZ-->六</span><!--pnid:jvDtXxMqDclzVDIp3ToJfD-->参考资料（按可核验性分级）</h2>
+
+      <div data-page-node-id="DgJ3xpBBSTyrGnI2RqI3K4" class="ref-group">
+        <h3 data-page-node-id="iUwxFbceqRGDxecLXDKHwK"><span data-page-node-id="V1xeCbFv8kjC5HIpf9kiqZ" class="ref-badge ref-a"><!--pnid:oEb4BBdiruzPzlstTGGmsZ-->A · 可独立核验</span><!--pnid:bb1I8NBT93YW4PXZgVfcsL-->工商 / 融资 / 官网实测</h3>
+        <ul data-page-node-id="PU5z7ofyX6Amqp9yyinnK7" class="ref-list">
+          <li data-page-node-id="mF06GMBtrz3SZ3Cz7l72x5"><a data-page-node-id="Dv8IVDa5cGxvoIZfIApwe0" href="https://www.qianlima.com" rel="noopener" target="_blank"><!--pnid:cyNlQEydaKhWboc6hIoPvP-->千里马招标网官网首页</a></li>
+          <li data-page-node-id="hgpGvw7Rhc6QEsDvbbp3Y5"><a data-page-node-id="j2Q6GVxvJy7ooHxRIlMf8t" href="https://home.qianlima.com/choose-package?sourceType=2" rel="noopener" target="_blank"><!--pnid:jtpfloclWaJ9nWuE91b3ZT-->千里马企业套餐页</a></li>
+          <li data-page-node-id="pyg0YXSPt59VJtksn3mtHm"><span data-page-node-id="IZLOWY5PoqzNC3Djuaw83y" class="ref-meta"><!--pnid:8eOq00aHmCoixuIULsOQ7n-->📷</span><!--pnid:v1seJlPlV6Rb78f4SGR0x9--> 千里马官网套餐页截图（2026-08-26 实测，含三档价格与加购项）<span data-page-node-id="LF3hcHrDHJaxNl2bfRXJfO" class="ref-meta"><!--pnid:rgbTBjgknkfeREBUq4nob6-->（本地截图）</span></li>
+          <li data-page-node-id="yenFNhbCUUfh6iJFoBm6mk"><a data-page-node-id="zbT2GgUbiRVqBaQIMBWxzy" href="https://vip.qianlima.com/register/" rel="noopener" target="_blank"><!--pnid:vYjrKwjQZKmRfUCLNdA6Zu-->千里马 VIP 服务注册页</a></li>
+          <li data-page-node-id="dQE41VWg43tvLjbym7IveO"><a data-page-node-id="6JLCtIyZKntmKp5qnRF7id" href="https://wap.qianlima.com/gsjj.html" rel="noopener" target="_blank"><!--pnid:IYncrRczi7fP1kz64rtU0W-->千里马公司简介(wap)</a></li>
+          <li data-page-node-id="f1CijjUAT6nzrhiytt1mao"><a data-page-node-id="qrktC30dufTxPnrfc3dVEo" href="https://finance.ifeng.com/c/86u5LjrG81C" rel="noopener" target="_blank"><!--pnid:EdeofpBvUWbHJLqEZb7GRt-->凤凰网：千里马完成数亿元融资 高成资本独家领投(A 轮)</a></li>
+          <li data-page-node-id="ZbLx1QAupGU1ZGLYBedeiV"><a data-page-node-id="X8D2YAdWwqyzoz1f1wlqVQ" href="https://finance.ifeng.com/c/8EqxNDjp7B3" rel="noopener" target="_blank"><!--pnid:kvwnH15J4hrX6aMF6w15xO-->凤凰网：千里马完成亿元级B轮融资 兴富/辰韬资本投资</a></li>
+          <li data-page-node-id="9msCQm10QiqMIMLB3Z50Wm"><span data-page-node-id="wtOLjjptTUcV0udhYovEbc" class="ref-meta"><!--pnid:VUnzja4MMTsf0taiiG6w4r-->🌐</span> <a data-page-node-id="9OMJnboBiukS7D5F45XNj7" href="http://xq.qianlima.com/" rel="noopener" target="_blank"><!--pnid:QLzA7jrYIJeyJmhjo3ONxg-->喜鹊标书 AI 官网</a><!--pnid:jzKwByrdR8jQGl2k4I65Xl--> / <a data-page-node-id="tGvwWFP5rqUDHgJamT3A82" href="https://www.xiquebiaoshu.com/" rel="noopener" target="_blank"><!--pnid:ZPosBHAn2o6Z6qEMQKB1sB-->xiquebiaoshu.com</a></li>
+          <li data-page-node-id="RQSiLm28FkZ8niRpNS2pSz"><a data-page-node-id="PnrVEd0K3bTJFlOG6FwG8G" href="https://www.ithome.com/0/989/664.htm" rel="noopener" target="_blank"><!--pnid:P8tdaaJxJ4W5LZkw1EUESB-->IT之家：喜鹊标书AI从读懂招标文件到完成高质量标书</a></li>
+          <li data-page-node-id="z1Lr7z64QgngU9ArhWcqHn"><a data-page-node-id="O3P1MpspeuhFENYItyWctM" href="https://www.ithome.com/0/990/713.htm" rel="noopener" target="_blank"><!--pnid:zi8o9YS5jDtY18VD2YYRZF-->IT之家：2026年AI标书软件选型指南</a></li>
+          <li data-page-node-id="Za0YyChYCf9Gb6sFudu2v8"><a data-page-node-id="PFfVjNijHCMKefFbVNbdfo" href="https://www.aitop100.cn/tools/xiquebiaoshu" rel="noopener" target="_blank"><!--pnid:Fi5D1An1JKUJPU0ZHUmMox-->AITOP100：喜鹊标书AI产品详解</a></li>
+          <li data-page-node-id="vvXMWio1hghT2u8aEZRWQG"><span data-page-node-id="axOMUZRkU56CCr2Z4QX9mX" class="ref-meta"><!--pnid:4bYeVmsrEKm02usSkRtPfd-->📷</span><!--pnid:XQapJKraz55xdq8Jdncmu3--> 乙方宝会员开通页截图（2026-08-26 实测，三档 tab：黄金/铂金/钻石，含会员特权对比与满减券；钻石 ¥699/年 券后价已确认）<span data-page-node-id="9JNcczYnRZKjbDwd6Hn57p" class="ref-meta"><!--pnid:BzK3rN38MMnQ3WOpxBfgXj-->（本地截图）</span></li>
+          <li data-page-node-id="IkdrYqJIwxdxC13Nk4Rg7y"><span data-page-node-id="c8wW6rRfOCH1eXYI4xevY5" class="ref-meta"><!--pnid:Ybp9oMytW3oFJzs3xgDa1e-->📷</span><!--pnid:fhGAS5g8oJD2mEWViKn3sm--> 喜鹊标书喜币充值页截图（2026-08-26 实测，含永久卡与月卡套餐，含超大套餐 1999 元/14000 币）<span data-page-node-id="54erG1D2BEtCCA34Xdpqlx" class="ref-meta"><!--pnid:lJiMsNQJrUQh9JtjlESCcX-->（本地截图）</span></li>
+        </ul>
+      </div>
+
+      <div data-page-node-id="O3915n5ZL3ajE6gQIS6WwE" class="ref-group">
+        <h3 data-page-node-id="HMwD5ELyncRpqD5wWxiA0f"><span data-page-node-id="OZ9k6iIL5TcCR3Bmi1bDvm" class="ref-badge ref-b"><!--pnid:dti8PNpemhTtd4X99n2LbN-->B · 商业软文/第三方评测</span><!--pnid:JV6ymRC3NbfOiPNeTQNGGA-->数字雷同，仅作参考不作独立佐证</h3>
+        <ul data-page-node-id="fzfTZjLVbfS4SwwUedRMs4" class="ref-list">
+          <li data-page-node-id="RLu0DrWfhwlcmebvllzdad"><a data-page-node-id="d2Y5IJrbhNBcylb2tLnOfp" href="https://aiqicha.baidu.com/details/ugknowledge?id=0613094878c1634b412e5f5ef926400b" rel="noopener" target="_blank"><!--pnid:MNXvlNtrWDvIXxcIs4jPLd-->爱企查：千里马招标官网靠不靠谱</a></li>
+          <li data-page-node-id="yRCgb3kpupMunNE1cKbN4r"><a data-page-node-id="df7PIaSLAnEEfyEUR6jGmQ" href="https://www.toutiao.com/article/7664907016774763017" rel="noopener" target="_blank"><!--pnid:z2Mm1Vvlgs4mkN9Ii6xzd0-->今日头条：2026年招投标平台选择指南</a></li>
+          <li data-page-node-id="3cetlRMXNs1JKqxg52N3Or"><a data-page-node-id="XB2YP9dOUM8xN2rhvhoAgl" href="https://www.toutiao.com/article/7664888695836705307" rel="noopener" target="_blank"><!--pnid:XgLTIKLO7saKTYB2iskWWf-->今日头条：5款主流招投标APP深度对比</a></li>
+          <li data-page-node-id="wbRYsgPdqdZNzcSifiDAkQ"><a data-page-node-id="9UMsUcOoDDPFtzZM7WUYpk" href="https://www.sohu.com/a/942447134_100137565" rel="noopener" target="_blank"><!--pnid:jSn8ViTgDMsEQjQBVWYzwH-->搜狐：五大招标平台真实口碑曝光</a></li>
+          <li data-page-node-id="PchkBzWVDpYyd9Q1qstfir"><a data-page-node-id="6JKgNQfts8y8bRjptRjvn1" href="https://www.toutiao.com/article/7647816685377929766/" rel="noopener" target="_blank"><!--pnid:4KPMNz5vnCemuLquZt39EW-->今日头条：5款主流招标平台实测避坑指南</a></li>
+          <li data-page-node-id="TFJmuokcSdNMoncTfsd3XE"><a data-page-node-id="TlhufUoZ1wOtqu31llcQPR" href="https://www.cnblogs.com/baifuai/articles/21749597" rel="noopener" target="_blank"><!--pnid:fuWjUfTkxZ1XxVnMlp6aYv-->博客园：2026年招标信息网站推荐榜</a></li>
+          <li data-page-node-id="EyfzjO0wtWfWcQPSBl8u5A"><a data-page-node-id="aSAfXdmQwCp4J9q3KsAVPx" href="https://www.ztb.ah.cn/2375.html" rel="noopener" target="_blank"><!--pnid:VeHTCXadbxSi1e363fykFG-->安徽招投标网：5大招标网站推荐</a></li>
+          <li data-page-node-id="l3xJes0DKN8NiOXy2huMCz"><a data-page-node-id="9ZUcj5g3oeIfKBPrX3KjgW" href="https://www.sohu.com/a/974315041_122613706" rel="noopener" target="_blank"><!--pnid:KXjzZPzX0bdZelNymQOK18-->搜狐：6款AI标书工具深度对比</a></li>
+          <li data-page-node-id="yQVJ9jnE8UngaNuljKRDfI"><a data-page-node-id="ge3X5CjCI2FxKRdsEw7bhQ" href="https://www.sohu.com/a/937834722_122626522" rel="noopener" target="_blank"><!--pnid:dSGz93SypwzYCAr4Iy1ZV0-->搜狐：4款免费AI标书神器大比拼</a></li>
+          <li data-page-node-id="Bc8EwieoJoAQCSVmlSveiX"><a data-page-node-id="9JkxyDCgmSW7ElJ6irpMtK" href="https://navxd.com/navigation/sites/4799.html" rel="noopener" target="_blank"><!--pnid:NZId7cD2TaUU6bFEdiIuJG-->navxd：喜鹊标书AI导航</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <footer data-page-node-id="nuqYL0ml4aCwGIA94tLEMg" style="text-align:center; color:var(--ink-faint); font-size:12.5px; padding:20px 0 10px"><!--pnid:w53HvjohI54FnOw00IaWRa-->
+    千里马及子产品调研报告 · 2026-08-26
+  </footer>
+</main>
+
+<button data-page-node-id="OGBEwyQ2gERMpSikyboywi" aria-label="返回顶部" class="back-top" id="backTop"><!--pnid:vsbKWEfsD8jPeDz6EcayaH-->↑</button>
+
+<script data-page-node-id="Gbnv6a2HIkdmGfHGawczpu" data-pnid-children="LFBsK2lDRtBkNJYzWVMmbB">
+  // 目录高亮当前章节
+  var tocLinks = document.querySelectorAll('#toc a');
+  var sections = [];
+  tocLinks.forEach(function (link) {
+    var id = link.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el });
+  });
+
+  function onScroll() {
+    var scrollY = window.scrollY;
+    // 进度条
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progressBar').style.width = (docH > 0 ? (scrollY / docH) * 100 : 0) + '%';
+    // 返回顶部
+    document.getElementById('backTop').classList.toggle('show', scrollY > 400);
+    // 高亮当前章节
+    var current = sections[0] ? sections[0].id : '';
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].el.getBoundingClientRect().top <= 120) current = sections[i].id;
+    }
+    tocLinks.forEach(function (link) {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // 返回顶部
+  document.getElementById('backTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // 移动端目录开关
+  var sidebar = document.getElementById('sidebar');
+  var mask = document.getElementById('tocMask');
+  function closeToc() { sidebar.classList.remove('open'); mask.classList.remove('show'); }
+  document.getElementById('tocToggle').addEventListener('click', function () {
+    sidebar.classList.toggle('open');
+    mask.classList.toggle('show');
+  });
+  mask.addEventListener('click', closeToc);
+  tocLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (window.innerWidth <= 1024) closeToc();
+    });
+  });
+
+  // ===== 深浅色主题：默认跟随系统，手动切换后记忆偏好 =====
+  var htmlEl = document.documentElement;
+  var themeBtn = document.getElementById('themeToggle');
+  var storedTheme = null;
+  try { storedTheme = localStorage.getItem('qlm-report-theme'); } catch (e) {}
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (storedTheme === 'dark' || (storedTheme !== 'light' && prefersDark)) htmlEl.classList.add('dark');
+  function syncThemeBtn() {
+    var dark = htmlEl.classList.contains('dark');
+    themeBtn.textContent = dark ? '☀️' : '🌙';
+    themeBtn.setAttribute('aria-label', dark ? '切换为浅色模式' : '切换为深色模式');
+  }
+  themeBtn.addEventListener('click', function () {
+    htmlEl.classList.toggle('dark');
+    try { localStorage.setItem('qlm-report-theme', htmlEl.classList.contains('dark') ? 'dark' : 'light'); } catch (e) {}
+    syncThemeBtn();
+  });
+  syncThemeBtn();
+  // 打印时强制浅色，打印结束恢复
+  var wasDarkForPrint = false;
+  window.addEventListener('beforeprint', function () {
+    wasDarkForPrint = htmlEl.classList.contains('dark');
+    if (wasDarkForPrint) htmlEl.classList.remove('dark');
+  });
+  window.addEventListener('afterprint', function () {
+    if (wasDarkForPrint) htmlEl.classList.add('dark');
+  });
+
+  // ===== 目录分组折叠（默认展开，点击箭头折叠） =====
+  document.querySelectorAll('#toc li.has-group').forEach(function (head) {
+    var pid = head.querySelector('a').getAttribute('href').slice(1);
+    var kids = document.querySelectorAll('#toc li.lvl-2[data-parent="' + pid + '"]');
+    head.querySelector('.caret').addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var closed = head.classList.toggle('closed');
+      kids.forEach(function (k) { k.style.display = closed ? 'none' : ''; });
+    });
+  });
+
+  // ===== 来源标注徽章化：行内 [来源] 转为徽章（A 级蓝 / B 级灰），可核验网页来源转为链接 =====
+  (function () {
+    var A_PAT = /截图实测|工商|融资|官网|套餐页|首页实测|IT之家|AITOP100|aitop100|喜鹊充值页/;
+    // 来源标签 → 对应网页链接（无条目的本地截图类来源保持纯文本徽章）
+    var SRC_URL = {
+      '官网': 'https://www.qianlima.com',
+      '官网·首页实测': 'https://www.qianlima.com',
+      '官网/软文': 'https://www.qianlima.com',
+      '官网/套餐页': 'https://home.qianlima.com/choose-package?sourceType=2',
+      '官网·gsjj.html': 'https://wap.qianlima.com/gsjj.html',
+      '官网·喜鹊': 'https://www.xiquebiaoshu.com/',
+      '官网·喜鹊充值页截图实测': 'https://www.xiquebiaoshu.com/',
+      '官网·喜鹊/IT之家': 'https://www.xiquebiaoshu.com/',
+      '官网·喜鹊/navxd/IT之家': 'https://www.xiquebiaoshu.com/',
+      '工商': 'https://aiqicha.baidu.com/details/ugknowledge?id=0613094878c1634b412e5f5ef926400b',
+      '融资·凤凰网': 'https://finance.ifeng.com/c/86u5LjrG81C',
+      '融资·凤凰网·A 轮/B 轮报道': 'https://finance.ifeng.com/c/8EqxNDjp7B3',
+      '软文·今日头条': 'https://www.toutiao.com/',
+      '软文·搜狐': 'https://www.sohu.com/',
+      '软文': 'https://www.sohu.com/',
+      'IT之家': 'https://www.ithome.com/0/989/664.htm',
+      'IT之家/navxd': 'https://www.ithome.com/0/989/664.htm',
+      'IT之家/aitop100': 'https://www.ithome.com/0/989/664.htm',
+      'AITOP100': 'https://www.aitop100.cn/tools/xiquebiaoshu',
+      '爱企查': 'https://aiqicha.baidu.com/',
+      '套餐页': 'https://home.qianlima.com/choose-package?sourceType=2',
+      '套餐页 home.': 'https://home.qianlima.com/choose-package?sourceType=2',
+      '喜鹊充值页': 'https://www.xiquebiaoshu.com/'
+    };
+    var BRACKET = /\[([^\[\]\n]{2,24})\]/g;
+    document.querySelectorAll('.chapter').forEach(function (root) {
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+      var texts = [], n;
+      while ((n = walker.nextNode())) texts.push(n);
+      texts.forEach(function (tn) {
+        if (tn.nodeValue.indexOf('[') === -1) return;
+        BRACKET.lastIndex = 0;
+        var frag = document.createDocumentFragment(), last = 0, m;
+        while ((m = BRACKET.exec(tn.nodeValue)) !== null) {
+          if (m.index > last) frag.appendChild(document.createTextNode(tn.nodeValue.slice(last, m.index)));
+          var url = SRC_URL[m[1]], b;
+          if (url) {
+            b = document.createElement('a');
+            b.href = url; b.target = '_blank'; b.rel = 'noopener noreferrer';
+          } else {
+            b = document.createElement('span');
+          }
+          b.className = 'src-badge ' + (A_PAT.test(m[1]) ? 'a' : 'b');
+          b.textContent = m[1];
+          frag.appendChild(b);
+          last = m.index + m[0].length;
+        }
+        if (last < tn.nodeValue.length) frag.appendChild(document.createTextNode(tn.nodeValue.slice(last)));
+        if (frag.childNodes.length) tn.parentNode.replaceChild(frag, tn);
+      });
+    });
+  })();
+
+  // ===== 价格列右对齐（无跨行表格中，价格占比高且文本简短的列整列右对齐） =====
+  (function () {
+    document.querySelectorAll('table').forEach(function (tbl) {
+      if (tbl.querySelector('[rowspan]')) return;
+      var headRow = tbl.querySelector('thead tr');
+      var bodyRows = tbl.querySelectorAll('tbody tr');
+      if (!headRow || !bodyRows.length) return;
+      var cols = headRow.children.length;
+      for (var c = 0; c < cols; c++) {
+        var total = 0, priced = 0, maxLen = 0;
+        bodyRows.forEach(function (r) {
+          var cell = r.children[c];
+          if (cell) {
+            total++;
+            if (cell.querySelector('.price')) priced++;
+            maxLen = Math.max(maxLen, cell.textContent.replace(/\s/g, '').length);
+          }
+        });
+        if (total && priced / total >= 0.6 && maxLen <= 24) {
+          if (headRow.children[c]) headRow.children[c].classList.add('td-num');
+          bodyRows.forEach(function (r) {
+            if (r.children[c]) r.children[c].classList.add('td-num');
+          });
+        }
+      }
+    });
+  })();
+</script>
+</body>
+</html>

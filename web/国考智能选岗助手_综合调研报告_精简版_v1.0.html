@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国考智能选岗助手 · 综合调研与可行性分析报告（精简版 v1.0）</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --surface: #ffffff;
+    --surface-2: #f8fafc;
+    --text: #1e293b;
+    --text-soft: #475569;
+    --text-mut: #64748b;
+    --border: #e2e8f0;
+    --primary: #2563eb;
+    --primary-soft: #eff6ff;
+    --green: #16a34a;
+    --green-soft: #f0fdf4;
+    --amber: #d97706;
+    --amber-soft: #fffbeb;
+    --red: #dc2626;
+    --red-soft: #fef2f2;
+    --shadow: 0 1px 3px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
+    --shadow-lg: 0 10px 30px rgba(15,23,42,.10);
+    --radius: 14px;
+    --maxw: 880px;
+  }
+  html[data-theme="dark"] {
+    --bg: #0b1220;
+    --surface: #131c2e;
+    --surface-2: #0f1726;
+    --text: #e6edf6;
+    --text-soft: #b6c2d4;
+    --text-mut: #8b98ad;
+    --border: #25324a;
+    --primary: #5b9bff;
+    --primary-soft: #16233c;
+    --green: #4ade80;
+    --green-soft: #10241a;
+    --amber: #fbbf24;
+    --amber-soft: #2a2110;
+    --red: #f87171;
+    --red-soft: #2a1414;
+    --shadow: 0 1px 3px rgba(0,0,0,.4);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Source Han Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Top bar ---------- */
+  header.topbar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    padding: 12px 20px;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .topbar .logo {
+    width: 34px; height: 34px; border-radius: 9px; flex: none;
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 15px;
+  }
+  .topbar .title { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar .sub { font-size: 12px; color: var(--text-mut); white-space: nowrap; }
+  .topbar .actions { display: flex; align-items: center; gap: 8px; flex: none; }
+  .btn {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px; transition: .15s;
+  }
+  .btn:hover { border-color: var(--primary); color: var(--primary); }
+  .btn.icon { padding: 8px 10px; }
+
+  /* ---------- Layout ---------- */
+  .layout { display: flex; align-items: flex-start; max-width: 1240px; margin: 0 auto; }
+
+  /* ---------- Sidebar TOC ---------- */
+  aside.toc {
+    position: sticky; top: 64px; align-self: flex-start;
+    width: 280px; flex: none; padding: 28px 16px 40px;
+    max-height: calc(100vh - 64px); overflow-y: auto;
+  }
+  aside.toc h2 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-mut); margin: 0 0 12px 10px; }
+  .toc a {
+    display: block; text-decoration: none; color: var(--text-soft);
+    padding: 7px 12px; border-radius: 9px; font-size: 14px; border-left: 3px solid transparent;
+    transition: .15s;
+  }
+  .toc a:hover { background: var(--surface-2); color: var(--text); }
+  .toc a.active { background: var(--primary-soft); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+  .toc a.sub { padding-left: 26px; font-size: 13px; color: var(--text-mut); }
+  .toc a.sub.active { color: var(--primary); }
+
+  /* ---------- Main ---------- */
+  main { flex: 1; min-width: 0; padding: 28px 24px 80px; }
+  .doc { max-width: var(--maxw); margin: 0 auto; }
+
+  .doc-h1 { font-size: 30px; line-height: 1.3; margin: 6px 0 6px; letter-spacing: -.01em; }
+  .lead { color: var(--text-soft); font-size: 15px; margin: 0 0 26px; }
+  .version-pill { display: inline-block; font-size: 12px; font-weight: 700; color: var(--primary); background: var(--primary-soft); border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border)); padding: 3px 10px; border-radius: 999px; margin-left: 8px; vertical-align: 3px; }
+  section { margin-top: 44px; scroll-margin-top: 84px; }
+  h2.sec { font-size: 23px; margin: 0 0 6px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+  h3.sub { font-size: 18px; margin: 30px 0 10px; color: var(--text); }
+  h3.sub::before { content: ""; display: inline-block; width: 6px; height: 18px; background: var(--primary); border-radius: 3px; margin-right: 9px; vertical-align: -3px; }
+  p { margin: 12px 0; }
+  ul, ol { margin: 12px 0; padding-left: 22px; }
+  li { margin: 7px 0; }
+  strong { color: var(--text); }
+  .muted { color: var(--text-mut); font-size: 13.5px; }
+
+  /* ---------- Hero / summary ---------- */
+  .hero {
+    background: linear-gradient(135deg, var(--primary-soft), var(--surface));
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 22px 24px; box-shadow: var(--shadow); margin-top: 18px;
+  }
+  .hero .tag { display: inline-block; font-size: 12px; font-weight: 700; color: var(--primary); background: var(--surface); border: 1px solid var(--border); padding: 3px 10px; border-radius: 999px; }
+  .hero .verdict {
+    display: flex; align-items: center; gap: 14px; margin: 14px 0 8px;
+    background: var(--red-soft); border: 1px solid color-mix(in srgb, var(--red) 30%, var(--border));
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .hero .verdict .big { font-size: 17px; font-weight: 800; color: var(--red); flex: none; }
+  .hero .verdict p { margin: 0; font-size: 14.5px; color: var(--text-soft); }
+
+  /* ---------- Stat cards ---------- */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+  .stat {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; box-shadow: var(--shadow); text-align: center;
+  }
+  .stat .num { font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1.2; }
+  .stat .num.warn { color: var(--amber); }
+  .stat .num.danger { color: var(--red); }
+  .stat .label { font-size: 13px; color: var(--text-mut); margin-top: 4px; }
+
+  /* ---------- Callout cards ---------- */
+  .callout {
+    border-radius: 12px; padding: 14px 16px; margin: 16px 0; border: 1px solid var(--border);
+    background: var(--surface-2); font-size: 14.5px;
+  }
+  .callout.head { background: var(--primary-soft); border-color: color-mix(in srgb, var(--primary) 25%, var(--border)); }
+  .callout.head .t { color: var(--primary); font-weight: 700; }
+  .callout.green { background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 25%, var(--border)); }
+  .callout.green .t { color: var(--green); font-weight: 700; }
+  .callout.amber { background: var(--amber-soft); border-color: color-mix(in srgb, var(--amber) 25%, var(--border)); }
+  .callout.amber .t { color: var(--amber); font-weight: 700; }
+  .callout.red { background: var(--red-soft); border-color: color-mix(in srgb, var(--red) 25%, var(--border)); }
+  .callout.red .t { color: var(--red); font-weight: 700; }
+  .callout .t { display: block; margin-bottom: 4px; }
+  .callout p { margin: 6px 0; }
+
+  /* ---------- Table ---------- */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; background: var(--surface); min-width: 640px; }
+  thead th { background: var(--surface-2); color: var(--text-soft); text-align: left; padding: 12px 14px; font-weight: 700; border-bottom: 2px solid var(--border); white-space: nowrap; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface-2); }
+  td b { color: var(--text); }
+  table.wide { min-width: 760px; }
+
+  /* ---------- Tech feasibility 3-tier ---------- */
+  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+  .tier { border-radius: 12px; padding: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); }
+  .tier .h { font-weight: 800; font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .tier .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .tier.green .h { color: var(--green); }
+  .tier.green .dot { background: var(--green); }
+  .tier.amber .h { color: var(--amber); }
+  .tier.amber .dot { background: var(--amber); }
+  .tier.red .h { color: var(--red); }
+  .tier.red .dot { background: var(--red); }
+  .tier ul { padding-left: 18px; margin: 0; font-size: 13.5px; }
+  .tier li { margin: 6px 0; }
+
+  /* ---------- Bar chart ---------- */
+  .chart { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 8px; box-shadow: var(--shadow); margin: 18px 0; }
+  .chart h4 { margin: 0 0 14px; font-size: 15px; }
+  .bar-row { display: grid; grid-template-columns: 130px 1fr 110px; align-items: center; gap: 10px; margin: 11px 0; }
+  .bar-row .name { font-size: 13.5px; color: var(--text-soft); text-align: right; }
+  .bar-track { background: var(--surface-2); border-radius: 8px; height: 22px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--primary), #7c3aed); }
+  .bar-fill.amber { background: linear-gradient(90deg, var(--amber), #f59e0b); }
+  .bar-fill.red { background: linear-gradient(90deg, var(--red), #ef4444); }
+  .bar-row .val { font-size: 13.5px; font-weight: 700; color: var(--text); }
+  .chart .note { font-size: 12px; color: var(--text-mut); margin: 4px 0 8px; }
+
+  /* ---------- Obstacles list ---------- */
+  .obs { counter-reset: obs; list-style: none; padding: 0; margin: 16px 0; }
+  .obs li {
+    position: relative; padding: 12px 16px 12px 52px; margin: 10px 0;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow);
+    font-size: 14.5px;
+  }
+  .obs li::before {
+    counter-increment: obs; content: counter(obs);
+    position: absolute; left: 14px; top: 12px;
+    width: 26px; height: 26px; border-radius: 50%; background: var(--red-soft); color: var(--red);
+    display: grid; place-items: center; font-weight: 800; font-size: 13px;
+  }
+
+  /* ---------- Insights cards (4.3) ---------- */
+  .insights { counter-reset: ins; list-style: none; padding: 0; margin: 16px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .insights li {
+    position: relative; padding: 14px 16px 14px 50px; margin: 0;
+    background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--primary);
+    border-radius: 12px; box-shadow: var(--shadow); font-size: 14px;
+  }
+  .insights li::before {
+    counter-increment: ins; content: counter(ins);
+    position: absolute; left: 14px; top: 14px;
+    width: 24px; height: 24px; border-radius: 50%; background: var(--primary-soft); color: var(--primary);
+    display: grid; place-items: center; font-weight: 800; font-size: 12px;
+  }
+  .insights li b { color: var(--primary); }
+
+  /* ---------- Steps ---------- */
+  .steps { counter-reset: step; list-style: none; padding: 0; margin: 16px 0; }
+  .steps li { position: relative; padding: 12px 16px 12px 52px; margin: 10px 0; background: var(--surface-2); border-left: 3px solid var(--primary); border-radius: 0 10px 10px 0; font-size: 14.5px; }
+  .steps li::before { counter-increment: step; content: counter(step); position: absolute; left: 14px; top: 12px; width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+
+  /* ---------- References ---------- */
+  .refs { columns: 2; column-gap: 28px; font-size: 13px; color: var(--text-soft); }
+  .refs li { break-inside: avoid; margin: 6px 0; }
+  @media (max-width: 640px) { .refs { columns: 1; } }
+
+  footer.docfoot { margin-top: 50px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--text-mut); }
+
+  /* ---------- Mobile TOC ---------- */
+  .toc-toggle { display: none; }
+  @media (max-width: 980px) {
+    .layout { display: block; }
+    aside.toc {
+      position: fixed; top: 0; left: 0; bottom: 0; width: 280px; z-index: 60;
+      background: var(--surface); border-right: 1px solid var(--border);
+      transform: translateX(-100%); transition: transform .25s; padding-top: 70px; box-shadow: var(--shadow-lg);
+    }
+    aside.toc.open { transform: translateX(0); }
+    .toc-toggle { display: inline-flex; }
+    .scrim { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 55; }
+    .scrim.show { display: block; }
+    main { padding: 20px 16px 70px; }
+    .doc-h1 { font-size: 24px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .tiers { grid-template-columns: 1fr; }
+    .insights { grid-template-columns: 1fr; }
+    .bar-row { grid-template-columns: 92px 1fr 84px; }
+  }
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: 1fr; }
+    .topbar .sub { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">选</div>
+    <div style="min-width:0">
+      <div class="title">国考智能选岗助手 · 可行性分析</div>
+      <div class="sub">综合调研报告（精简版 v1.0）</div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn icon toc-toggle" id="tocBtn" aria-label="目录">☰ 目录</button>
+    <button class="btn icon" id="themeBtn" aria-label="切换主题">🌙 暗色</button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="layout">
+  <aside class="toc" id="toc">
+    <h2>目录</h2>
+    <a href="#summary">摘要</a>
+    <a href="#s1">一、背景与目标</a>
+    <a href="#s2">二、调研发现</a>
+    <a href="#s2-1" class="sub">2.1 目标用户与痛点</a>
+    <a href="#s2-2" class="sub">2.2 市场规模</a>
+    <a href="#s2-3" class="sub">2.3 竞品格局</a>
+    <a href="#s2-4" class="sub">2.4 使用场景</a>
+    <a href="#s2-5" class="sub">2.5 商业模式</a>
+    <a href="#s3">三、可行性分析</a>
+    <a href="#s3-1" class="sub">3.1 需求错配</a>
+    <a href="#s3-2" class="sub">3.2 技术可行性</a>
+    <a href="#s3-3" class="sub">3.3 成本收益</a>
+    <a href="#s3-4" class="sub">3.4 竞争格局</a>
+    <a href="#s3-5" class="sub">3.5 合规与责任</a>
+    <a href="#s3-6" class="sub">3.6 七条障碍</a>
+    <a href="#s4">四、产品启示</a>
+    <a href="#s4-1" class="sub">4.1 竞品优势</a>
+    <a href="#s4-2" class="sub">4.2 产品启示</a>
+    <a href="#s5">五、结论与建议</a>
+    <a href="#s5-1" class="sub">5.1 综合结论</a>
+    <a href="#s5-2" class="sub">5.2 建议路径</a>
+    <a href="#s5-3" class="sub">5.3 执行要点</a>
+    <a href="#refs">参考来源</a>
+  </aside>
+
+  <main>
+    <div class="doc">
+      <h1 class="doc-h1">国考智能选岗助手：综合调研与可行性分析报告（精简版）<span class="version-pill">v1.0</span></h1>
+      <p class="lead">本版面向非技术读者，在整合版基础上提炼精髓、合并重复、简化技术结论，并移除开发工作量与团队投入评估。<strong>v1.0：</strong>新增"四、产品启示"章节（基于五款竞品体验复盘），原"结论与建议"顺延为第五章。核心问题：该项目是否值得作为独立产品立项？</p>
+
+      <!-- 摘要 -->
+      <section id="summary">
+        <div class="hero">
+          <span class="tag">核心结论</span>
+          <div class="verdict">
+            <span class="big">不建议<br>独立立项</span>
+            <p>业务上存在用户被锁定、数据垄断、窗口期短、巨头合并、免费替代、付费未验证、合规零容忍等系统性障碍；技术上仅"基础选岗匹配、AI 问答、资讯展示"三项成熟可行，却与免费工具难以差异化；题库、竞争比预测、AI 评分、实时报名数据等核心功能均受硬约束，短期无法实现。如确需切入，应作为成熟公考生态的细分模块或获客入口，而非独立产品。</p>
+          </div>
+          <p style="margin:6px 0 0;font-size:14px;color:var(--text-soft)">本项目面向应届毕业生国考选岗场景。调研显示，"找岗"（筛选岗位）已被市场充分解决，痛点在"判岗"——专业是否可报、胜算多大。考编总盘近 <strong>800 万人</strong>（国考 2026 年过审 371.8 万，省考联考 586.95 万，覆盖 23 省），需求真实且存在复购；但国考选岗窗口仅约 <strong>10 天/年</strong>，季节性强，主力用户与核心数据已被粉笔、中公、华图、公考雷达等厂商锁定。</p>
+        </div>
+      </section>
+
+      <!-- 一、背景与目标 -->
+      <section id="s1">
+        <h2 class="sec">一、背景与目标</h2>
+        <ul>
+          <li><strong>项目定位：</strong>面向应届毕业生的国考选岗工具（筛选、报考建议、胜算评估）。</li>
+          <li><strong>调研目标：</strong>验证用户与痛点、测算市场规模、分析竞争格局、评估技术可行性。</li>
+          <li><strong>结论导向：</strong>判断项目是否值得独立推进。</li>
+        </ul>
+      </section>
+
+      <!-- 二、调研发现 -->
+      <section id="s2">
+        <h2 class="sec">二、调研发现</h2>
+
+        <h3 class="sub" id="s2-1">2.1 目标用户与痛点</h3>
+        <p>主力人群为应届毕业生。2026 国考约 <strong>2.6 万个计划专供应届</strong>，占招录总数 <strong>68%</strong>，需求真实。三个痛点：</p>
+        <ol>
+          <li><strong>专业是否匹配</strong>——超 30% 卡在专业目录匹配；</li>
+          <li><strong>一次性不可逆</strong>——限报 1 岗、过审不可改报；</li>
+          <li><strong>无法判断胜算</strong>——看不到录取概率。</li>
+        </ol>
+        <div class="callout head"><span class="t">结论</span><p>找岗已被解决，判岗（能否报考、胜算多大）才是真痛点，也是产品立足点。</p></div>
+
+        <h3 class="sub" id="s2-2">2.2 市场规模</h3>
+        <div class="stats">
+          <div class="stat"><div class="num">371.8万</div><div class="label">国考过审（2026，历史新高，6 年涨 2.6 倍）</div></div>
+          <div class="stat"><div class="num">586.95万</div><div class="label">省考联考（23 省）</div></div>
+          <div class="stat"><div class="num">近800万</div><div class="label">考编总盘（含事业单位）</div></div>
+          <div class="stat"><div class="num danger">~10天</div><div class="label">选岗窗口 / 年（10 月中下旬报名）</div></div>
+          <div class="stat"><div class="num warn">98:1</div><div class="label">平均竞争比</div></div>
+          <div class="stat"><div class="num danger">6470:1</div><div class="label">最高竞争比</div></div>
+        </div>
+        <ul>
+          <li><strong>巡考复购：</strong>同一批人全年跨场流动，选岗为高频复购需求。</li>
+          <li><strong>季节硬伤：</strong>选岗窗口仅约 10 天/年（10 月中下旬报名，过审不可改），窗口期外日活趋零，拉新贵、留存差。</li>
+        </ul>
+        <div class="chart">
+          <h4>考编总盘规模示意（各口径合计口径不同，仅作量级参考）</h4>
+          <div class="bar-row"><div class="name">国考过审</div><div class="bar-track"><div class="bar-fill" style="width:63%"></div></div><div class="val">371.8 万</div></div>
+          <div class="bar-row"><div class="name">省考联考</div><div class="bar-track"><div class="bar-fill amber" style="width:100%"></div></div><div class="val">586.95 万</div></div>
+          <div class="bar-row"><div class="name">考编总盘</div><div class="bar-track"><div class="bar-fill red" style="width:90%"></div></div><div class="val">近 800 万</div></div>
+          <p class="note">注：国考、省考、事业单位分属不同招录体系，口径不完全叠加；"近 800 万"为报告引用的考编总盘量级。</p>
+        </div>
+
+        <h3 class="sub" id="s2-3">2.3 竞品格局</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>厂商</th><th>主要形态</th><th>用户规模</th><th>核心优势</th><th>商业模式</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>公考雷达</b></td><td>App + 小程序 + 网页</td><td>下载破 1 亿（北京日报口径）/用户 3000 万+</td><td>数据全、更新快（公告后 16 秒同步）</td><td>免费 + 广告/会员/课程导流</td></tr>
+              <tr><td><b>粉笔</b></td><td>App + 小程序 + 网页</td><td>注册 7000 万+/月活 910 万</td><td>题库与模考数据（9000 万次模考参与）</td><td>免费 + 课程转化</td></tr>
+              <tr><td><b>中公/华图</b></td><td>App + 网页 + 线下网点</td><td>千余家分校</td><td>人工咨询 + 线下渠道</td><td>课程绑定</td></tr>
+              <tr><td><b>腾讯 AI 公考通</b></td><td>QQ 浏览器内置</td><td>亿级流量</td><td>混元大模型 + 规则校验</td><td>免费（生态获客）</td></tr>
+              <tr><td><b>夜灯公考</b></td><td>小程序 + 网页</td><td>AI 选岗 3 万+ 人次（厂商口径）</td><td>AI 选岗概念</td><td>免费（引流）</td></tr>
+              <tr><td><b>上岸Claw</b></td><td>Web/Agent</td><td>80 万+ 岗位库</td><td>对话式选岗</td><td>AI 工具导航站分发</td></tr>
+              <tr><td><b>通用 AI 工具</b><br>（豆包、千问等）</td><td>App + 网页</td><td>亿级用户</td><td>通用大模型语义理解</td><td>免费（生态获客）</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted">注：规模数据基于 2026-08 产品观察，发布前建议核实；两家报告对公考雷达用户量口径不一致，已并列保留。</p>
+        <h4 style="margin-top:20px;font-size:15px;">头部玩家近期动作</h4>
+        <ul>
+          <li><strong>粉笔（2025-10）：</strong>升级"智能选岗"（主动推荐、竞争力排名、预测入口、捡漏榜等），网盘公开 2021–2025 历年进面分，免费用户可用；备注栏靠人工指南，未结构化。</li>
+          <li><strong>中公/华图：</strong>2025-12-15 宣布股权级战略合作，数据 + 流量联合，共押 AI 人岗匹配。</li>
+          <li><strong>官方职位表 Excel 已是免费可替代品：</strong>国家公务员局公开，权威完整，免费门槛极低。</li>
+        </ul>
+        <div class="callout amber"><span class="t">剩余缝隙</span><p>筛选已商品化，决策建议被部分覆盖。可切入的空白收敛为"备注栏文字结构化解析"与"冷门专业/择业期长尾精准匹配"，体量不足以支撑独立产品。</p></div>
+
+        <h3 class="sub" id="s2-4">2.4 使用场景</h3>
+        <ul>
+          <li><strong>核心场景（报名前 10 天）：</strong>输入条件 → 匹配岗位 → 看报考建议与胜算 → 当场决策。场景短、压强高，产品须快、准、稳。</li>
+          <li><strong>备考期：</strong>用历年进面分锚定目标岗、倒推所需分数。</li>
+          <li><strong>二战复盘：</strong>回溯上次失败原因，指导下次调整。</li>
+        </ul>
+
+        <h3 class="sub" id="s2-5">2.5 商业模式</h3>
+        <ul>
+          <li><strong>独立付费存疑：</strong>筛选免费已成标配，用户为"建议"付费意愿未验证；粉笔 AI 刷题班 30 万付费仅带来 3810 万收入，AI 被当作低价获客手段。</li>
+          <li><strong>变现路径：</strong>获客钩子 → 培训转化（粉笔打法）；细分差异化（冷门专业/择业期）；内容 + 社区引流（小红书/知乎/B 站）。</li>
+          <li><strong>变现尝试：</strong>深度报告会员、培训分佣、B 端高校就业指导系统。</li>
+        </ul>
+        <div class="callout red"><span class="t">结论</span><p>不宜作为独立产品立项；作为公考生态的流量入口或一环，才有商业意义。</p></div>
+      </section>
+
+      <!-- 三、可行性分析 -->
+      <section id="s3">
+        <h2 class="sec">三、可行性分析</h2>
+
+        <h3 class="sub" id="s3-1">3.1 需求真实，但与独立产品形态错配</h3>
+        <p><strong>需求侧证据：</strong></p>
+        <ul>
+          <li>主力人群明确：2026 国考 2.6 万计划专供应届，占 68%，需求真实。</li>
+          <li>市场规模大：国考过审 371.8 万、省考 586.95 万，总盘近 800 万。</li>
+          <li>痛点真实高频：超 30% 卡专业匹配；限报 1 岗、过审不可改；看不到胜算。</li>
+        </ul>
+        <p><strong>匹配度问题：</strong></p>
+        <ul>
+          <li><strong>季节硬伤：</strong>选岗窗口仅约 10 天/年，窗口期外日活趋零，自然流量无法运营。</li>
+          <li><strong>盘子大不等于你的盘子：</strong>800 万总盘中过半已被三家占据；省考窗口错开，对独立工具反增运营负担。</li>
+          <li><strong>长尾需求规模小：</strong>冷门专业/二战/择业期人群付费意愿强但分散，难以支撑独立获客成本。</li>
+        </ul>
+        <div class="callout head"><span class="t">结论</span><p>需求真实不等于产品可行。品类的季节性时间结构缺陷无法靠产品迭代解决，需求与"独立常驻产品"形态天然错配。</p></div>
+
+        <h3 class="sub" id="s3-2">3.2 技术可行性：可行的无差异化，差异化的不可行</h3>
+        <p>按实现条件，核心功能分三档：</p>
+        <div class="tiers">
+          <div class="tier green">
+            <div class="h"><span class="dot"></span>能做（3 项）</div>
+            <ul>
+              <li>基础选岗匹配：按专业、学历、政治面貌等条件精确筛选，准确率可达 99%。</li>
+              <li>AI 选岗问答：单次成本极低（约 0.008 元）。</li>
+              <li>公开资讯展示：聚合时政、公告、面试技巧等内容。</li>
+            </ul>
+            <p class="muted" style="margin:8px 0 0">问题：都是"公开信息工具"层面，与公考雷达、粉笔的免费功能高度重合，难以形成差异。</p>
+          </div>
+          <div class="tier amber">
+            <div class="h"><span class="dot"></span>做不到 / 降级</div>
+            <ul>
+              <li>竞争比/进面分预测：官方仅 10 天窗口、每岗每年 1 个数据点，只能给参考区间。</li>
+              <li>AI 权威评分：大模型与人工评分相关性仅 0.6–0.8，只能降级为"参考点评"。</li>
+              <li>招录政策预测：政策由行政决策驱动，无规律可建模。</li>
+              <li>题库内容：10 万道真题需 4–12 人年，公开合法题源极少。</li>
+            </ul>
+          </div>
+          <div class="tier red">
+            <div class="h"><span class="dot"></span>碰不得（红线）</div>
+            <ul>
+              <li>实时报名数据：官方不提供接口、每日仅更新一次，产品天然延迟一天；突破反爬可能触犯非法获取计算机信息系统数据罪。公务员及报考人员个人信息受法律严格保护。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout red"><span class="t">结论</span><p>能做的没差异化，有差异化的做不了。产品定位只能局限为"公开信息工具"。</p></div>
+
+        <h3 class="sub" id="s3-3">3.3 成本收益：投入高，收入上限低，ROI 不成立</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>投入端</th><th>收益端</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>
+                  <ul style="margin:0">
+                    <li>数据资产：历年进面分分散在数百招录机关面试公告中，需 3–5 年系统采集才能形成可对比时序库。</li>
+                    <li>内容资产：10 万道真题需 4–12 人年，公开合法题源极少。</li>
+                    <li>合规成本：政治面貌属敏感个人信息须单独告知；生成式 AI 服务需登记（前置数周）；法务与持续合规成本高。</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="margin:0">
+                    <li>独立付费意愿未验证，用户已习惯免费。</li>
+                    <li>巨头参照系悲观：粉笔 AI 刷题班 30 万付费仅 3810 万收入，巨头自己都跑不通单独变现。</li>
+                    <li>季节窗口短，付费密度低：10 天/年窗口期转化效率受限。</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout red"><span class="t">结论</span><p>启动成本（数据采集 3–5 年 + 合规 + 流量）叠加季节性收入上限，独立运营财务模型难成立，ROI 测算不支持独立立项。</p></div>
+
+        <h3 class="sub" id="s3-4">3.4 竞争格局：巨头已形成全链路闭环</h3>
+        <ol>
+          <li><strong>用户锁定：</strong>应届生（占招录 68%）正是粉笔、中公、华图的核心付费用户群，三家已覆盖备考到选岗完整链路。</li>
+          <li><strong>数据垄断：</strong>判岗痛点依赖模考数据库（粉笔 9000 万次模考参与），新进入者无法短期复制；粉笔已公开 2021–2025 历年进面分，免费替代门槛极低。</li>
+          <li><strong>巨头合并：</strong>2025-12-15 中公/华图/粉笔股权级战略合作，流量、数据、品牌首次合并。</li>
+          <li><strong>技术壁垒：</strong>选岗赛道的壁垒不在 AI，而在"招考数据聚合 + 结构化解析 + 实时同步"的管线能力（公考雷达公告后 16 秒同步、7 分钟解析 2 万岗位）。</li>
+          <li><strong>缝隙不足：</strong>剩余缝隙（备注栏解析、长尾匹配）体量不足以撑起独立产品。</li>
+        </ol>
+        <div class="callout red"><span class="t">结论</span><p>独立工具面对"免费替代 + 数据垄断 + 巨头合并"的三重闭环，无结构性优势。</p></div>
+
+        <h3 class="sub" id="s3-5">3.5 合规与责任：误判零容忍，风险远超收益</h3>
+        <ul>
+          <li><strong>决策不可逆、容错为零：</strong>限报 1 岗、过审不得改，任一硬性资格误判将直接影响用户前途。</li>
+          <li><strong>误判代价远高于收益：</strong>误判一次，负面传播足以击垮品牌；巨头通过"仅作参考，以官方为准"免责，独立产品无此豁免。</li>
+          <li><strong>个人信息合规：</strong>政治面貌属敏感个人信息，须单独告知同意；采集须守 robots 协议；不得暗示与官方关联。</li>
+          <li><strong>数据获取红线：</strong>突破反爬可能触犯非法获取计算机信息系统数据罪。</li>
+          <li><strong>AI 合规：</strong>调用大模型 API 须走登记程序。</li>
+        </ul>
+        <div class="callout red"><span class="t">结论</span><p>分数预测/报考建议这一最高价值环节恰是最高责任环节，巨头规避是因为怕担责，新进入者承担风险能力更弱，合规风险远超营收上限。</p></div>
+
+        <h3 class="sub" id="s3-6">3.6 综合判断：7 条系统性障碍</h3>
+        <ol class="obs">
+          <li>主力用户已被粉笔/中公/华图锁定，新进入者获客成本高；</li>
+          <li>判岗痛点被巨头模考数据库垄断，不可短期复制；</li>
+          <li>窗口期短（约 10 天/年），拉新成本高、留存低；</li>
+          <li>粉笔 + 华图股权合作后，独立工具面对合并资源体量；</li>
+          <li>官方 Excel + 历年进面分 + 上岸经验已构成免费可替代方案；</li>
+          <li>独立付费意愿未验证，连巨头 AI 选岗都跑不通单独变现；</li>
+          <li>一次性不可逆决策 + 误判零容忍，合规风险远超营收上限。</li>
+        </ol>
+      </section>
+
+      <!-- 四、产品启示 -->
+      <section id="s4">
+        <h2 class="sec">四、产品启示</h2>
+        <p class="lead" style="margin-bottom:8px">本章基于公考雷达、粉笔选岗助手、腾讯 AI 公考通、上岸 Claw、夜灯公考五款代表性竞品的产品体验复盘，从产品设计与运营角度提炼启示，作为前文市场与可行性判断的产品侧补充。</p>
+
+        <h3 class="sub" id="s4-1">4.1 竞品优势</h3>
+        <p>五款竞品分属三类形态：<strong>独立工具</strong>（公考雷达）、<strong>生态模块</strong>（粉笔选岗助手、腾讯 AI 公考通）、<strong>引流入口</strong>（夜灯公考、上岸 Claw）。</p>
+        <div class="table-wrap">
+          <table class="wide">
+            <thead>
+              <tr><th>维度</th><th>公考雷达</th><th>粉笔选岗助手</th><th>腾讯 AI 公考通</th><th>上岸 Claw</th><th>夜灯公考</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>功能</b></td><td>数据维度最全（公告/职位/国企三线），智能选岗引入预估分数与动态热度排序</td><td>满足/不满足项透明匹配，模考大数据支撑竞争力排名</td><td>模块极简，机会追踪覆盖公告更新与报名提醒</td><td>一句话自然语言输入，岗位库 106 万，职位详情标注信息来源</td><td>专业筛选颗粒最细（学历→大类→子类→专业名四级联动），结果数量克制，避免信息过载</td></tr>
+              <tr><td><b>体验</b></td><td>积分任务与新手引导延长用户生命周期</td><td>简历完成度驱动信息补全，分项匹配结果直观</td><td>无需下载注册，决策成本为零</td><td>输入门槛最低，支持"只看有编/只看报名中"等硬性条件筛选</td><td>网页即用、纯条件表单无冗余干扰，高明确度用户路径最短</td></tr>
+              <tr><td><b>商业模式</b></td><td>VIP + 广告 + 积分商城 + 找课导流，多元变现最成熟</td><td>课程导流 + 1 对 1 规划服务，变现嵌入教育闭环</td><td>几乎无商业化，依托生态获客</td><td>备考资料包广告 + 公众号引流</td><td>免费工具引流刷题与课程，获客成本低、转化路径直接</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub" id="s4-2">4.2 产品启示</h3>
+        <ol class="insights">
+          <li><b>可解释性优于抽象评级。</b> 星级评分不具解释力，逐项列明符合项、不符合项及其依据方能建立信任。推荐类产品的核心投入应在解释推荐理由，而非扩大结果规模。</li>
+          <li><b>以精选替代规模。</b> 数千条匹配结果不具备决策价值，明确"排除哪些、为何排除、余下哪些"方为有效的决策支持。</li>
+          <li><b>风险告知前置。</b> 免责声明置于详情页形同虚设。涉及用户切身利益的资格与风险边界，应在结果首屏主动披露，既满足合规要求，也强化专业形象。</li>
+          <li><b>变现强度与中立性此消彼长。</b> 广告、会员、课程导流叠加将稀释推荐可信度。新品早期应克制变现，优先积累信任资产，或采用不干预判断的隐性路径（数据服务、B 端合作）。</li>
+          <li><b>新型交互须以结构化确认兜底。</b> 自然语言输入可降低使用门槛，但存在歧义与误判风险，解析结果须以结构化形式回显供用户确认，资格判定仍应由规则引擎执行。</li>
+          <li><b>标注数据来源是成本最低的可信度建设。</b> 标明信息来源与更新日期，投入极小，对用户判断结果可靠性帮助显著。</li>
+          <li><b>硬性条件优先于主观偏好。</b> 编制类型、报名状态等决定能否报考的硬性条件，应先于地区经济、发展前景等偏好进入筛选逻辑，防止次要条件干扰关键决策。</li>
+        </ol>
+      </section>
+
+      <!-- 五、结论与建议 -->
+      <section id="s5">
+        <h2 class="sec">五、结论与建议</h2>
+
+        <h3 class="sub" id="s5-1">5.1 综合结论</h3>
+        <div class="callout red"><span class="t">综合结论</span><p>不建议作为独立产品立项。两篇报告从业务与技术两条独立路径切入，结论方向一致：整体方案按预期推进的可能性较低，单独成型的商业价值难以独立支撑；如确需进入该赛道，应依附成熟生态，以细分模块或获客入口形式切入。</p></div>
+
+        <h3 class="sub" id="s5-2">5.2 建议路径（如确需切入）</h3>
+        <ol class="steps">
+          <li><strong>依附成熟生态：</strong>与粉笔、中公、华图之一合作，以细分模块（备注栏解析/冷门专业匹配）嵌入其产品矩阵，分担流量与合规成本。</li>
+          <li><strong>转向高 ROI 细分：</strong>聚焦"二战失败者复盘"这一付费意愿最强但巨头不愿做的窄场景，做小而精的咨询型产品。</li>
+          <li><strong>延后立项节奏：</strong>待巨头合作落地后观察其结构性短板，再判断是否仍有真实缝隙。</li>
+        </ol>
+
+        <h3 class="sub" id="s5-3">5.3 若确需推进的执行要点</h3>
+        <ul>
+          <li><strong>形态：</strong>Web + 小程序双形态切入，APP 后置。</li>
+          <li><strong>范围：</strong>以基础选岗匹配 + AI 问答 + 资讯展示为最小可用版本。</li>
+          <li><strong>承诺降级：</strong>竞争比预测只给参考区间、AI 评分降级为参考点评、实时数据按一日延迟设计。</li>
+          <li><strong>红线写死：</strong>合规采集三原则、生成式 AI 服务登记、不触碰真实报名个人信息。</li>
+          <li><strong>核心工程能力：</strong>把"年度适配流程"（政策配置化）当作核心工程建设。</li>
+        </ul>
+      </section>
+
+      <!-- 参考来源 -->
+      <section id="refs">
+        <h2 class="sec">参考来源</h2>
+        <ol class="refs">
+          <li>国家公务员局 2026 年度国考招录计划（应届生 2.6 万计划、占比 68%）</li>
+          <li>2026 年度国考时间节点（报名期 10 月中下旬、过审不可改报）</li>
+          <li>国考报名数据公开报道（2026 过审 371.8 万、竞争比 98:1、最高 6470:1；6 年涨 2.6 倍）</li>
+          <li>省考联考数据（23 省、586.95 万）</li>
+          <li>粉笔官方介绍、粉笔公开财务（注册 7000 万+/月活 910 万、9000 万次模考参与、AI 刷题班 30 万付费 3810 万收入）</li>
+          <li>东方财富网报道 2025-10-21（粉笔智能选岗升级）</li>
+          <li>fenbi.com/fpr（2021–2025 历年进面分 Excel 公开）</li>
+          <li>华图、粉笔股权级战略合作公开报道（2025-12-15）</li>
+          <li>公考雷达官网 gongkaoleida.com；北京日报（累计下载破 1 亿口径）</li>
+          <li>腾讯 AI 公考通（QQ 浏览器内置，2025-10）</li>
+          <li>夜灯公考官网 yedengtech.com（AI 选岗 3 万+ 人次，厂商口径）</li>
+          <li>上岸Claw（对话式选岗 Agent、80 万+ 岗位库）</li>
+          <li>豆包 doubao.com、通义千问 tongyi.aliyun.com（通用大模型语义选岗）</li>
+          <li>中公 offcn.com、华图 huatu.com（1V1 选岗咨询 99–999 元、分校规模）</li>
+          <li>《中华人民共和国个人信息保护法》（政治面貌等敏感个人信息处理规则）</li>
+          <li>《中华人民共和国刑法》第 285 条（非法获取计算机信息系统数据罪）</li>
+          <li>国家公务员局官方专题站（《招考简章.zip》下载来源）</li>
+        </ol>
+      </section>
+
+      <footer class="docfoot">
+        本文档由精简版 v1.0 报告转换而来，内容、数据与结论与原文完全一致，仅优化呈现方式。<br>
+        版本说明：v1.0 相对精简版新增"四、产品启示"章节，原"结论与建议"顺延为第五章；其余内容与数据不变。
+      </footer>
+    </div>
+  </main>
+</div>
+
+<script>
+  // 主题切换
+  (function () {
+    var btn = document.getElementById('themeBtn');
+    var root = document.documentElement;
+    function apply(theme) {
+      root.setAttribute('data-theme', theme);
+      btn.textContent = theme === 'dark' ? '☀️ 亮色' : '🌙 暗色';
+      try { localStorage.setItem('gkdy-theme', theme); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('gkdy-theme'); } catch (e) {}
+    apply(saved || 'light');
+    btn.addEventListener('click', function () {
+      apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+  })();
+
+  // 移动端目录
+  (function () {
+    var btn = document.getElementById('tocBtn');
+    var toc = document.getElementById('toc');
+    var scrim = document.getElementById('scrim');
+    function open(o) {
+      toc.classList.toggle('open', o);
+      scrim.classList.toggle('show', o);
+    }
+    btn.addEventListener('click', function () { open(!toc.classList.contains('open')); });
+    scrim.addEventListener('click', function () { open(false); });
+    toc.addEventListener('click', function (e) { if (e.target.tagName === 'A') open(false); });
+  })();
+
+  // 目录高亮（滚动监听）
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('aside.toc a'));
+    var map = {};
+    links.forEach(function (a) {
+      var id = a.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if (el) map[id] = a;
+    });
+    var ids = Object.keys(map);
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('active'); });
+          var a = map[en.target.id];
+          if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+    ids.forEach(function (id) { obs.observe(document.getElementById(id)); });
+  })();
+</script>
+</body>
+</html>

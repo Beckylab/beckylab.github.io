@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ES Mail 本地邮件归档 - 原型</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; font-size: 13px; color: #333; background: #f5f7fa; display: flex; height: 100vh; overflow: hidden; }
+
+  /* ── Sidebar ─── */
+  .sidebar { width: 200px; background: #fff; border-right: 1px solid #e8e8e8; display: flex; flex-direction: column; flex-shrink: 0; }
+  .sidebar-logo { padding: 18px 16px; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; gap: 10px; }
+  .sidebar-logo .logo-icon { width: 30px; height: 30px; background: #4a90d9; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 15px; }
+  .sidebar-logo .logo-text { font-size: 14px; font-weight: 600; color: #333; }
+  .sidebar-nav { padding: 8px 0; overflow-y: auto; flex: 1; }
+  .nav-item { display: flex; align-items: center; padding: 11px 16px; cursor: pointer; color: #555; font-size: 13px; gap: 8px; transition: all .15s; border-left: 3px solid transparent; }
+  .nav-item:hover { background: #f5f7fa; }
+  .nav-item.active { color: #4a90d9; background: #eef5fc; border-left-color: #4a90d9; font-weight: 500; }
+  .nav-item .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+  .nav-item .nav-arrow { margin-left: auto; font-size: 10px; color: #bbb; }
+  .nav-children { display: none; }
+  .nav-children.open { display: block; }
+  .nav-child { padding: 9px 16px 9px 42px; cursor: pointer; font-size: 13px; color: #666; border-left: 3px solid transparent; }
+  .nav-child:hover { background: #f5f7fa; }
+  .nav-child.active { color: #4a90d9; background: #eef5fc; border-left-color: #4a90d9; }
+
+  /* ─── Main area ─── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ─── Top bar ─── */
+  .topbar { height: 50px; background: #fff; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; justify-content: flex-end; padding: 0 24px; gap: 24px; flex-shrink: 0; }
+  .topbar-item { display: flex; align-items: center; gap: 6px; color: #666; cursor: pointer; font-size: 13px; }
+  .topbar-item:hover { color: #4a90d9; }
+
+  /* ─── Tabs ─── */
+  .tabs { display: flex; gap: 0; padding: 0 24px; background: #f5f7fa; flex-shrink: 0; }
+  .tab { padding: 10px 20px; cursor: pointer; font-size: 13px; color: #666; border-bottom: 2px solid transparent; display: flex; align-items: center; gap: 6px; }
+  .tab:hover { color: #4a90d9; }
+  .tab.active { color: #4a90d9; border-bottom-color: #4a90d9; font-weight: 500; }
+  .tab .tab-close { font-size: 12px; color: #bbb; margin-left: 2px; }
+  .tab .tab-close:hover { color: #999; }
+
+  /* ── Content ─── */
+  .content { flex: 1; overflow-y: auto; padding: 16px 24px 24px; }
+
+  /* ─── Breadcrumb ─── */
+  .breadcrumb { font-size: 13px; color: #999; margin-bottom: 16px; }
+  .breadcrumb span { color: #4a90d9; cursor: pointer; }
+
+  /* ─── Card ── */
+  .card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 16px; }
+
+  /* ─── Search page ─── */
+  .search-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .search-header-left { display: flex; align-items: center; gap: 12px; }
+  .search-header-left h2 { font-size: 16px; font-weight: 600; color: #333; }
+  .search-header-left .collapse-btn { font-size: 12px; color: #4a90d9; cursor: pointer; }
+  .search-header-right { display: flex; gap: 18px; }
+  .header-link { display: flex; align-items: center; gap: 4px; color: #4a90d9; cursor: pointer; font-size: 13px; }
+  .header-link:hover { text-decoration: underline; }
+
+  /* Toolbar */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .toolbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .toolbar-right { display: flex; gap: 16px; align-items: center; }
+
+  .logic-group { display: flex; align-items: center; gap: 0; }
+  .logic-label { font-size: 13px; color: #666; margin-right: 8px; }
+  .logic-btn { padding: 5px 14px; font-size: 13px; cursor: pointer; border: 1px solid #ddd; background: #f5f7fa; color: #666; transition: all .15s; }
+  .logic-btn:first-child { border-radius: 4px 0 0 4px; }
+  .logic-btn:last-child { border-radius: 0 4px 4px 0; margin-left: -1px; }
+  .logic-btn.active { background: #4a90d9; color: #fff; border-color: #4a90d9; }
+
+  /* Regex toggle */
+  .regex-toggle { display: flex; align-items: center; gap: 6px; margin-left: 16px; }
+  .regex-btn { padding: 5px 12px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid #ddd; border-radius: 4px; background: #f5f7fa; color: #999; display: flex; align-items: center; gap: 4px; transition: all .2s; }
+  .regex-btn:hover { border-color: #e8a735; color: #d48806; }
+  .regex-btn.active { background: #fff3d6; border-color: #e8a735; color: #d48806; }
+  .regex-btn svg { width: 14px; height: 14px; }
+  .regex-status { font-size: 11px; color: #d48806; background: #fff8e6; padding: 2px 8px; border-radius: 3px; }
+
+  .action-link { display: flex; align-items: center; gap: 4px; color: #4a90d9; cursor: pointer; font-size: 13px; }
+  .action-link:hover { text-decoration: underline; }
+
+  /* Regex hint bar */
+  .regex-hint { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 6px; padding: 10px 16px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #8c6d1f; }
+  .regex-hint .hint-fields { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .regex-hint .field-tag { background: #fff; padding: 1px 8px; border-radius: 3px; font-size: 11px; }
+  .regex-hint .hint-close { cursor: pointer; color: #d48806; font-size: 14px; margin-left: 12px; }
+
+  /* Regex reference panel */
+  .regex-ref { background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; font-size: 12px; color: #666; }
+  .regex-ref-title { font-weight: 600; color: #333; margin-bottom: 8px; font-size: 13px; }
+  .regex-ref-items { display: flex; gap: 20px; flex-wrap: wrap; }
+  .regex-ref-item { display: flex; align-items: center; gap: 4px; }
+  .regex-ref-item code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: "SF Mono", "Consolas", monospace; font-size: 11px; color: #333; }
+
+  /* Condition rows */
+  .conditions { padding: 4px 0; }
+  .condition-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
+  .condition-label { width: 80px; text-align: right; font-size: 13px; color: #666; flex-shrink: 0; }
+  .condition-select { width: 100px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; background: #fff; flex-shrink: 0; }
+  .condition-input { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; transition: border-color .2s, background .2s; }
+  .condition-input:focus { border-color: #4a90d9; }
+  .condition-input.regex-mode { border-color: #e8a735; background: #fffdf5; }
+  .email-input { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; transition: border-color .2s, background .2s; }
+  .email-input.regex-mode { border-color: #e8a735 !important; background: #fffdf5 !important; }
+  .person-inputs.regex-mode .emp-input { display: none; }
+  .person-inputs.regex-mode .org-icon { display: none; }
+  .condition-input::placeholder { color: #bbb; }
+
+  .condition-mode-select { width: 70px; padding: 8px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; background: #fff; flex-shrink: 0; }
+
+  .date-range { display: flex; align-items: center; gap: 8px; flex: 1; }
+  .date-range input { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; }
+  .date-range .arrow { color: #ccc; font-size: 16px; }
+  .date-range .cal-icon { color: #999; cursor: pointer; }
+
+  .person-inputs { display: flex; gap: 8px; flex: 1; }
+  .person-inputs .email-input { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; }
+  .person-inputs .emp-input { width: 140px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; }
+  .person-inputs .emp-input::placeholder { color: #bbb; }
+  .org-icon { color: #999; cursor: pointer; flex-shrink: 0; }
+
+  .attach-toggle { display: flex; gap: 0; flex: 1; }
+  .attach-btn { padding: 7px 16px; font-size: 13px; cursor: pointer; border: 1px solid #ddd; background: #f5f7fa; color: #666; transition: all .15s; }
+  .attach-btn:first-child { border-radius: 4px 0 0 4px; }
+  .attach-btn:last-child { border-radius: 0 4px 4px 0; margin-left: -1px; }
+  .attach-btn.active { background: #4a90d9; color: #fff; border-color: #4a90d9; }
+
+  .regex-indicator { display: flex; align-items: center; gap: 3px; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; flex-shrink: 0; transition: all .2s; }
+  .regex-indicator.off { background: #f5f7fa; color: #bbb; border: 1px solid #ddd; }
+  .regex-indicator.on { background: #fff3d6; color: #d48806; border: 1px solid #e8a735; }
+  .regex-indicator svg { width: 12px; height: 12px; }
+
+  .remove-btn { cursor: pointer; color: #ccc; padding: 4px; flex-shrink: 0; }
+  .remove-btn:hover { color: #ff4d4f; }
+
+  /* ── Size range inputs ── */
+  .size-range { display: flex; align-items: center; gap: 6px; flex: 1; }
+  .size-range input { width: 100px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; }
+  .size-range .size-arrow { color: #ccc; font-size: 14px; }
+  .size-range select { width: 60px; padding: 8px 4px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; background: #fff; }
+
+  /* ── Domain inputs ── */
+  .domain-inputs { display: flex; gap: 8px; flex: 1; align-items: center; }
+  .domain-inputs .domain-mode-select { width: 70px; padding: 8px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; background: #fff; flex-shrink: 0; }
+  .domain-inputs .domain-input { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; transition: border-color .2s, background .2s; }
+  .domain-inputs .domain-input:focus { border-color: #4a90d9; }
+  .domain-inputs .domain-input.regex-mode { border-color: #e8a735; background: #fffdf5; }
+
+  /* ── Tag chips ── */
+  .tag-inputs { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; align-items: center; }
+  .tag-chip { padding: 5px 14px; border-radius: 4px; font-size: 12px; cursor: pointer; border: 1px dashed; transition: all .2s; display: flex; align-items: center; gap: 4px; user-select: none; }
+  .tag-chip.unselected { background: #fafafa; color: #999; border-color: #ddd; }
+  .tag-chip.selected { border-style: solid; }
+  .tag-chip .tag-check { font-size: 10px; display: none; }
+  .tag-chip.selected .tag-check { display: inline; }
+  .tag-chip[data-color="red"].selected { background: #fff1f0; color: #cf1322; border-color: #ffa39e; }
+  .tag-chip[data-color="blue"].selected { background: #e6f7ff; color: #096dd9; border-color: #91d5ff; }
+  .tag-chip[data-color="green"].selected { background: #f6ffed; color: #52c41a; border-color: #b7eb8f; }
+  .tag-chip[data-color="yellow"].selected { background: #fffbe6; color: #d48806; border-color: #ffe58f; }
+  .tag-chip[data-color="purple"].selected { background: #f9f0ff; color: #722ed1; border-color: #d3adf7; }
+  .tag-chip[data-color="cyan"].selected { background: #e6fffb; color: #13c2c2; border-color: #87e8de; }
+
+  /* ── Field type select (replaces condition-select) ── */
+  .field-type-select { width: 100px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; background: #fff; flex-shrink: 0; cursor: pointer; }
+
+  /* ── More settings link ── */
+  .more-settings-link { color: #4a90d9; cursor: pointer; font-size: 13px; margin-left: 8px; display: flex; align-items: center; gap: 2px; }
+  .more-settings-link:hover { text-decoration: underline; }
+
+  /* ── Attachment sub-fields ─ */
+  .attach-sub-fields { background: #fafbfc; border: 1px solid #eee; border-radius: 6px; margin: 8px 0 0 90px; padding: 12px 16px; }
+  .attach-sub-fields .condition-row { padding: 8px 0; }
+
+  /* ── Extension tag input ── */
+  .ext-tag-input { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; min-height: 36px; cursor: text; background: #fff; }
+  .ext-tag-input:focus-within { border-color: #4a90d9; }
+  .ext-tag { display: inline-flex; align-items: center; gap: 2px; padding: 2px 8px; background: #eef5fc; border-radius: 3px; font-size: 12px; color: #4a90d9; }
+  .ext-tag span { cursor: pointer; font-size: 10px; color: #999; }
+  .ext-tag span:hover { color: #ff4d4f; }
+  .ext-tag-search { border: none; outline: none; font-size: 13px; flex: 1; min-width: 120px; padding: 2px 0; }
+  .ext-tag-search::placeholder { color: #bbb; }
+
+  /* ── Extension dropdown ── */
+  .ext-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.1); z-index: 100; margin-top: 4px; max-height: 320px; overflow: hidden; display: flex; flex-direction: column; }
+  .ext-categories { display: flex; gap: 16px; padding: 10px 14px; border-bottom: 1px solid #eee; background: #fafbfc; flex-wrap: wrap; }
+  .ext-cat-label { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #666; cursor: pointer; }
+  .ext-cat-label input { cursor: pointer; }
+  .ext-cat-remove { color: #999; cursor: pointer; font-size: 10px; margin-left: 2px; }
+  .ext-cat-remove:hover { color: #ff4d4f; }
+  .ext-list { overflow-y: auto; max-height: 220px; padding: 4px 0; }
+  .ext-item { padding: 7px 14px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: #333; }
+  .ext-item:hover { background: #f5f7fa; }
+  .ext-item.selected { background: #eef5fc; color: #4a90d9; }
+  .ext-check { color: #4a90d9; font-weight: 600; }
+
+  /* Action buttons */
+  .search-actions { display: flex; justify-content: center; gap: 12px; margin-top: 20px; padding-bottom: 8px; }
+  .btn-search { padding: 10px 36px; background: #4a90d9; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 500; }
+  .btn-search:hover { background: #3a7bc8; }
+  .btn-reset { padding: 10px 36px; background: #fff; color: #666; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; cursor: pointer; }
+  .btn-reset:hover { border-color: #bbb; }
+
+  /* ─── Results table ─── */
+  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .results-header h3 { font-size: 14px; font-weight: 600; color: #333; }
+  .results-header .count { font-size: 12px; color: #999; font-weight: 400; }
+  .results-filters { display: flex; gap: 8px; }
+  .filter-tag { padding: 4px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; color: #666; cursor: pointer; }
+
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.data-table th { padding: 10px 12px; text-align: left; font-weight: 500; color: #666; background: #f8f9fb; border-bottom: 1px solid #eee; font-size: 12px; }
+  table.data-table th.right { text-align: right; }
+  table.data-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; color: #666; }
+  table.data-table td.right { text-align: right; }
+  table.data-table tr:hover td { background: #fafbfc; }
+  .link-blue { color: #4a90d9; cursor: pointer; }
+  .link-blue:hover { text-decoration: underline; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; margin-right: 4px; }
+  .tag-red { background: #fff1f0; color: #cf1322; }
+  .tag-blue { background: #e6f7ff; color: #096dd9; }
+  .tag-green { background: #f6ffed; color: #52c41a; }
+  .tag-yellow { background: #fffbe6; color: #d48806; }
+  .ops { display: flex; gap: 10px; justify-content: flex-end; font-size: 12px; }
+  .ops span { color: #4a90d9; cursor: pointer; }
+  .ops span:hover { text-decoration: underline; }
+
+  /* Pagination */
+  .pagination { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 16px; font-size: 13px; color: #666; }
+  .page-btn { padding: 4px 10px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .page-btn.active { background: #4a90d9; color: #fff; border-color: #4a90d9; }
+
+  /* ─── Statistics page ─── */
+  .filter-row { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
+  .filter-group { display: flex; align-items: center; gap: 10px; }
+  .filter-label { font-size: 13px; color: #333; font-weight: 500; }
+  .filter-label .required { color: #ff4d4f; margin-right: 2px; }
+  .filter-input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; outline: none; }
+  .filter-input:focus { border-color: #4a90d9; }
+  .account-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .account-tag { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: #eef5fc; border-radius: 4px; font-size: 12px; color: #4a90d9; }
+  .account-tag .remove { cursor: pointer; font-size: 10px; }
+  .account-add { padding: 4px 10px; border: 1px dashed #ddd; border-radius: 4px; font-size: 12px; color: #999; cursor: pointer; }
+  .btn-query { padding: 8px 24px; background: #4a90d9; color: #fff; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; }
+  .btn-query:hover { background: #3a7bc8; }
+
+  /* Summary cards */
+  .summary-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+  .summary-card { background: #fafbfc; border: 1px solid #f0f0f0; border-radius: 6px; padding: 14px 16px; }
+  .summary-card .card-label { font-size: 12px; color: #999; margin-bottom: 6px; }
+  .summary-card .card-value { font-size: 22px; font-weight: 600; }
+
+  /* Stats table header */
+  .stats-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .stats-header h3 { font-size: 15px; font-weight: 600; color: #333; }
+  .stats-actions { display: flex; gap: 8px; }
+  .btn-outline { padding: 6px 14px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; color: #666; cursor: pointer; background: #fff; }
+  .btn-outline:hover { border-color: #4a90d9; color: #4a90d9; }
+
+  /* Progress bar */
+  .progress-bar { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+  .progress-track { width: 60px; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; }
+  .progress-fill.green { background: #52c41a; }
+  .progress-fill.yellow { background: #faad14; }
+  .progress-fill.red { background: #ff4d4f; }
+  .progress-text { font-size: 12px; color: #666; min-width: 36px; }
+
+  /* Status badge */
+  .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 10px; font-size: 11px; }
+  .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .status-active { background: #f6ffed; color: #52c41a; }
+  .status-active .dot { background: #52c41a; }
+  .status-partial { background: #fffbe6; color: #faad14; }
+  .status-partial .dot { background: #faad14; }
+  .status-inactive { background: #fff2f0; color: #ff4d4f; }
+  .status-inactive .dot { background: #ff4d4f; }
+
+  /* tfoot */
+  table.data-table tfoot tr { background: #f8f9fb; font-weight: 600; }
+  table.data-table tfoot td { border-top: 2px solid #ddd; color: #333; }
+
+  /* Page visibility */
+  .page { display: none; }
+  .page.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ── Sidebar ─── -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">E</div>
+    <div class="logo-text">ES Mail 本地邮件归档</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-item" onclick="switchPage('dashboard')">
+      <span class="nav-icon"></span> 工作台
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🚀</span> 轻松上手管理
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">⚙️</span> 企业配置
+      <span class="nav-arrow">∨</span>
+    </div>
+    <div class="nav-item active" onclick="switchPage('search')">
+      <span class="nav-icon">🔍</span> 邮件搜索
+      <span class="nav-arrow">∧</span>
+    </div>
+    <div class="nav-children open">
+      <div class="nav-child active" id="nav-search" onclick="switchPage('search')">邮件搜索</div>
+      <div class="nav-child">视图管理</div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">📋</span> 邮件审计
+      <span class="nav-arrow">∨</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🔧</span> 辅助工具
+      <span class="nav-arrow">∨</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">📝</span> 日志管理
+      <span class="nav-arrow">∨</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon"></span> 搬家管理
+      <span class="nav-arrow">∨</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('stats')">
+      <span class="nav-icon">📈</span> 数据统计
+      <span class="nav-arrow">∨</span>
+    </div>
+    <div class="nav-children">
+      <div class="nav-child" id="nav-stats" onclick="switchPage('stats')">数据统计</div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">ℹ️</span> 关于系统
+      <span class="nav-arrow">∨</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Main ── -->
+<div class="main">
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-item"> 使用流程</div>
+    <div class="topbar-item">👤 您好，admin</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab" onclick="switchPage('dashboard')">工作台 <span class="tab-close">×</span></div>
+    <div class="tab active" id="tab-search" onclick="switchPage('search')">邮件搜索 <span class="tab-close">×</span></div>
+    <div class="tab" id="tab-stats" onclick="switchPage('stats')">数据统计 <span class="tab-close">×</span></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- PAGE: Email Search -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="content page active" id="page-search">
+    <div class="breadcrumb">邮件搜索 &gt; <span>邮件搜索</span></div>
+
+    <!-- Search card -->
+    <div class="card">
+      <div class="search-header">
+        <div class="search-header-left">
+          <h2>邮件搜索</h2>
+          <span class="collapse-btn">收起 </span>
+        </div>
+        <div class="search-header-right">
+          <div class="header-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            视图设置
+          </div>
+          <div class="header-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            切换常规搜索
+          </div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <div class="logic-group">
+            <span class="logic-label">条件间关系：</span>
+            <div class="logic-btn active" onclick="setLogic(this)">And(与)</div>
+            <div class="logic-btn" onclick="setLogic(this)">Or(或)</div>
+          </div>
+          <!-- ── Regex mode toggle ── -->
+          <div class="regex-toggle">
+            <div class="regex-btn" id="regexBtn" onclick="toggleRegex()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg>
+              正则模式
+            </div>
+            <span class="regex-status" id="regexStatus" style="display:none;">已启用 · 文本输入支持正则语法</span>
+          </div>
+        </div>
+        <div class="toolbar-right">
+          <div class="action-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            存为视图
+          </div>
+          <div class="action-link" onclick="addCondition()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            添加条件
+          </div>
+        </div>
+      </div>
+
+      <!-- Regex hint bar (hidden by default) -->
+      <div class="regex-hint" id="regexHint" style="display:none;">
+        <div class="hint-fields">
+          <span>💡 正则模式已开启，以下字段支持正则表达式：</span>
+          <span class="field-tag">邮件主题</span>
+          <span class="field-tag">收件人</span>
+          <span class="field-tag">发件人</span>
+          <span class="field-tag">密送</span>
+          <span class="field-tag">附件名称</span>
+        </div>
+        <span class="hint-close" onclick="document.getElementById('regexHint').style.display='none'">×</span>
+      </div>
+
+      <!-- Regex reference panel (hidden by default) -->
+      <div class="regex-ref" id="regexRef" style="display:none;">
+        <div class="regex-ref-title">常用正则速查</div>
+        <div class="regex-ref-items">
+          <div class="regex-ref-item"><code>^主题</code> 以"主题"开头</div>
+          <div class="regex-ref-item"><code>结尾$</code> 以"结尾"结束</div>
+          <div class="regex-ref-item"><code>.*</code> 匹配任意字符</div>
+          <div class="regex-ref-item"><code>[a-z]+</code> 匹配小写字母</div>
+          <div class="regex-ref-item"><code>\d+</code> 匹配数字</div>
+          <div class="regex-ref-item"><code>\d{3}-\d{4}</code> 匹配电话号码</div>
+          <div class="regex-ref-item"><code>.*\.pdf$</code> 匹配pdf附件</div>
+          <div class="regex-ref-item"><code>合同.*金额</code> 主题含"合同"且后跟"金额"</div>
+        </div>
+      </div>
+
+      <!-- Conditions -->
+      <div class="conditions" id="conditions">
+        <!-- Row 1: 邮件主题 -->
+        <div class="condition-row">
+          <div class="condition-label">邮件主题</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject" selected>邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <input class="condition-input regex-target" type="text" placeholder="请输入" data-field="subject">
+          <select class="condition-mode-select"><option>包含</option><option>不包含</option></select>
+          <div class="regex-indicator off regex-toggle-field" data-field="subject" onclick="toggleFieldRegex(this)" title="启用正则">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg>
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 2: 邮件内容 -->
+        <div class="condition-row">
+          <div class="condition-label">邮件内容</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content" selected>邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <input class="condition-input" type="text" placeholder="请输入" data-field="content">
+          <select class="condition-mode-select"><option>包含</option><option>不包含</option></select>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 3: 邮件日期 -->
+        <div class="condition-row">
+          <div class="condition-label">邮件日期</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date" selected>邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <div class="date-range">
+            <input type="date" placeholder="开始日期">
+            <span class="arrow">→</span>
+            <input type="date" placeholder="结束日期">
+            <span class="cal-icon">📅</span>
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 4: 收件人 -->
+        <div class="condition-row">
+          <div class="condition-label">收件人</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to" selected>收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <div class="person-inputs">
+            <input class="email-input regex-target" type="text" placeholder="请输入邮箱地址" data-field="to">
+            <span class="org-icon">🏢</span>
+            <input class="emp-input" type="text" placeholder="请输入工号">
+          </div>
+          <div class="regex-indicator off regex-toggle-field" data-field="to" onclick="toggleFieldRegex(this)" title="启用正则">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg>
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 5: 发件人 -->
+        <div class="condition-row">
+          <div class="condition-label">发件人</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from" selected>发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <div class="person-inputs">
+            <input class="email-input regex-target" type="text" placeholder="请输入邮箱地址" data-field="from">
+            <input class="emp-input" type="text" placeholder="请输入工号">
+          </div>
+          <div class="regex-indicator off regex-toggle-field" data-field="from" onclick="toggleFieldRegex(this)" title="启用正则">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg>
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 6: 密送 -->
+        <div class="condition-row">
+          <div class="condition-label">密送</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="bcc" selected>密送</option><option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <div class="person-inputs">
+            <input class="email-input regex-target" type="text" placeholder="请输入邮箱地址" data-field="bcc">
+            <input class="emp-input" type="text" placeholder="请输入工号">
+          </div>
+          <div class="regex-indicator off regex-toggle-field" data-field="bcc" onclick="toggleFieldRegex(this)" title="启用正则">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg>
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 7: 邮件大小 -->
+        <div class="condition-row">
+          <div class="condition-label">邮件大小</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size" selected>邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <div class="size-range">
+            <input type="number" placeholder="最小" min="0">
+            <select><option>B</option><option>KB</option><option>MB</option><option>GB</option></select>
+            <span class="size-arrow">~</span>
+            <input type="number" placeholder="最大" min="0">
+            <select><option>B</option><option>KB</option><option selected>MB</option><option>GB</option></select>
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 8: 收信域 -->
+        <div class="condition-row">
+          <div class="condition-label">收信域</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain" selected>收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <div class="domain-inputs">
+            <select class="domain-mode-select"><option>限定</option><option>排除</option></select>
+            <input class="domain-input" type="text" placeholder="请输入域名" data-field="recvDomain">
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 9: 发信域 -->
+        <div class="condition-row">
+          <div class="condition-label">发信域</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain" selected>发信域</option><option value="attachment">附件</option><option value="tags">标签</option>
+          </select>
+          <div class="domain-inputs">
+            <select class="domain-mode-select"><option>限定</option><option>排除</option></select>
+            <input class="domain-input" type="text" placeholder="请输入域名" data-field="sendDomain">
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 10: 标签 -->
+        <div class="condition-row">
+          <div class="condition-label">标签</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment">附件</option><option value="tags" selected>标签</option>
+          </select>
+          <div class="tag-inputs">
+            <div class="tag-chip selected" data-color="red" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 重要</div>
+            <div class="tag-chip unselected" data-color="red" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 紧急</div>
+            <div class="tag-chip selected" data-color="blue" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 合同</div>
+            <div class="tag-chip unselected" data-color="blue" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 通知</div>
+            <div class="tag-chip unselected" data-color="green" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 已处理</div>
+            <div class="tag-chip unselected" data-color="yellow" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 待审核</div>
+            <div class="tag-chip unselected" data-color="purple" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 机密</div>
+            <div class="tag-chip unselected" data-color="cyan" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 存档</div>
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Row 11: 附件 -->
+        <div class="condition-row" id="attachRow">
+          <div class="condition-label">附件</div>
+          <select class="field-type-select" onchange="changeFieldType(this)">
+            <option value="subject">邮件主题</option><option value="content">邮件内容</option><option value="date">邮件日期</option><option value="to">收件人</option><option value="from">发件人</option><option value="bcc">密送</option><option value="size">邮件大小</option><option value="recvDomain">收信域</option><option value="sendDomain">发信域</option><option value="attachment" selected>附件</option><option value="tags">标签</option>
+          </select>
+          <div class="attach-toggle">
+            <div class="attach-btn active" onclick="setAttach(this)">不限</div>
+            <div class="attach-btn" onclick="setAttach(this)">包含</div>
+            <div class="attach-btn" onclick="setAttach(this)">不包含</div>
+          </div>
+          <div class="more-settings-link" id="moreSettingsLink" onclick="toggleMoreSettings()" style="display:none;">
+            更多设置 <span id="moreArrow">∧</span>
+          </div>
+          <div class="remove-btn" onclick="removeCondition(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </div>
+        </div>
+        <!-- Attachment sub-fields (expanded via "更多设置") -->
+        <div class="attach-sub-fields" id="attachSubFields" style="display:none;">
+          <div class="condition-row" style="padding-left: 190px;">
+            <div class="condition-label" style="width:70px;">附件名称</div>
+            <input class="condition-input regex-target" type="text" placeholder="请输入" data-field="attachmentName" style="flex:1;">
+            <select class="condition-mode-select"><option>包含</option><option>不包含</option></select>
+            <div class="regex-indicator off regex-toggle-field" data-field="attachmentName" onclick="toggleFieldRegex(this)" title="启用正则">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg>
+            </div>
+          </div>
+          <div class="condition-row" style="padding-left: 190px;">
+            <div class="condition-label" style="width:70px;">
+              <span style="color:#4a90d9;cursor:help;" title="按文件扩展名筛选">ⓘ</span> 扩展名称
+            </div>
+            <div style="flex:1;position:relative;">
+              <div class="ext-tag-input" id="extTagInput" onclick="toggleExtDropdown()">
+                <span class="ext-tag" data-ext="doc">doc <span onclick="event.stopPropagation();removeExtTag(this)">×</span></span>
+                <span class="ext-tag" data-ext="docx">docx <span onclick="event.stopPropagation();removeExtTag(this)">×</span></span>
+                <span class="ext-tag" data-ext="zip">zip <span onclick="event.stopPropagation();removeExtTag(this)">×</span></span>
+                <input class="ext-tag-search" type="text" placeholder="请输入，例如：doc" id="extSearchInput" oninput="filterExtensions()">
+              </div>
+              <!-- Extension dropdown -->
+              <div class="ext-dropdown" id="extDropdown" style="display:none;">
+                <!-- Category filters -->
+                <div class="ext-categories">
+                  <label class="ext-cat-label"><input type="checkbox" class="ext-cat-cb" data-cat="doc" checked onchange="toggleCategory('doc')"> 文档 <span class="ext-cat-remove" onclick="event.stopPropagation();clearCategory('doc')">×</span></label>
+                  <label class="ext-cat-label"><input type="checkbox" class="ext-cat-cb" data-cat="image" onchange="toggleCategory('image')"> 图片 <span class="ext-cat-remove" onclick="event.stopPropagation();clearCategory('image')">×</span></label>
+                  <label class="ext-cat-label"><input type="checkbox" class="ext-cat-cb" data-cat="archive" checked onchange="toggleCategory('archive')"> 压缩包 <span class="ext-cat-remove" onclick="event.stopPropagation();clearCategory('archive')">×</span></label>
+                  <label class="ext-cat-label"><input type="checkbox" class="ext-cat-cb" data-cat="media" onchange="toggleCategory('media')"> 媒体 <span class="ext-cat-remove" onclick="event.stopPropagation();clearCategory('media')">×</span></label>
+                </div>
+                <!-- Extension list -->
+                <div class="ext-list" id="extList">
+                  <div class="ext-item" data-ext="7z" data-cat="archive" onclick="toggleExtItem(this)">7z</div>
+                  <div class="ext-item selected" data-ext="zip" data-cat="archive" onclick="toggleExtItem(this)">zip <span class="ext-check">✓</span></div>
+                  <div class="ext-item" data-ext="gz" data-cat="archive" onclick="toggleExtItem(this)">gz</div>
+                  <div class="ext-item" data-ext="tar" data-cat="archive" onclick="toggleExtItem(this)">tar</div>
+                  <div class="ext-item" data-ext="rar" data-cat="archive" onclick="toggleExtItem(this)">rar</div>
+                  <div class="ext-item" data-ext="tgz" data-cat="archive" onclick="toggleExtItem(this)">tgz</div>
+                  <div class="ext-item" data-ext="emz" data-cat="archive" onclick="toggleExtItem(this)">emz</div>
+                  <div class="ext-item selected" data-ext="doc" data-cat="doc" onclick="toggleExtItem(this)">doc <span class="ext-check">✓</span></div>
+                  <div class="ext-item selected" data-ext="docx" data-cat="doc" onclick="toggleExtItem(this)">docx <span class="ext-check">✓</span></div>
+                  <div class="ext-item" data-ext="xls" data-cat="doc" onclick="toggleExtItem(this)">xls</div>
+                  <div class="ext-item" data-ext="xlsx" data-cat="doc" onclick="toggleExtItem(this)">xlsx</div>
+                  <div class="ext-item" data-ext="ppt" data-cat="doc" onclick="toggleExtItem(this)">ppt</div>
+                  <div class="ext-item" data-ext="pptx" data-cat="doc" onclick="toggleExtItem(this)">pptx</div>
+                  <div class="ext-item" data-ext="pdf" data-cat="doc" onclick="toggleExtItem(this)">pdf</div>
+                  <div class="ext-item" data-ext="txt" data-cat="doc" onclick="toggleExtItem(this)">txt</div>
+                  <div class="ext-item" data-ext="jpg" data-cat="image" onclick="toggleExtItem(this)">jpg</div>
+                  <div class="ext-item" data-ext="jpeg" data-cat="image" onclick="toggleExtItem(this)">jpeg</div>
+                  <div class="ext-item" data-ext="png" data-cat="image" onclick="toggleExtItem(this)">png</div>
+                  <div class="ext-item" data-ext="bmp" data-cat="image" onclick="toggleExtItem(this)">bmp</div>
+                  <div class="ext-item" data-ext="gif" data-cat="image" onclick="toggleExtItem(this)">gif</div>
+                  <div class="ext-item" data-ext="mp4" data-cat="media" onclick="toggleExtItem(this)">mp4</div>
+                  <div class="ext-item" data-ext="avi" data-cat="media" onclick="toggleExtItem(this)">avi</div>
+                  <div class="ext-item" data-ext="mp3" data-cat="media" onclick="toggleExtItem(this)">mp3</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="condition-row" style="padding-left: 190px;">
+            <div class="condition-label" style="width:70px;">
+              <span style="color:#4a90d9;cursor:help;" title="搜索附件内的文字内容">ⓘ</span> 附件内容
+            </div>
+            <input class="condition-input" type="text" placeholder="请输入附件内容" data-field="attachmentContent" style="flex:1;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="search-actions">
+        <button class="btn-search">搜 索</button>
+        <button class="btn-reset">重 置</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="card">
+      <div class="results-header">
+        <h3>搜索结果 <span class="count">(共 3 封邮件)</span></h3>
+        <div class="results-filters">
+          <div class="filter-tag">排序：收件时间 ↓</div>
+          <div class="filter-tag">视图：全部</div>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:40px"></th>
+            <th>邮件主题</th>
+            <th>发件人</th>
+            <th>收件人</th>
+            <th>日期</th>
+            <th>大小</th>
+            <th>标签</th>
+            <th class="right">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td class="link-blue">关于2026年Q3项目进度汇报</td>
+            <td>zhangsan@company.com</td>
+            <td>admin@company.com</td>
+            <td style="color:#999;font-size:12px">2026-07-15 14:30</td>
+            <td style="color:#999;font-size:12px">256 KB</td>
+            <td><span class="tag tag-red">重要</span></td>
+            <td class="right"><div class="ops"><span>详情</span><span>下载</span><span>转发</span></div></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td class="link-blue">合同签署 - 金额128万元</td>
+            <td>lisi@partner.com</td>
+            <td>admin@company.com</td>
+            <td style="color:#999;font-size:12px">2026-07-12 09:15</td>
+            <td style="color:#999;font-size:12px">1.2 MB</td>
+            <td><span class="tag tag-blue">合同</span></td>
+            <td class="right"><div class="ops"><span>详情</span><span>下载</span><span>转发</span></div></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td class="link-blue">周报 - 第28周</td>
+            <td>wangwu@company.com</td>
+            <td>admin@company.com</td>
+            <td style="color:#999;font-size:12px">2026-07-10 18:00</td>
+            <td style="color:#999;font-size:12px">89 KB</td>
+            <td></td>
+            <td class="right"><div class="ops"><span>详情</span><span>下载</span><span>转发</span></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination">
+        <span>共 3 条</span>
+        <div class="page-btn">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- PAGE: Statistics -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="content page" id="page-stats">
+    <div class="breadcrumb">数据统计 &gt; <span>数据统计</span></div>
+
+    <!-- Filter card -->
+    <div class="card">
+      <div class="filter-row">
+        <div class="filter-group">
+          <span class="filter-label"><span class="required">*</span> 时间设置：</span>
+          <input class="filter-input" type="date" value="2026-02-01">
+          <span style="color:#ccc">→</span>
+          <input class="filter-input" type="date" value="2026-07-31">
+          <span style="color:#999;cursor:pointer">📅</span>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">账号设置：</span>
+          <div class="account-tags">
+            <div class="account-tag">a-2@east.net <span class="remove">×</span></div>
+            <div class="account-tag">dongfang@365east.partner.onmschina.cn <span class="remove">×</span></div>
+            <div class="account-add">+ 添加账号</div>
+          </div>
+        </div>
+        <div class="filter-group">
+          <button class="btn-query">查 询</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats card -->
+    <div class="card">
+      <div class="stats-header">
+        <h3>用户归档量统计</h3>
+      </div>
+
+      <!-- Stats table (simplified) -->
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:40px"></th>
+            <th>用户邮箱</th>
+            <th class="right">归档数量</th>
+            <th class="right">索引容量</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>zhangsan@company.com</td>
+            <td class="right">12,580</td>
+            <td class="right" style="color:#999">2.45 GB</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>lisi@company.com</td>
+            <td class="right">8,920</td>
+            <td class="right" style="color:#999">1.78 GB</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>wangwu@company.com</td>
+            <td class="right">6,340</td>
+            <td class="right" style="color:#999">1.12 GB</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>zhaoliu@company.com</td>
+            <td class="right">4,210</td>
+            <td class="right" style="color:#999">890 MB</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>sunqi@company.com</td>
+            <td class="right">3,560</td>
+            <td class="right" style="color:#999">650 MB</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>zhouba@company.com</td>
+            <td class="right">2,890</td>
+            <td class="right" style="color:#999">520 MB</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>wujing@company.com</td>
+            <td class="right">1,980</td>
+            <td class="right" style="color:#999">0 MB</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>chenggang@company.com</td>
+            <td class="right">1,560</td>
+            <td class="right" style="color:#999">340 MB</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td>合计</td>
+            <td class="right">42,040</td>
+            <td class="right">—</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="pagination">
+        <span>共 8 条</span>
+        <div class="page-btn">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── Page switching ───
+  function switchPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.nav-child').forEach(n => n.classList.remove('active'));
+
+    if (page === 'search') {
+      document.getElementById('page-search').classList.add('active');
+      document.getElementById('tab-search').classList.add('active');
+      document.getElementById('nav-search').classList.add('active');
+    } else if (page === 'stats') {
+      document.getElementById('page-stats').classList.add('active');
+      document.getElementById('tab-stats').classList.add('active');
+      document.getElementById('nav-stats').classList.add('active');
+    }
+  }
+
+  // ─── Logic toggle ───
+  function setLogic(el) {
+    el.parentElement.querySelectorAll('.logic-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ─── Regex mode toggle ───
+  let regexEnabled = false;
+  function toggleRegex() {
+    regexEnabled = !regexEnabled;
+    const btn = document.getElementById('regexBtn');
+    const status = document.getElementById('regexStatus');
+    const hint = document.getElementById('regexHint');
+    const ref = document.getElementById('regexRef');
+
+    btn.classList.toggle('active', regexEnabled);
+    status.style.display = regexEnabled ? 'inline' : 'none';
+    hint.style.display = regexEnabled ? 'flex' : 'none';
+    ref.style.display = regexEnabled ? 'block' : 'none';
+
+    // Update all regex-target inputs
+    document.querySelectorAll('.regex-target').forEach(input => {
+      input.classList.toggle('regex-mode', regexEnabled);
+    });
+
+    // Toggle regex-mode on person-inputs containers (hides emp-input and org-icon)
+    document.querySelectorAll('.person-inputs').forEach(container => {
+      container.classList.toggle('regex-mode', regexEnabled);
+    });
+
+    // Update per-field indicators
+    document.querySelectorAll('.regex-toggle-field').forEach(ind => {
+      ind.classList.toggle('on', regexEnabled);
+      ind.classList.toggle('off', !regexEnabled);
+    });
+  }
+
+  // ─── Per-field regex toggle ───
+  function toggleFieldRegex(el) {
+    const field = el.dataset.field;
+    const isOn = el.classList.contains('on');
+    el.classList.toggle('on', !isOn);
+    el.classList.toggle('off', isOn);
+
+    // Toggle the corresponding input
+    const input = document.querySelector(`.regex-target[data-field="${field}"]`);
+    if (input) input.classList.toggle('regex-mode', !isOn);
+
+    // Sync .person-inputs container in the same row (show/hide emp-input and org-icon)
+    const row = el.closest('.condition-row');
+    if (row) {
+      const personContainer = row.querySelector('.person-inputs');
+      if (personContainer) {
+        const anyOn = personContainer.querySelectorAll('.regex-target.regex-mode').length > 0;
+        personContainer.classList.toggle('regex-mode', anyOn);
+      }
+    }
+  }
+
+  // ─── Attachment toggle ───
+  function setAttach(el) {
+    el.parentElement.querySelectorAll('.attach-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    const moreLink = document.getElementById('moreSettingsLink');
+    const subFields = document.getElementById('attachSubFields');
+    if (el.textContent.trim() === '不限') {
+      moreLink.style.display = 'none';
+      subFields.style.display = 'none';
+    } else {
+      moreLink.style.display = 'flex';
+    }
+  }
+
+  // ── More settings toggle ──
+  let moreSettingsOpen = false;
+  function toggleMoreSettings() {
+    moreSettingsOpen = !moreSettingsOpen;
+    document.getElementById('attachSubFields').style.display = moreSettingsOpen ? 'block' : 'none';
+    document.getElementById('moreArrow').textContent = moreSettingsOpen ? '∧' : '';
+  }
+
+  // ─── Extension dropdown ───
+  function toggleExtDropdown() {
+    const dd = document.getElementById('extDropdown');
+    dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+  }
+  function toggleExtItem(el) {
+    el.classList.toggle('selected');
+    const ext = el.dataset.ext;
+    const hasCheck = el.querySelector('.ext-check');
+    if (el.classList.contains('selected') && !hasCheck) {
+      el.innerHTML = ext + ' <span class="ext-check">✓</span>';
+    } else if (!el.classList.contains('selected') && hasCheck) {
+      el.textContent = ext;
+    }
+    syncExtTags();
+  }
+  function removeExtTag(span) {
+    const tag = span.parentElement;
+    const ext = tag.dataset.ext;
+    tag.remove();
+    const item = document.querySelector(`.ext-item[data-ext="${ext}"]`);
+    if (item) {
+      item.classList.remove('selected');
+      item.textContent = ext;
+    }
+  }
+  function syncExtTags() {
+    const input = document.getElementById('extTagInput');
+    input.querySelectorAll('.ext-tag').forEach(t => t.remove());
+    const searchInput = document.getElementById('extSearchInput');
+    document.querySelectorAll('.ext-item.selected').forEach(item => {
+      const tag = document.createElement('span');
+      tag.className = 'ext-tag';
+      tag.dataset.ext = item.dataset.ext;
+      tag.innerHTML = item.dataset.ext + ' <span onclick="event.stopPropagation();removeExtTag(this)">×</span>';
+      input.insertBefore(tag, searchInput);
+    });
+  }
+  function filterExtensions() {
+    const query = document.getElementById('extSearchInput').value.toLowerCase();
+    document.querySelectorAll('.ext-item').forEach(item => {
+      item.style.display = item.dataset.ext.toLowerCase().includes(query) ? 'flex' : 'none';
+    });
+  }
+  function toggleCategory(cat) {
+    const cb = document.querySelector(`.ext-cat-cb[data-cat="${cat}"]`);
+    const checked = cb.checked;
+    document.querySelectorAll(`.ext-item[data-cat="${cat}"]`).forEach(item => {
+      if (checked && !item.classList.contains('selected')) {
+        toggleExtItem(item);
+      } else if (!checked && item.classList.contains('selected')) {
+        toggleExtItem(item);
+      }
+    });
+  }
+  function clearCategory(cat) {
+    const cb = document.querySelector(`.ext-cat-cb[data-cat="${cat}"]`);
+    cb.checked = false;
+    document.querySelectorAll(`.ext-item[data-cat="${cat}"].selected`).forEach(item => {
+      toggleExtItem(item);
+    });
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.ext-tag-input') && !e.target.closest('.ext-dropdown')) {
+      document.getElementById('extDropdown').style.display = 'none';
+    }
+  });
+
+  // ─── Tag chip toggle ───
+  function toggleTagChip(el) {
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      el.classList.add('unselected');
+    } else {
+      el.classList.remove('unselected');
+      el.classList.add('selected');
+    }
+  }
+
+  // ─── Field type change (dropdown switch) ───
+  const fieldTemplates = {
+    subject: { label: '邮件主题', input: '<input class="condition-input regex-target" type="text" placeholder="请输入" data-field="subject"><select class="condition-mode-select"><option>包含</option><option>不包含</option></select><div class="regex-indicator off regex-toggle-field" data-field="subject" onclick="toggleFieldRegex(this)" title="启用正则"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg></div>' },
+    content: { label: '邮件内容', input: '<input class="condition-input" type="text" placeholder="请输入" data-field="content"><select class="condition-mode-select"><option>包含</option><option>不包含</option></select>' },
+    date: { label: '邮件日期', input: '<div class="date-range"><input type="date" placeholder="开始日期"><span class="arrow">→</span><input type="date" placeholder="结束日期"><span class="cal-icon">📅</span></div>' },
+    to: { label: '收件人', input: '<div class="person-inputs"><input class="email-input regex-target" type="text" placeholder="请输入邮箱地址" data-field="to"><span class="org-icon">🏢</span><input class="emp-input" type="text" placeholder="请输入工号"></div><div class="regex-indicator off regex-toggle-field" data-field="to" onclick="toggleFieldRegex(this)" title="启用正则"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg></div>' },
+    from: { label: '发件人', input: '<div class="person-inputs"><input class="email-input regex-target" type="text" placeholder="请输入邮箱地址" data-field="from"><input class="emp-input" type="text" placeholder="请输入工号"></div><div class="regex-indicator off regex-toggle-field" data-field="from" onclick="toggleFieldRegex(this)" title="启用正则"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg></div>' },
+    bcc: { label: '密送', input: '<div class="person-inputs"><input class="email-input regex-target" type="text" placeholder="请输入邮箱地址" data-field="bcc"><input class="emp-input" type="text" placeholder="请输入工号"></div><div class="regex-indicator off regex-toggle-field" data-field="bcc" onclick="toggleFieldRegex(this)" title="启用正则"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"/><path d="M4 4h8"/><path d="M12 4v16"/><path d="M16 12h4"/><path d="M20 12l-4 8"/></svg></div>' },
+    size: { label: '邮件大小', input: '<div class="size-range"><input type="number" placeholder="最小" min="0"><select><option>B</option><option>KB</option><option>MB</option><option>GB</option></select><span class="size-arrow">~</span><input type="number" placeholder="最大" min="0"><select><option>B</option><option>KB</option><option selected>MB</option><option>GB</option></select></div>' },
+    recvDomain: { label: '收信域', input: '<div class="domain-inputs"><select class="domain-mode-select"><option>限定</option><option>排除</option></select><input class="domain-input" type="text" placeholder="请输入域名" data-field="recvDomain"></div>' },
+    sendDomain: { label: '发信域', input: '<div class="domain-inputs"><select class="domain-mode-select"><option>限定</option><option>排除</option></select><input class="domain-input" type="text" placeholder="请输入域名" data-field="sendDomain"></div>' },
+    attachment: { label: '附件', input: '<div class="attach-toggle"><div class="attach-btn active" onclick="setAttach(this)">不限</div><div class="attach-btn" onclick="setAttach(this)">包含</div><div class="attach-btn" onclick="setAttach(this)">不包含</div></div>' },
+    tags: { label: '标签', input: '<div class="tag-inputs"><div class="tag-chip unselected" data-color="red" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 重要</div><div class="tag-chip unselected" data-color="red" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 紧急</div><div class="tag-chip unselected" data-color="blue" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 合同</div><div class="tag-chip unselected" data-color="blue" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 通知</div><div class="tag-chip unselected" data-color="green" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 已处理</div><div class="tag-chip unselected" data-color="yellow" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 待审核</div><div class="tag-chip unselected" data-color="purple" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 机密</div><div class="tag-chip unselected" data-color="cyan" onclick="toggleTagChip(this)"><span class="tag-check">✓</span> 存档</div></div>' }
+  };
+
+  function changeFieldType(selectEl) {
+    const val = selectEl.value;
+    const tmpl = fieldTemplates[val];
+    if (!tmpl) return;
+    const row = selectEl.closest('.condition-row');
+    // Update label
+    row.querySelector('.condition-label').textContent = tmpl.label;
+    // Remove old input area elements (everything between select and remove-btn)
+    const removeBtn = row.querySelector('.remove-btn');
+    const elementsToRemove = [];
+    let el = selectEl.nextElementSibling;
+    while (el && el !== removeBtn) {
+      elementsToRemove.push(el);
+      el = el.nextElementSibling;
+    }
+    elementsToRemove.forEach(e => e.remove());
+    // Insert new input area before remove button
+    const temp = document.createElement('div');
+    temp.innerHTML = tmpl.input;
+    while (temp.firstChild) {
+      row.insertBefore(temp.firstChild, removeBtn);
+    }
+    // Sync regex mode if global is on
+    if (regexEnabled) {
+      row.querySelectorAll('.regex-target').forEach(inp => inp.classList.add('regex-mode'));
+      row.querySelectorAll('.regex-toggle-field').forEach(ind => { ind.classList.add('on'); ind.classList.remove('off'); });
+      row.querySelectorAll('.person-inputs').forEach(c => c.classList.add('regex-mode'));
+    }
+  }
+
+  // ─── Remove condition ───
+  function removeCondition(btn) {
+    const row = btn.closest('.condition-row');
+    if (document.querySelectorAll('.conditions .condition-row').length > 1) {
+      row.remove();
+    }
+  }
+
+  // ─── Add condition ───
+  const allFieldOptions = [
+    { value: 'subject', label: '邮件主题' },
+    { value: 'content', label: '邮件内容' },
+    { value: 'date', label: '邮件日期' },
+    { value: 'to', label: '收件人' },
+    { value: 'from', label: '发件人' },
+    { value: 'bcc', label: '密送' },
+    { value: 'size', label: '邮件大小' },
+    { value: 'recvDomain', label: '收信域' },
+    { value: 'sendDomain', label: '发信域' },
+    { value: 'attachment', label: '附件' },
+    { value: 'tags', label: '标签' }
+  ];
+
+  function addCondition() {
+    // Pick the first field type not already used, or cycle through
+    const usedFields = new Set();
+    document.querySelectorAll('.field-type-select').forEach(sel => usedFields.add(sel.value));
+    let defaultVal = 'subject';
+    for (const f of allFieldOptions) {
+      if (!usedFields.has(f.value)) { defaultVal = f.value; break; }
+    }
+
+    const row = document.createElement('div');
+    row.className = 'condition-row';
+
+    // Build options HTML
+    let optsHtml = allFieldOptions.map(f =>
+      `<option value="${f.value}"${f.value === defaultVal ? ' selected' : ''}>${f.label}</option>`
+    ).join('');
+
+    const selectHtml = `<select class="field-type-select" onchange="changeFieldType(this)">${optsHtml}</select>`;
+    const inputHtml = fieldTemplates[defaultVal].input;
+
+    row.innerHTML = `
+      <div class="condition-label">${fieldTemplates[defaultVal].label}</div>
+      ${selectHtml}
+      ${inputHtml}
+      <div class="remove-btn" onclick="removeCondition(this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+      </div>
+    `;
+    document.getElementById('conditions').appendChild(row);
+
+    // Sync regex mode
+    if (regexEnabled) {
+      row.querySelectorAll('.regex-target').forEach(inp => inp.classList.add('regex-mode'));
+      row.querySelectorAll('.regex-toggle-field').forEach(ind => { ind.classList.add('on'); ind.classList.remove('off'); });
+      row.querySelectorAll('.person-inputs').forEach(c => c.classList.add('regex-mode'));
+    }
+  }
+</script>
+</body>
+</html>
